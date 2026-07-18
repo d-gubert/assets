@@ -239,7 +239,7 @@
   :root[data-theme="light"] { --fam-103: #2563eb; --fam-149: #0d9488; }
   :root[data-theme="dark"] { --fam-103: #60a5fa; --fam-149: #2dd4bf; }
   .anim-controls { display: flex; align-items: center; gap: 14px; margin: 0 0 12px; flex-wrap: wrap; }
-  #anim-play { font-family: var(--mono); font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--merged); background: var(--merged); color: #fff; cursor: pointer; white-space: nowrap; }
+  #anim-play { font-family: var(--mono); font-size: 13px; font-weight: 600; min-width: 92px; min-height: 38px; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--merged); background: var(--merged); color: #fff; cursor: pointer; white-space: nowrap; }
   #anim-play:hover { filter: brightness(1.07); }
   .anim-step { font-family: var(--mono); font-size: 16px; line-height: 1; font-weight: 600; width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .anim-step:hover { border-color: var(--merged); color: var(--merged); }
@@ -254,7 +254,7 @@
   .dotf { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
   .f-core { background: var(--accent); } .f-103 { background: var(--fam-103); } .f-125 { background: var(--merged); } .f-149 { background: var(--fam-149); }
   .anim-stage { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; align-items: flex-start; }
-  .lane { flex: 1 1 0; min-width: 188px; background: var(--surface-2); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; min-height: 210px; transition: opacity .3s ease; }
+  .lane { flex: 1 1 0; max-width: 233.66px; background: var(--surface-2); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; min-height: 210px; transition: transform .5s cubic-bezier(.4,0,.2,1), opacity .35s ease; }
   .lane.is-source { background: color-mix(in srgb, var(--accent) 7%, var(--surface-2)); }
   .lane.is-merged { opacity: .74; }
   .lane-hd { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -289,7 +289,7 @@
   @keyframes chipin { 0% { opacity: 0; transform: translateX(-9px); background: color-mix(in srgb, var(--merged) 24%, var(--surface)); } 100% { opacity: 1; transform: none; } }
   /* leaving a lane — eased collapse + fade as a commit sheds into another column */
   .chip.cout { opacity: 0; transform: translateX(14px); max-height: 0 !important; padding-top: 0; padding-bottom: 0; margin-bottom: -6px; pointer-events: none; }
-  @media (prefers-reduced-motion: reduce) { .chip.cin, .lane-count.bump, .lane-basename.bump { animation: none; } .chip { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .chip.cin, .lane-count.bump, .lane-basename.bump { animation: none; } .chip, .lane { transition: none; } }
 
   /* stacked-PR sequence — #41019's base pointer over time */
   .sflow { display: flex; gap: 14px; overflow-x: auto; padding: 4px 2px 14px; scroll-snap-type: x proximity; }
@@ -423,7 +423,7 @@
     // #41019 restacks up the stack (base_ref_changed events); each prep PR is created on the branch
     // below it and silently auto-retargets to develop when that branch merges.
     var BASE_TL = {
-      "41019": [["1970","develop"],["2026-06-29T20:47:19Z","103"],["2026-06-30T22:55:21Z","125"],["2026-07-02T19:20:43Z","149"],["2026-07-03T19:37:43Z","develop"]],
+      "41019": [["1970","develop"],["2026-06-29T20:47:19Z","103"],["2026-07-01T12:30:21Z","125"],["2026-07-02T20:00:50Z","149"],["2026-07-03T19:37:43Z","develop"]],
       "41103": [["1970","develop"]],
       "41125": [["1970","103"],["2026-07-02T17:00:27Z","develop"]],
       "41149": [["1970","125"],["2026-07-03T17:52:58Z","develop"]]
@@ -511,15 +511,15 @@
       });
     }
 
-    function renderLane(pr, st, displayStack, animate, baseCode){
+    function renderLane(pr, st, displayStack, animate, baseCode, e){
       var o = L[pr];
-      reconcile(o.stack, displayStack.map(function(c){ return {key:c[2], fam:chipFam(pr,c[2])}; }), animate);
+      reconcile(o.stack, displayStack.map(function(c){ return {key:c[2], fam:chipFam(pr,c[2])}; }), st.status !== "merged");
       var cls = st.status==="merged"?"st-merged":(st.status==="open"?"st-open":"st-pre");
       o.status.className = "lane-status " + cls;
       o.status.textContent = st.status==="merged" ? "merged ✓" : (st.status==="open" ? "open" : "awaiting");
       o.root.classList.toggle("is-merged", st.status==="merged");
       var n = String(displayStack.length);
-      if (o.count.textContent !== n){ o.count.textContent = n; o.count.classList.remove("bump"); void o.count.offsetWidth; o.count.classList.add("bump"); }
+	  if (o.count.textContent !== n || e.pr === pr){ o.count.textContent = n; void o.count.offsetWidth; o.count.classList.add("bump"); }else{o.count.classList.remove("bump")}
       // base-branch pointer — shown once the PR is live; bumps when the pointer moves
       var live = st.status !== "pre";
       o.baseRow.style.display = live ? "" : "none";
@@ -538,6 +538,31 @@
     scrub.max = ev.length - 1;
     var cur = -1, timer = null;
 
+    // order visible lanes so each PR's base sits immediately to its right —
+    // walk the tip's base chain (#41019 → its base → …), then append the rest by depth.
+    function computeOrder(vis, baseCode){
+      var depth = {};
+      function dep(pr){
+        if (depth[pr] != null) return depth[pr];
+        depth[pr] = 1;                                   // seed breaks any accidental cycle
+        var bc = baseCode[pr];
+        if (bc !== "develop"){ var bp = "41" + bc; if (vis[bp]) depth[pr] = 1 + dep(bp); }
+        return depth[pr];
+      }
+      PRS.forEach(function(pr){ if (vis[pr]) dep(pr); });
+      var order = [], seen = {}, cur = "41019";
+      while (cur && vis[cur] && !seen[cur]){
+        order.push(cur); seen[cur] = true;
+        var bc = baseCode[cur];
+        if (bc === "develop") break;
+        var nxt = "41" + bc;
+        cur = vis[nxt] ? nxt : null;
+      }
+      var rest = PRS.filter(function(pr){ return vis[pr] && !seen[pr]; });
+      rest.sort(function(a,b){ return (depth[b]-depth[a]) || (a>b?-1:1); });
+      return order.concat(rest);
+    }
+
     function go(idx, animate){
       idx = Math.max(0, Math.min(ev.length-1, idx));
       var st = stateAt(idx);
@@ -548,16 +573,41 @@
         st[pr].stack.forEach(function(c){ claimed[c[2]] = true; });
       });
       var e = ev[idx];
+      var disp = {}, vis = {}, baseCode = {};
       PRS.forEach(function(pr){
-        var disp = pr === "41019"
-          ? st[pr].stack.filter(function(c){ return !claimed[c[2]]; })
-          : st[pr].stack;
-        renderLane(pr, st[pr], disp, animate, baseAt(pr, e.t));
+        disp[pr] = pr === "41019" ? st[pr].stack.filter(function(c){ return !claimed[c[2]]; }) : st[pr].stack;
+        vis[pr] = disp[pr].length > 0;                   // hide any PR column with 0 commits
+        baseCode[pr] = baseAt(pr, e.t);
+      });
+      var order = computeOrder(vis, baseCode);
+      // FLIP: record positions before the reorder so we can animate the column moves
+      var first = {};
+      if (animate) PRS.forEach(function(pr){ var el = L[pr].root; if (el.style.display !== "none") first[pr] = el.getBoundingClientRect(); });
+      PRS.forEach(function(pr){ renderLane(pr, st[pr], disp[pr], animate, baseCode[pr],e); });
+      PRS.forEach(function(pr){ L[pr].root.style.display = vis[pr] ? "" : "none"; });
+      order.forEach(function(pr){ stage.appendChild(L[pr].root); });  // reorder: base-to-the-right
+      if (animate) PRS.forEach(function(pr){
+        var el = L[pr].root;
+        if (!vis[pr]) return;
+        var f = first[pr];
+        if (!f){                                          // newly visible → scale/fade in
+          el.style.transition = "none"; el.style.transform = "scale(.92)"; el.style.opacity = "0";
+          el.getBoundingClientRect();
+          el.style.transition = ""; el.style.transform = ""; el.style.opacity = "";
+        } else {
+          var last = el.getBoundingClientRect(), dx = f.left - last.left, dy = f.top - last.top;
+          if (dx || dy){                                  // invert then play the slide
+            el.style.transition = "none"; el.style.transform = "translate(" + dx + "px," + dy + "px)";
+            el.getBoundingClientRect();
+            el.style.transition = ""; el.style.transform = "";
+          }
+        }
       });
       clock.textContent = fmt(e.t);
+      var commitCount=disp[e.pr].length;
       cap.innerHTML = e.type==="merge"
-        ? '<b>#'+e.pr+' merged</b> into develop ✓' + (e.pr==="41019" ? ' — <b>Phase D complete.</b> All four PRs landed.' : ' — its work leaves the stack; #41019 rebases lighter.')
-        : '<b>#'+e.pr+'</b> force-pushed → '+e.stack.length+' commit'+(e.stack.length!==1?'s':'') + (e.pr==="41019" && e.stack.length>=16 ? ' — the monolith at its fullest' : '');
+        ? '<b>#'+e.pr+' merged</b> into develop ✓' + (e.pr==="41019" && ' — <b>Phase D complete.</b> All four PRs landed.')
+        : '<b>#'+e.pr+'</b> force-pushed → '+commitCount+' commit'+(commitCount!==1?'s':'') + (e.pr==="41019" && commitCount>=21 ? ' — the monolith at its fullest' : '');
       scrub.value = idx; cur = idx;
       if (typeof syncStep === "function") syncStep();
     }
