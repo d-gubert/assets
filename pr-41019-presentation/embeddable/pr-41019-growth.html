@@ -345,7 +345,6 @@
 <div class="wrap">
   <div class="section-head">
     <h2>Grow, split, converge — the whole saga in motion</h2>
-    <p>Every force-push and merge across all four PRs, replayed in real chronological order. Watch #41019’s stack swell, its commits shed into the three prep PRs (matched by colour), each prep PR converge and merge, and #41019 collapse to its final four commits — Phase D. The <span style="font-family:var(--mono);font-size:.9em">↳ base</span> pill under each PR is its base branch at that instant — it flashes whenever a pointer moves, as PRs restack up the tower (<code>develop → #41103 → #41125 → #41149</code>) and drop back to <code>develop</code> as the layers below them merge.</p>
   </div>
   <div class="card">
     <div class="anim-controls">
@@ -613,7 +612,7 @@
       clock.textContent = fmt(e.t);
       var commitCount=disp[e.pr].length;
       cap.innerHTML = e.type==="merge"
-        ? '<b>#'+e.pr+' merged</b> into develop ✓' + (e.pr==="41019" && ' — <b>Phase D complete.</b> All four PRs landed.')
+        ? '<b>#'+e.pr+' merged</b> into develop ✓' + (e.pr==="41019" ? ' — <b>Phase D complete.</b> All four PRs landed.' : '')
         : '<b>#'+e.pr+'</b> force-pushed → '+commitCount+' commit'+(commitCount!==1?'s':'') + (e.pr==="41019" && commitCount>=21 ? ' — the monolith at its fullest' : '');
       scrub.value = idx; cur = idx;
       if (typeof syncStep === "function") syncStep();
