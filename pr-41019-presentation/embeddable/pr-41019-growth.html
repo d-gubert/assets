@@ -259,7 +259,11 @@
   .lane.is-merged { opacity: .74; }
   .lane-hd { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .lane-pr { font-family: var(--mono); font-weight: 700; font-size: 14px; }
+  .lane-pr.bump { animation: prbump .4s ease; }
+  @keyframes prbump { 0% { transform: scale(1); } 40% { transform: scale(1.35); color: var(--merged); } 100% { transform: scale(1); } }
   .lane-status { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; padding: 2px 7px; border-radius: 20px; white-space: nowrap; }
+  .lane-status.bump { animation: statusbump .4s ease; }
+  @keyframes statusbump { 0% { transform: scale(1); } 40% { transform: scale(1.35); color: var(--merged); } 100% { transform: scale(1); } }
   .st-pre { color: var(--faint); background: var(--surface); }
   .st-open { color: var(--merged); background: var(--merged-soft); }
   .st-merged { color: var(--open); background: var(--open-soft); }
@@ -454,8 +458,8 @@
         + '<div class="lane-sub"><span class="lane-title">'+TITLES[pr]+'</span><span class="lane-count">0</span></div>'
         + '<ol class="lane-stack"></ol>';
       stage.appendChild(d);
-      L[pr] = {root:d, status:d.querySelector(".lane-status"), count:d.querySelector(".lane-count"), stack:d.querySelector(".lane-stack"),
-               baseRow:d.querySelector(".lane-base"), base:d.querySelector(".lane-basename"), prevBase:null};
+      L[pr] = {root:d, title:d.querySelector(".lane-pr"), status:d.querySelector(".lane-status"), count:d.querySelector(".lane-count"), stack:d.querySelector(".lane-stack"),
+               baseRow:d.querySelector(".lane-base"), base:d.querySelector(".lane-basename"), prevBase:null, prevStatus:null};
     });
 
     function stateAt(idx){
@@ -515,11 +519,14 @@
       var o = L[pr];
       reconcile(o.stack, displayStack.map(function(c){ return {key:c[2], fam:chipFam(pr,c[2])}; }), st.status !== "merged");
       var cls = st.status==="merged"?"st-merged":(st.status==="open"?"st-open":"st-pre");
+      if (animate && e.pr===pr){o.title.classList.remove("bump"); void o.title.offsetWidth; o.title.classList.add("bump");}else{o.title.classList.remove("bump")}
       o.status.className = "lane-status " + cls;
       o.status.textContent = st.status==="merged" ? "merged ✓" : (st.status==="open" ? "open" : "awaiting");
+      if (animate && o.prevStatus && o.prevStatus !== st.status){o.status.classList.remove("bump"); void o.status.offsetWidth; o.status.classList.add("bump");}
+      o.prevStatus=st.status;
       o.root.classList.toggle("is-merged", st.status==="merged");
       var n = String(displayStack.length);
-	  if (o.count.textContent !== n || e.pr === pr){ o.count.textContent = n; void o.count.offsetWidth; o.count.classList.add("bump"); }else{o.count.classList.remove("bump")}
+	  if (animate && o.count.textContent !== n){ o.count.textContent = n; void o.count.offsetWidth; o.count.classList.add("bump"); }else{o.count.classList.remove("bump")}
       // base-branch pointer — shown once the PR is live; bumps when the pointer moves
       var live = st.status !== "pre";
       o.baseRow.style.display = live ? "" : "none";
