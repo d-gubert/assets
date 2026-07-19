@@ -269,7 +269,7 @@
   .st-merged { color: var(--open); background: var(--open-soft); }
   .lane-sub { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 6px 0 10px; }
   .lane-title { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
-  .lane-count { font-family: var(--mono); font-weight: 700; font-size: 19px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .lane-count { flex-grow: 1; text-align: end; font-family: var(--mono); font-weight: 700; font-size: 19px; color: var(--ink); font-variant-numeric: tabular-nums; }
   .lane-count.bump { animation: countbump .4s ease; }
   @keyframes countbump { 0% { transform: scale(1); } 40% { transform: scale(1.35); color: var(--merged); } 100% { transform: scale(1); } }
   /* base-branch pointer */
@@ -453,8 +453,8 @@
       var d = document.createElement("div");
       d.className = "lane" + (pr==="41019"?" is-source":"");
       d.innerHTML = '<div class="lane-hd"><span class="lane-pr">#'+pr+'</span><span class="lane-status st-pre">awaiting</span></div>'
-        + '<div class="lane-base" style="display:none"><span class="lb-arrow">↳ base</span><span class="lane-basename b-develop">develop</span></div>'
-        + '<div class="lane-sub"><span class="lane-title">'+TITLES[pr]+'</span><span class="lane-count">0</span></div>'
+        + '<div class="lane-base" style="display:none"><span class="lb-arrow">↳ base</span><span class="lane-basename b-develop">develop</span><span class="lane-count">0</span></div>'
+        // + '<div class="lane-sub"><span class="lane-title">'+TITLES[pr]+'</span><span class="lane-count">0</span></div>'
         + '<ol class="lane-stack"></ol>';
       stage.appendChild(d);
       L[pr] = {root:d, title:d.querySelector(".lane-pr"), status:d.querySelector(".lane-status"), count:d.querySelector(".lane-count"), stack:d.querySelector(".lane-stack"),
@@ -525,7 +525,8 @@
       o.prevStatus=st.status;
       o.root.classList.toggle("is-merged", st.status==="merged");
       var n = String(displayStack.length);
-	  if (animate && o.count.textContent !== n){ o.count.textContent = n; void o.count.offsetWidth; o.count.classList.add("bump"); }else{o.count.classList.remove("bump")}
+	  if (animate && o.count.textContent !== n){ void o.count.offsetWidth; o.count.classList.add("bump"); }else{o.count.classList.remove("bump")}
+      o.count.textContent = n;
       // base-branch pointer — shown once the PR is live; bumps when the pointer moves
       var live = st.status !== "pre";
       o.baseRow.style.display = live ? "" : "none";
@@ -626,6 +627,7 @@
         go(cur+1, true);
       }, 1100);
     }
+    var validSteps = [4,9,10,14,16,21,26,29,36,39,42,54];
     var prevBtn = document.getElementById("anim-prev"), nextBtn = document.getElementById("anim-next");
     function syncStep(){ prevBtn.disabled = cur <= 0; nextBtn.disabled = cur >= ev.length-1; }
     function step(delta){ stop(); go(cur + delta, true); play.textContent = cur>=ev.length-1 ? "↻ Replay" : "▶ Play"; }
