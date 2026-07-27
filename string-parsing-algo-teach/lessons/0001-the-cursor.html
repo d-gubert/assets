@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1 — The Cursor</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="page">
+
+  <p class="eyebrow">Lesson 01 · String Parsing</p>
+  <h1>The Cursor</h1>
+  <p class="subtitle">Every parser you will ever hand-write is one integer and three
+  questions. Today you write your first one, and it parses a real piece of the tmux line.</p>
+
+  <div class="mission-strip">1: Tab #1* (3 panes) [<b>382x99</b>] [layout 66e3,<b>382x99</b>,0,0{127x99,0,0,0,127x99,128,0,2,126x99,256,0,1}] @0 (active)</div>
+
+  <p>That is the string from your mission. By the end of this lesson you will have
+  written the code that turns the bold part — <code>382x99</code> — into
+  <code>{ w: 382, h: 99 }</code>, with no libraries and no regex. It is a small piece.
+  It is also the piece that appears <em>four times</em> in that one line, and every
+  other lesson in this workspace is built on the machinery you write here.</p>
+
+  <h2>1. Why <code>split()</code> is not a parser</h2>
+
+  <p>You already know this feeling, so one demonstration is enough. Here is the
+  obvious way to pull the window name out of the line:</p>
+
+<pre><code><span class="tok-c">// "1: Tab #1* (3 panes) [382x99] ..."</span>
+line.split(<span class="tok-s">" "</span>)  <span class="tok-c">// → ["1:", "Tab", "#1*", "(3", "panes)", "[382x99]", ...]</span></code></pre>
+
+  <p>The name is <code>Tab #1</code>. It contains a space. The delimiter you split on
+  lives <em>inside</em> the field you were trying to extract, so the split destroys
+  exactly the information you wanted. You can patch it — rejoin indices 1 through
+  <em>n</em>, count backwards from <code>(</code> — and each patch is a new assumption
+  about a string you do not control.</p>
+
+  <div class="rule-box">
+    <p><strong>The rule:</strong> <code>split()</code> is only safe when no field can
+    ever contain the delimiter. The moment a format allows that — spaces in names,
+    commas in nested lists, brackets inside brackets — splitting is guessing.</p>
+  </div>
+
+  <p class="sidenote">This is not a JavaScript problem. The same trap is why CSV is
+  hard, why parsing HTML with string matching famously fails, and why
+  <code>IFS</code> in shell scripts bites everyone eventually.</p>
+
+  <p>The alternative is not a cleverer split. It is to stop looking at the string as
+  a whole and start walking it, one character at a time, deciding as you go.</p>
+
+  <h2>2. The cursor</h2>
+
+  <p>A cursor is two things: <strong>the source string</strong>, and
+  <strong>an index into it</strong>. That is the entire state. Everything else is a
+  function of those two values.</p>
+
+<pre><code><span class="tok-k">const</span> src = <span class="tok-s">"382x99"</span>;
+<span class="tok-k">let</span>   pos = <span class="tok-h">0</span>;   <span class="tok-c">// ← the only thing that ever changes</span></code></pre>
+
+  <p>From that state you get three primitives. Learn these three names; they are the
+  same three names used in
+  <a href="https://craftinginterpreters.com/scanning.html">Robert Nystrom's scanner</a>,
+  and they will not change for the rest of this workspace.</p>
+
+<pre><code><span class="tok-c">// Look at the current character. Do NOT move.</span>
+<span class="tok-k">function</span> peek() {
+  <span class="tok-k">return</span> pos &lt; src.length ? src[pos] : <span class="tok-s">"\0"</span>;
+}
+
+<span class="tok-c">// Return the current character AND move past it.</span>
+<span class="tok-k">function</span> advance() {
+  <span class="tok-k">return</span> src[pos++];
+}
+
+<span class="tok-c">// Is there anything left?</span>
+<span class="tok-k">function</span> atEnd() {
+  <span class="tok-k">return</span> pos &gt;= src.length;
+}</code></pre>
+
+  <p class="sidenote">Why does <code>peek()</code> return <code>"\0"</code> past the
+  end instead of throwing? Because it is called constantly inside loop conditions.
+  A sentinel that compares unequal to every real character lets
+  <code>while (isDigit(peek()))</code> terminate naturally at the end of input,
+  with no bounds check written by hand. Nystrom makes the same choice.</p>
+
+  <p>The distinction between <code>peek</code> and <code>advance</code> is the whole
+  idea, and it is the thing beginners get wrong. <strong>Peek asks. Advance commits.</strong>
+  You peek to <em>decide</em> what to do; you advance once you have decided. Every
+  parser you write from here is a loop of: peek, decide, advance.</p>
+
+  <h3>Drive one yourself</h3>
+
+  <p>Press the buttons. Watch which calls move the marker and which do not. Predict
+  the return value before you click — that prediction is the point.</p>
+
+  <div data-cursor-lab data-input="382x99" data-label="cursor over &quot;382x99&quot;"></div>
+
+  <h2>3. One derived helper: reading a number</h2>
+
+  <p>With those three primitives, everything else is composition. To read a number you
+  remember where you started, consume digits while there are digits, and slice out
+  what you covered:</p>
+
+<pre><code><span class="tok-k">const</span> isDigit = (c) =&gt; c &gt;= <span class="tok-s">"0"</span> &amp;&amp; c &lt;= <span class="tok-s">"9"</span>;
+
+<span class="tok-k">function</span> readNumber() {
+  <span class="tok-k">const</span> start = pos;
+  <span class="tok-k">while</span> (isDigit(peek())) advance();
+  <span class="tok-k">return</span> Number(src.slice(start, pos));
+}</code></pre>
+
+  <p>Read that loop carefully, because its shape recurs forever:
+  <em>peek to test, advance to consume.</em> It handles <code>1</code>,
+  <code>382</code> and <code>18446744</code> identically, and it stops the instant it
+  meets something that is not a digit — leaving <code>pos</code> sitting exactly on
+  that character, ready for whoever asks next. Nothing was thrown away. Nothing was
+  guessed.</p>
+
+  <div class="callout">
+    <p class="callout-title">The transferable idea</p>
+    <p>A parsing function's contract is: <em>start at the first character of the thing
+    you parse; return the value; leave <code>pos</code> on the first character you did
+    not consume.</em> Hold every function you write to that contract and they compose
+    without you having to think about it.</p>
+  </div>
+
+  <h2>4. Your turn</h2>
+
+  <p>Write <code>parseDims</code>. It takes <code>"382x99"</code> and returns
+  <code>{ w: 382, h: 99 }</code>. The three primitives are given; the logic is yours.
+  <code>split</code>, <code>indexOf</code>, <code>match</code>, <code>replace</code>
+  and <code>RegExp</code> are blocked — that constraint is the lesson.</p>
+
+  <div class="exercise" data-exercise data-fn="parseDims" data-key="l1-parse-dims"
+       data-banned="split,indexOf,match,replace,RegExp">
+    <p class="ex-brief"><strong>Task:</strong> parse a tmux dimension pair
+    <code>WIDTHxHEIGHT</code> into <code>{ w, h }</code>. Both must be
+    <em>numbers</em>, not strings.</p>
+
+<textarea class="ex-code" spellcheck="false">function parseDims(src) {
+  let pos = 0;
+
+  const peek    = () => pos < src.length ? src[pos] : "\0";
+  const advance = () => src[pos++];
+  const atEnd   = () => pos >= src.length;
+  const isDigit = (c) => c >= "0" && c <= "9";
+
+  function readNumber() {
+    // TODO: consume digits, return them as a Number
+  }
+
+  // TODO: read the width, step over the "x", read the height
+
+  return { w: 0, h: 0 };
+}</textarea>
+
+<script type="application/json" class="ex-tests">
+[
+  {"args": ["382x99"], "expect": {"w": 382, "h": 99}},
+  {"args": ["1x1"],    "expect": {"w": 1,   "h": 1}},
+  {"args": ["127x99"], "expect": {"w": 127, "h": 99},
+   "note": "the first pane cell in your mission string"},
+  {"args": ["9x100"],  "expect": {"w": 9,   "h": 100},
+   "note": "catches anything that assumes both numbers are the same width"},
+  {"args": ["0x0"],    "expect": {"w": 0,   "h": 0},
+   "note": "0 is falsy — catches any `if (n)` guard hiding in your digit loop"}
+]
+</script>
+
+    <div class="ex-solution" hidden>
+<pre><code><span class="tok-k">function</span> parseDims(src) {
+  <span class="tok-k">let</span> pos = 0;
+
+  <span class="tok-k">const</span> peek    = () =&gt; pos &lt; src.length ? src[pos] : <span class="tok-s">"\0"</span>;
+  <span class="tok-k">const</span> advance = () =&gt; src[pos++];
+  <span class="tok-k">const</span> isDigit = (c) =&gt; c &gt;= <span class="tok-s">"0"</span> &amp;&amp; c &lt;= <span class="tok-s">"9"</span>;
+
+  <span class="tok-k">function</span> readNumber() {
+    <span class="tok-k">const</span> start = pos;
+    <span class="tok-k">while</span> (isDigit(peek())) advance();
+    <span class="tok-k">return</span> Number(src.slice(start, pos));
+  }
+
+  <span class="tok-k">const</span> w = readNumber();
+  advance();                <span class="tok-c">// step over the "x"</span>
+  <span class="tok-k">const</span> h = readNumber();
+  <span class="tok-k">return</span> { w, h };
+}</code></pre>
+      <p style="font-size:.86rem;color:var(--ink-soft);margin-top:.7rem">
+      Notice the weak spot: that bare <code>advance()</code> consumes whatever is
+      there, <code>x</code> or not. <code>parseDims("382y99")</code> happily returns
+      <code>{w: 382, h: 99}</code>. Fixing that honestly is Lesson 2.</p>
+    </div>
+  </div>
+
+  <h2>5. Retrieval check</h2>
+
+  <p>Answer from memory, not by scrolling up. Getting one wrong here is more useful
+  than getting all three right by looking.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-q">You call <code>peek()</code> twice in a row. What do you get?</p>
+    <ul class="quiz-options">
+      <li data-correct data-why="peek() is a question, not a consumption. Nothing about the cursor changes, so asking twice gives the same answer twice.">Both return the same character and the position stays put.</li>
+      <li data-why="That describes advance(), which returns the character and then steps forward. Mixing these two up is the classic source of off-by-one bugs.">Both return the same character but the position moves once.</li>
+      <li data-why="That would be true of two advance() calls. peek() never moves the position — that is the entire reason it exists.">Each returns a different character because the position moves along.</li>
+    </ul>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-q">When is <code>split(delimiter)</code> actually a safe way to parse?</p>
+    <ul class="quiz-options">
+      <li data-correct data-why="This is the exact precondition. A tmux window name may contain spaces, so splitting that line on spaces violates it immediately.">No field may ever contain the delimiter used to separate fields.</li>
+      <li data-why="Quoting does not save you — it means you now have to parse the quotes, including escaped quotes inside them, which split() cannot do.">Every field is quoted, so the delimiter never appears unescaped.</li>
+      <li data-why="Fixed-width fields are a different format entirely; you would slice by offset rather than split by delimiter. Not the condition being asked about.">Every field must be the same length so offsets are known.</li>
+    </ul>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-q">What should <code>peek()</code> do when <code>pos</code> is past the last character?</p>
+    <ul class="quiz-options">
+      <li data-correct data-why="A sentinel keeps loop conditions like `while (isDigit(peek()))` honest and self-terminating, with no hand-written bounds check at every call site.">Return a sentinel value rather than throw, so callers can test it.</li>
+      <li data-why="Reading past the end is completely normal during scanning — it is how a loop discovers the input ended. Throwing would make the common case an exception.">Throw an error immediately, since reading past the end is a bug.</li>
+      <li data-why="Wrapping would make the cursor loop over its input forever, and a scan would never terminate. Position must be monotonic.">Wrap back around to index zero so the scan can continue.</li>
+    </ul>
+  </div>
+
+  <h2>6. Read this next</h2>
+
+  <p><strong>Primary source:</strong>
+  <a href="https://craftinginterpreters.com/scanning.html">Crafting Interpreters, Chapter 4: “Scanning”</a>
+  — read §4.1 to §4.5 only (roughly to “Lexemes and Tokens”). Nystrom builds the exact
+  cursor you just built, and names the fields <code>start</code>, <code>current</code>
+  and <code>line</code>. Notice he keeps <code>start</code> as scanner state where you
+  kept it as a local — and ask yourself why he needs to. It is free and it is the best
+  writing on this subject anywhere.</p>
+
+  <div class="ask-teacher">
+    <strong>I'm your teacher here — ask me things.</strong> If the peek/advance split
+    still feels arbitrary, if you want to know why <code>readNumber</code> uses
+    <code>slice</code> instead of accumulating <code>n * 10 + digit</code>, or if you
+    want a harder variant of this exercise before moving on — just ask in the session.
+    Half-understood foundations get expensive fast in parsing.
+  </div>
+
+  <div class="lesson-footer">
+    <h3>Reference</h3>
+    <ul>
+      <li><a href="../reference/cursor-primitives.html">Cursor primitives — cheat sheet</a> (print this one)</li>
+      <li><a href="../reference/glossary.html">Glossary</a></li>
+    </ul>
+    <h3>Next</h3>
+    <ul>
+      <li><strong>Lesson 2 — Expect &amp; fail well:</strong> that bare
+      <code>advance()</code> over the <code>x</code> is a lie. You will build
+      <code>expect(ch)</code> and make <code>parseDims("382y99")</code> report
+      <em>expected 'x' at column 3</em>. Ask me to write it when you're ready.</li>
+    </ul>
+  </div>
+
+</div>
+<script src="../assets/cursor-lab.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

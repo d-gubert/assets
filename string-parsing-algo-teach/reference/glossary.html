@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Glossary</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+<style>
+  dl { margin: 0 0 1.8rem; }
+  dt { font-weight: 650; margin-top: 1.1rem; }
+  dd { margin: 0.25rem 0 0; color: var(--ink-soft); }
+  dd .avoid { display: block; font-size: 0.78rem; color: var(--ink-faint); font-style: italic; margin-top: 0.2rem; }
+  .pending { font-size: 0.86rem; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <p class="eyebrow">Reference</p>
+  <h1>Glossary</h1>
+  <p class="subtitle">The canonical vocabulary for this workspace. A term is only added
+  here once you have used it correctly — so this file is a record of what you know, not
+  a list of what you should read.</p>
+
+  <h2>The cursor</h2>
+
+  <dl>
+    <dt>Cursor</dt>
+    <dd>An input string paired with a position into it. The complete state of a
+    hand-written parser.
+    <span class="avoid">Avoid: pointer, iterator, reader</span></dd>
+
+    <dt>Position</dt>
+    <dd>The index of the next character that has not yet been consumed. Monotonic —
+    it only ever moves forward, except during deliberate backtracking.
+    <span class="avoid">Avoid: offset, index, cursor (the cursor is the whole thing)</span></dd>
+
+    <dt>Peek</dt>
+    <dd>Reading the character at the position without moving it. The operation used to
+    <em>decide</em>.
+    <span class="avoid">Avoid: lookahead (that word is reserved for a different, larger idea)</span></dd>
+
+    <dt>Advance</dt>
+    <dd>Reading the character at the position and moving past it. The operation used to
+    <em>commit</em>.
+    <span class="avoid">Avoid: next, read, eat, bump</span></dd>
+
+    <dt>Consume</dt>
+    <dd>To advance past one or more characters, having decided what they are. Consumed
+    characters are behind the position and will not be seen again.</dd>
+
+    <dt>Sentinel</dt>
+    <dd>A value returned in place of a real character when the position is past the end
+    of input — <code>"\0"</code> in this workspace. It exists so loop conditions
+    terminate without a bounds check at every call site.
+    <span class="avoid">Avoid: null character, EOF marker</span></dd>
+
+    <dt>Character class</dt>
+    <dd>A predicate over a single character, written as range comparisons —
+    <code>isDigit</code>, <code>isAlpha</code>, <code>isHex</code>.</dd>
+  </dl>
+
+  <h2>Formats</h2>
+
+  <dl>
+    <dt>Field</dt>
+    <dd>One meaningful value inside a formatted string — a width, a name, a pane id.</dd>
+
+    <dt>Delimiter</dt>
+    <dd>A character whose job is to separate fields. Splitting on a delimiter is only
+    valid when no field may contain it.</dd>
+  </dl>
+
+  <p class="pending">Terms arriving in later lessons — <em>lexeme, token, tokenizer,
+  grammar, terminal, non-terminal, recursive descent, lookahead, backtracking,
+  ambiguity, EBNF</em> — are deliberately not listed yet. They go in once used, not once
+  mentioned.</p>
+
+  <div class="lesson-footer">
+    <h3>Related</h3>
+    <ul>
+      <li><a href="cursor-primitives.html">Cursor primitives — cheat sheet</a></li>
+      <li><a href="../lessons/0001-the-cursor.html">Lesson 1 — The Cursor</a></li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>

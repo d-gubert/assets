@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Cursor Primitives</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+<style>
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.9rem; margin-bottom: 1.6rem; }
+  .card { border: 1px solid var(--rule); border-radius: 5px; padding: 0.85rem 1rem; background: var(--bg-sunk); }
+  .card h3 { margin: 0 0 0.35rem; font-family: var(--mono); font-size: 0.85rem; color: var(--accent-2); }
+  .card p { font-size: 0.83rem; margin: 0; color: var(--ink-soft); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; margin-bottom: 1.6rem; }
+  th, td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); }
+  td code { font-size: 0.8rem; }
+  .tablewrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <p class="eyebrow">Reference · print me</p>
+  <h1>Cursor Primitives</h1>
+  <p class="subtitle">The complete toolkit for hand-written parsing. Everything else in
+  this workspace is built from these.</p>
+
+  <h2>State</h2>
+
+<pre><code><span class="tok-k">const</span> src = <span class="tok-s">"…"</span>;   <span class="tok-c">// immutable input</span>
+<span class="tok-k">let</span>   pos = 0;     <span class="tok-c">// the only mutable state in the whole parser</span></code></pre>
+
+  <h2>The three primitives</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>peek()</h3>
+      <p>Returns the character at <code>pos</code>. <strong>Does not move.</strong>
+      Returns a sentinel (<code>"\0"</code>) past the end so loop conditions
+      terminate on their own.</p>
+    </div>
+    <div class="card">
+      <h3>advance()</h3>
+      <p>Returns the character at <code>pos</code> and <strong>increments
+      <code>pos</code></strong>. The only thing in the system that moves forward.</p>
+    </div>
+    <div class="card">
+      <h3>atEnd()</h3>
+      <p><code>pos &gt;= src.length</code>. Guards outer loops so you never scan
+      forever on malformed input.</p>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <p><strong>Peek asks. Advance commits.</strong> You peek to decide; you advance
+    once you have decided. Every off-by-one bug in a hand-written parser is these two
+    getting mixed up.</p>
+  </div>
+
+<pre><code><span class="tok-k">const</span> peek    = ()  =&gt; pos &lt; src.length ? src[pos] : <span class="tok-s">"\0"</span>;
+<span class="tok-k">const</span> advance = ()  =&gt; src[pos++];
+<span class="tok-k">const</span> atEnd   = ()  =&gt; pos &gt;= src.length;</code></pre>
+
+  <h2>Character classes</h2>
+
+  <p>Range comparisons, not regex. They are faster, they are obvious, and they work on
+  a single character where a regex would need a whole engine.</p>
+
+<pre><code><span class="tok-k">const</span> isDigit = (c) =&gt; c &gt;= <span class="tok-s">"0"</span> &amp;&amp; c &lt;= <span class="tok-s">"9"</span>;
+<span class="tok-k">const</span> isAlpha = (c) =&gt; (c &gt;= <span class="tok-s">"a"</span> &amp;&amp; c &lt;= <span class="tok-s">"z"</span>)
+                   || (c &gt;= <span class="tok-s">"A"</span> &amp;&amp; c &lt;= <span class="tok-s">"Z"</span>)
+                   ||  c === <span class="tok-s">"_"</span>;
+<span class="tok-k">const</span> isHex   = (c) =&gt; isDigit(c) || (c &gt;= <span class="tok-s">"a"</span> &amp;&amp; c &lt;= <span class="tok-s">"f"</span>)
+                                  || (c &gt;= <span class="tok-s">"A"</span> &amp;&amp; c &lt;= <span class="tok-s">"F"</span>);
+<span class="tok-k">const</span> isSpace = (c) =&gt; c === <span class="tok-s">" "</span> || c === <span class="tok-s">"\t"</span>;</code></pre>
+
+  <h2>Derived helpers</h2>
+
+  <p>Composition of the three primitives. Written once, reused everywhere.</p>
+
+<pre><code><span class="tok-c">// Consume characters while a predicate holds; return the covered text.</span>
+<span class="tok-k">function</span> consumeWhile(pred) {
+  <span class="tok-k">const</span> start = pos;
+  <span class="tok-k">while</span> (!atEnd() &amp;&amp; pred(peek())) advance();
+  <span class="tok-k">return</span> src.slice(start, pos);
+}
+
+<span class="tok-c">// An unsigned integer.</span>
+<span class="tok-k">function</span> readNumber() {
+  <span class="tok-k">return</span> Number(consumeWhile(isDigit));
+}
+
+<span class="tok-c">// Consume ch only if it is there. Returns whether it was. Never throws.</span>
+<span class="tok-k">function</span> match(ch) {
+  <span class="tok-k">if</span> (peek() !== ch) <span class="tok-k">return</span> <span class="tok-k">false</span>;
+  advance();
+  <span class="tok-k">return</span> <span class="tok-k">true</span>;
+}</code></pre>
+
+  <h2>The contract every parse function obeys</h2>
+
+  <div class="tablewrap">
+  <table>
+    <tr><th>Rule</th><th>Meaning</th></tr>
+    <tr>
+      <td>Enter on the first character</td>
+      <td>When <code>parseX()</code> is called, <code>pos</code> sits on the first
+      character of the <em>X</em> being parsed. It never has to skip in.</td>
+    </tr>
+    <tr>
+      <td>Return the value</td>
+      <td>The function returns the structured result — a number, an object, a node —
+      and nothing about position.</td>
+    </tr>
+    <tr>
+      <td>Exit on the first character you did not consume</td>
+      <td>On return, <code>pos</code> sits on the next unconsumed character. Not one
+      before, not one after.</td>
+    </tr>
+    <tr>
+      <td>Consume nothing on a decision</td>
+      <td>If you <code>peek()</code> to choose a branch, position is unchanged when the
+      branch is taken. The branch does its own consuming.</td>
+    </tr>
+  </table>
+  </div>
+
+  <p>Hold every function to those four lines and they compose without you having to
+  reason about them together. Break one — a function that leaves <code>pos</code> one
+  past where it should — and every caller above it becomes subtly wrong.</p>
+
+  <h2>The tmux dimension pair, end to end</h2>
+
+<pre><code><span class="tok-c">// "382x99" → { w: 382, h: 99 }</span>
+<span class="tok-k">function</span> parseDims() {
+  <span class="tok-k">const</span> w = readNumber();
+  match(<span class="tok-s">"x"</span>);          <span class="tok-c">// Lesson 2 upgrades this to expect("x")</span>
+  <span class="tok-k">const</span> h = readNumber();
+  <span class="tok-k">return</span> { w, h };
+}</code></pre>
+
+  <div class="lesson-footer">
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="https://craftinginterpreters.com/scanning.html">Crafting Interpreters §4 — Scanning</a>
+      (Nystrom; <code>advance</code>/<code>peek</code>/<code>match</code> defined here)</li>
+    </ul>
+    <h3>Related</h3>
+    <ul>
+      <li><a href="glossary.html">Glossary</a></li>
+      <li><a href="../lessons/0001-the-cursor.html">Lesson 1 — The Cursor</a></li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
