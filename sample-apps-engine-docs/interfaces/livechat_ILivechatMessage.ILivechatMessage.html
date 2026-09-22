@@ -1,0 +1,304 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>ILivechatMessage | Rocket.Chat Apps-Engine API Reference</title><meta name="description" content="Documentation for Rocket.Chat Apps-Engine API Reference"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Rocket.Chat Apps-Engine API Reference</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="../modules/livechat_ILivechatMessage.html">livechat/ILivechatMessage</a></li>
+<li><a href="" aria-current="page">ILivechatMessage</a></li></ul>
+<h1>Interface ILivechatMessage</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>A message in a Livechat conversation.</p>
+<p>A message the visitor wrote carries the visitor as well as the sender,
+which is the only way to tell the two sides apart.</p>
+</div></section>
+<div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">ILivechatMessage</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#alias">alias</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#attachments">attachments</a><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageAttachment.IMessageAttachment.html" class="tsd-signature-type tsd-kind-interface">IMessageAttachment</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#avatarurl">avatarUrl</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#blocks">blocks</a><span class="tsd-signature-symbol">?:</span> (<span class="tsd-signature-type">LayoutBlock</span> <span class="tsd-signature-symbol">|</span> <a href="uikit_blocks_Blocks.IBlock.html" class="tsd-signature-type tsd-kind-interface">IBlock</a>)<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#createdat">createdAt</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#customfields">customFields</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">{</span> <span class="tsd-signature-symbol">[</span><span class="tsd-kind-index-signature">key</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]:</span> <span class="tsd-signature-type">any</span> <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#editedat">editedAt</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#editor">editor</a><span class="tsd-signature-symbol">?:</span> <a href="users_IUser.IUser.html" class="tsd-signature-type tsd-kind-interface">IUser</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#emoji">emoji</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#file">file</a><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageFile.IMessageFile.html" class="tsd-signature-type tsd-kind-interface">IMessageFile</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#files">files</a><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageFile.IMessageFile.html" class="tsd-signature-type tsd-kind-interface">IMessageFile</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#groupable">groupable</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#id">id</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#parseurls">parseUrls</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#pinned">pinned</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#pinnedat">pinnedAt</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#pinnedby">pinnedBy</a><span class="tsd-signature-symbol">?:</span> <a href="users_IUserLookup.IUserLookup.html" class="tsd-signature-type tsd-kind-interface">IUserLookup</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#reactions">reactions</a><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageReaction.IMessageReactions.html" class="tsd-signature-type tsd-kind-interface">IMessageReactions</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#room">room</a><span class="tsd-signature-symbol">:</span> <a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#sender">sender</a><span class="tsd-signature-symbol">:</span> <a href="users_IUser.IUser.html" class="tsd-signature-type tsd-kind-interface">IUser</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#starred">starred</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">{</span> <span class="tsd-kind-property">_id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span> <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#text">text</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#threadid">threadId</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#token">token</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#type">type</a><span class="tsd-signature-symbol">?:</span> <a href="../types/messages_MessageType.MessageType.html" class="tsd-signature-type tsd-kind-type-alias">MessageType</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#updatedat">updatedAt</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#visitor">visitor</a><span class="tsd-signature-symbol">?:</span> <a href="livechat_IVisitor.IVisitor.html" class="tsd-signature-type tsd-kind-interface">IVisitor</a><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div>
+<section class="tsd-panel tsd-hierarchy" data-refl="2077">
+<h4>Hierarchy (<a href="../hierarchy.html#livechat/ILivechatMessage.ILivechatMessage">View Summary</a>)</h4>
+<ul class="tsd-hierarchy">
+<li class="tsd-hierarchy-item"><a href="messages_IMessage.IMessage.html" class="tsd-signature-type tsd-kind-interface">IMessage</a>
+<ul class="tsd-hierarchy">
+<li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">ILivechatMessage</span></li></ul></li></ul></section><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/livechat/ILivechatMessage.ts:10</li></ul></aside>
+<section class="tsd-panel-group tsd-index-group">
+<section class="tsd-panel tsd-index-panel">
+<details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h5 class="tsd-index-heading uppercase">Index</h5></summary>
+<div class="tsd-accordion-details">
+<section class="tsd-index-section">
+<h3 class="tsd-index-heading tsd-anchor-link" id="properties">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-index-list"><a href="#alias" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>alias?</span></a>
+<a href="#attachments" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>attachments?</span></a>
+<a href="#avatarurl" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>avatar<wbr/>Url?</span></a>
+<a href="#blocks" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>blocks?</span></a>
+<a href="#createdat" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>created<wbr/>At?</span></a>
+<a href="#customfields" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>custom<wbr/>Fields?</span></a>
+<a href="#editedat" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>edited<wbr/>At?</span></a>
+<a href="#editor" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>editor?</span></a>
+<a href="#emoji" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>emoji?</span></a>
+<a href="#file" class="tsd-index-link deprecated tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>file?</span></a>
+<a href="#files" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>files?</span></a>
+<a href="#groupable" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>groupable?</span></a>
+<a href="#id" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>id?</span></a>
+<a href="#parseurls" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>parse<wbr/>Urls?</span></a>
+<a href="#pinned" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>pinned?</span></a>
+<a href="#pinnedat" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>pinned<wbr/>At?</span></a>
+<a href="#pinnedby" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>pinned<wbr/>By?</span></a>
+<a href="#reactions" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>reactions?</span></a>
+<a href="#room" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>room</span></a>
+<a href="#sender" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>sender</span></a>
+<a href="#starred" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>starred?</span></a>
+<a href="#text" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>text?</span></a>
+<a href="#threadid" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>thread<wbr/>Id?</span></a>
+<a href="#token" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>token?</span></a>
+<a href="#type" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>type?</span></a>
+<a href="#updatedat" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>updated<wbr/>At?</span></a>
+<a href="#visitor" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>visitor?</span></a>
+</div></section></div></details></section></section>
+<details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h2 class="tsd-anchor-link" id="properties-1">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
+<section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="alias"><code class="tsd-tag">Optional</code><span>alias</span><a href="#alias" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">alias</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>A name to show in place of the sender's.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#alias">alias</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:42</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="attachments"><code class="tsd-tag">Optional</code><span>attachments</span><a href="#attachments" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">attachments</span><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageAttachment.IMessageAttachment.html" class="tsd-signature-type tsd-kind-interface">IMessageAttachment</a><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>The rich previews and quotes shown under the message.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#attachments">attachments</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:48</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="avatarurl"><code class="tsd-tag">Optional</code><span>avatar<wbr/>Url</span><a href="#avatarurl" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">avatarUrl</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>An image to show in place of the sender's avatar.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#avatarurl">avatarUrl</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:40</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="blocks"><code class="tsd-tag">Optional</code><span>blocks</span><a href="#blocks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">blocks</span><span class="tsd-signature-symbol">?:</span> (<span class="tsd-signature-type">LayoutBlock</span> <span class="tsd-signature-symbol">|</span> <a href="uikit_blocks_Blocks.IBlock.html" class="tsd-signature-type tsd-kind-interface">IBlock</a>)<span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>The UIKit blocks rendered under the message.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#blocks">blocks</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:58</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="createdat"><code class="tsd-tag">Optional</code><span>created<wbr/>At</span><a href="#createdat" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">createdAt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span></div>
+<div class="tsd-comment tsd-typography"><p>When the message was posted.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#createdat">createdAt</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:30</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="customfields"><code class="tsd-tag">Optional</code><span>custom<wbr/>Fields</span><a href="#customfields" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">customFields</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">{</span> <span class="tsd-signature-symbol">[</span><span class="tsd-kind-index-signature">key</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]:</span> <span class="tsd-signature-type">any</span> <span class="tsd-signature-symbol">}</span></div>
+<div class="tsd-comment tsd-typography"><p>The values filled into the workspace's custom message fields.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#customfields">customFields</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:56</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="editedat"><code class="tsd-tag">Optional</code><span>edited<wbr/>At</span><a href="#editedat" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">editedAt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span></div>
+<div class="tsd-comment tsd-typography"><p>When the message was last edited.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#editedat">editedAt</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:36</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="editor"><code class="tsd-tag">Optional</code><span>editor</span><a href="#editor" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">editor</span><span class="tsd-signature-symbol">?:</span> <a href="users_IUser.IUser.html" class="tsd-signature-type tsd-kind-interface">IUser</a></div>
+<div class="tsd-comment tsd-typography"><p>Who last edited the message.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#editor">editor</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:34</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="emoji"><code class="tsd-tag">Optional</code><span>emoji</span><a href="#emoji" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">emoji</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>An emoji to show in place of the sender's avatar.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#emoji">emoji</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:38</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="file"><code class="tsd-tag">Optional</code><span class="deprecated">file</span><a href="#file" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">file</span><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageFile.IMessageFile.html" class="tsd-signature-type tsd-kind-interface">IMessageFile</a></div>
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-deprecated">
+<h4 class="tsd-anchor-link" id="deprecated">Deprecated<a href="#deprecated" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Deprecated in favor of files</p>
+</div></div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#file">file</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:44</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="files"><code class="tsd-tag">Optional</code><span>files</span><a href="#files" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">files</span><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageFile.IMessageFile.html" class="tsd-signature-type tsd-kind-interface">IMessageFile</a><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>The files attached to the message.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#files">files</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:46</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="groupable"><code class="tsd-tag">Optional</code><span>groupable</span><a href="#groupable" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">groupable</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Whether the client may fold this message into the one above it.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#groupable">groupable</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:52</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="id"><code class="tsd-tag">Optional</code><span>id</span><a href="#id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">id</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The message's identifier, once it is saved.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#id">id</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:20</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="parseurls"><code class="tsd-tag">Optional</code><span>parse<wbr/>Urls</span><a href="#parseurls" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">parseUrls</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Whether Rocket.Chat should look for links in the text and build previews.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#parseurls">parseUrls</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:54</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="pinned"><code class="tsd-tag">Optional</code><span>pinned</span><a href="#pinned" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">pinned</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Whether the message is pinned in its room.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#pinned">pinned</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:62</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="pinnedat"><code class="tsd-tag">Optional</code><span>pinned<wbr/>At</span><a href="#pinnedat" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">pinnedAt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span></div>
+<div class="tsd-comment tsd-typography"><p>When the message was pinned.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#pinnedat">pinnedAt</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:64</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="pinnedby"><code class="tsd-tag">Optional</code><span>pinned<wbr/>By</span><a href="#pinnedby" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">pinnedBy</span><span class="tsd-signature-symbol">?:</span> <a href="users_IUserLookup.IUserLookup.html" class="tsd-signature-type tsd-kind-interface">IUserLookup</a></div>
+<div class="tsd-comment tsd-typography"><p>Who pinned the message.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#pinnedby">pinnedBy</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:66</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="reactions"><code class="tsd-tag">Optional</code><span>reactions</span><a href="#reactions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">reactions</span><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessageReaction.IMessageReactions.html" class="tsd-signature-type tsd-kind-interface">IMessageReactions</a></div>
+<div class="tsd-comment tsd-typography"><p>Who reacted to the message, keyed by emoji.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#reactions">reactions</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:50</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="room"><span>room</span><a href="#room" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">room</span><span class="tsd-signature-symbol">:</span> <a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a></div>
+<div class="tsd-comment tsd-typography"><p>The room the message is in.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#room">room</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:24</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="sender"><span>sender</span><a href="#sender" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">sender</span><span class="tsd-signature-symbol">:</span> <a href="users_IUser.IUser.html" class="tsd-signature-type tsd-kind-interface">IUser</a></div>
+<div class="tsd-comment tsd-typography"><p>Who the message is from.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#sender">sender</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:26</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="starred"><code class="tsd-tag">Optional</code><span>starred</span><a href="#starred" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">starred</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">{</span> <span class="tsd-kind-property">_id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span> <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>The users who starred the message.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#starred">starred</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:60</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="text"><code class="tsd-tag">Optional</code><span>text</span><a href="#text" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">text</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The message's text, in Rocket.Chat's markdown.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#text">text</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:28</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="threadid"><code class="tsd-tag">Optional</code><span>thread<wbr/>Id</span><a href="#threadid" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">threadId</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The thread the message belongs to, when it is a reply in one.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#threadid">threadId</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:22</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="token"><code class="tsd-tag">Optional</code><span>token</span><a href="#token" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">token</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The visitor's token, which identifies them across conversations.</p>
+</div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/livechat/ILivechatMessage.ts:14</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="type"><code class="tsd-tag">Optional</code><span>type</span><a href="#type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">type</span><span class="tsd-signature-symbol">?:</span> <a href="../types/messages_MessageType.MessageType.html" class="tsd-signature-type tsd-kind-type-alias">MessageType</a></div>
+<div class="tsd-comment tsd-typography"><p>What the message announces, when it is a system message rather than one somebody wrote.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#type">type</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:68</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="updatedat"><code class="tsd-tag">Optional</code><span>updated<wbr/>At</span><a href="#updatedat" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">updatedAt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span></div>
+<div class="tsd-comment tsd-typography"><p>When the message record last changed.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from <a href="messages_IMessage.IMessage.html">IMessage</a>.<a href="messages_IMessage.IMessage.html#updatedat">updatedAt</a></p>
+<ul>
+<li>Defined in src/definition/messages/IMessage.ts:32</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="visitor"><code class="tsd-tag">Optional</code><span>visitor</span><a href="#visitor" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">visitor</span><span class="tsd-signature-symbol">?:</span> <a href="livechat_IVisitor.IVisitor.html" class="tsd-signature-type tsd-kind-interface">IVisitor</a></div>
+<div class="tsd-comment tsd-typography"><p>The visitor who wrote the message, when the visitor did.</p>
+</div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/livechat/ILivechatMessage.ts:12</li></ul></aside></section></section></details></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details">
+<details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Properties</summary>
+<div><a href="#alias" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>alias</span></a><a href="#attachments" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>attachments</span></a><a href="#avatarurl" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>avatar<wbr/>Url</span></a><a href="#blocks" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>blocks</span></a><a href="#createdat" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>created<wbr/>At</span></a><a href="#customfields" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>custom<wbr/>Fields</span></a><a href="#editedat" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>edited<wbr/>At</span></a><a href="#editor" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>editor</span></a><a href="#emoji" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>emoji</span></a><a href="#file" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>file</span></a><a href="#files" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>files</span></a><a href="#groupable" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>groupable</span></a><a href="#id" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>id</span></a><a href="#parseurls" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>parse<wbr/>Urls</span></a><a href="#pinned" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>pinned</span></a><a href="#pinnedat" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>pinned<wbr/>At</span></a><a href="#pinnedby" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>pinned<wbr/>By</span></a><a href="#reactions" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>reactions</span></a><a href="#room" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>room</span></a><a href="#sender" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>sender</span></a><a href="#starred" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>starred</span></a><a href="#text" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>text</span></a><a href="#threadid" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>thread<wbr/>Id</span></a><a href="#token"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>token</span></a><a href="#type" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>type</span></a><a href="#updatedat" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>updated<wbr/>At</span></a><a href="#visitor"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>visitor</span></a></div></details></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">Rocket.Chat Apps-Engine API Reference</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>

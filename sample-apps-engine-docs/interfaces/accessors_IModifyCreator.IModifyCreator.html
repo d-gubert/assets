@@ -1,0 +1,259 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>IModifyCreator | Rocket.Chat Apps-Engine API Reference</title><meta name="description" content="Documentation for Rocket.Chat Apps-Engine API Reference"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Rocket.Chat Apps-Engine API Reference</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="../modules/accessors_IModifyCreator.html">accessors/IModifyCreator</a></li>
+<li><a href="" aria-current="page">IModifyCreator</a></li></ul>
+<h1>Interface IModifyCreator</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>Creates new records: messages, rooms, discussions, conferences, uploads and
+more.</p>
+<p>Everything built here goes through a builder. Nothing exists until
+<a href="#finish" class="tsd-kind-method">IModifyCreator.finish</a> is called with it, so a builder can be passed
+around and changed first.</p>
+</div></section>
+<div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">IModifyCreator</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-call-signature" href="#finish-1">finish</a><span class="tsd-signature-symbol">(</span><br/>        <span class="tsd-kind-parameter">builder</span><span class="tsd-signature-symbol">:</span><br/>            <span class="tsd-signature-symbol">|</span> <a href="accessors_IRoomBuilder.IRoomBuilder.html" class="tsd-signature-type tsd-kind-interface">IRoomBuilder</a><br/>            <span class="tsd-signature-symbol">|</span> <a href="accessors_IMessageBuilder.IMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">IMessageBuilder</a><br/>            <span class="tsd-signature-symbol">|</span> <a href="accessors_IDiscussionBuilder.IDiscussionBuilder.html" class="tsd-signature-type tsd-kind-interface">IDiscussionBuilder</a><br/>            <span class="tsd-signature-symbol">|</span> <a href="accessors_ILivechatMessageBuilder.ILivechatMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessageBuilder</a><br/>            <span class="tsd-signature-symbol">|</span> <a href="accessors_IUserBuilder.IUserBuilder.html" class="tsd-signature-type tsd-kind-interface">IUserBuilder</a><br/>            <span class="tsd-signature-symbol">|</span> <a href="accessors_IVideoConferenceBuilder.IVideoConferenceBuilder.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceBuilder</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getblockbuilder-1">getBlockBuilder</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="../classes/uikit_blocks_BlockBuilder.BlockBuilder.html" class="tsd-signature-type tsd-kind-class">BlockBuilder</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getcontactcreator-1">getContactCreator</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IContactCreator.IContactCreator.html" class="tsd-signature-type tsd-kind-interface">IContactCreator</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getemailcreator-1">getEmailCreator</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IEmailCreator.IEmailCreator.html" class="tsd-signature-type tsd-kind-interface">IEmailCreator</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getlivechatcreator-1">getLivechatCreator</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ILivechatCreator.ILivechatCreator.html" class="tsd-signature-type tsd-kind-interface">ILivechatCreator</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getuploadcreator-1">getUploadCreator</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUploadCreator.IUploadCreator.html" class="tsd-signature-type tsd-kind-interface">IUploadCreator</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#startbotuser-1">startBotUser</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="users_IBotUser.IBotUser.html" class="tsd-signature-type tsd-kind-interface">IBotUser</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUserBuilder.IUserBuilder.html" class="tsd-signature-type tsd-kind-interface">IUserBuilder</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#startdiscussion-1">startDiscussion</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IDiscussionBuilder.IDiscussionBuilder.html" class="tsd-signature-type tsd-kind-interface">IDiscussionBuilder</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#startlivechatmessage-1">startLivechatMessage</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <a href="livechat_ILivechatMessage.ILivechatMessage.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ILivechatMessageBuilder.ILivechatMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessageBuilder</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#startmessage-1">startMessage</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessage.IMessage.html" class="tsd-signature-type tsd-kind-interface">IMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IMessageBuilder.IMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">IMessageBuilder</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#startroom-1">startRoom</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IRoomBuilder.IRoomBuilder.html" class="tsd-signature-type tsd-kind-interface">IRoomBuilder</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#startvideoconference-1">startVideoConference</a><span class="tsd-signature-symbol">(</span><br/>        <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/videoConferences_AppVideoConference.AppVideoConference.html" class="tsd-signature-type tsd-kind-type-alias">AppVideoConference</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IVideoConferenceBuilder.IVideoConferenceBuilder.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceBuilder</a><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:26</li></ul></aside>
+<section class="tsd-panel-group tsd-index-group">
+<section class="tsd-panel tsd-index-panel">
+<details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h5 class="tsd-index-heading uppercase">Index</h5></summary>
+<div class="tsd-accordion-details">
+<section class="tsd-index-section">
+<h3 class="tsd-index-heading tsd-anchor-link" id="methods">Methods<a href="#methods" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-index-list"><a href="#finish" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>finish</span></a>
+<a href="#getblockbuilder" class="tsd-index-link deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Block<wbr/>Builder</span></a>
+<a href="#getcontactcreator" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Contact<wbr/>Creator</span></a>
+<a href="#getemailcreator" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Email<wbr/>Creator</span></a>
+<a href="#getlivechatcreator" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Livechat<wbr/>Creator</span></a>
+<a href="#getuploadcreator" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Upload<wbr/>Creator</span></a>
+<a href="#startbotuser" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Bot<wbr/>User</span></a>
+<a href="#startdiscussion" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Discussion</span></a>
+<a href="#startlivechatmessage" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Livechat<wbr/>Message</span></a>
+<a href="#startmessage" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Message</span></a>
+<a href="#startroom" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Room</span></a>
+<a href="#startvideoconference" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Video<wbr/>Conference</span></a>
+</div></section></div></details></section></section>
+<details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
+<section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="finish"><span>finish</span><a href="#finish" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="finish-1"><span class="tsd-kind-call-signature">finish</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">builder</span><span class="tsd-signature-symbol">:</span><br/>        <span class="tsd-signature-symbol">|</span> <a href="accessors_IRoomBuilder.IRoomBuilder.html" class="tsd-signature-type tsd-kind-interface">IRoomBuilder</a><br/>        <span class="tsd-signature-symbol">|</span> <a href="accessors_IMessageBuilder.IMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">IMessageBuilder</a><br/>        <span class="tsd-signature-symbol">|</span> <a href="accessors_IDiscussionBuilder.IDiscussionBuilder.html" class="tsd-signature-type tsd-kind-interface">IDiscussionBuilder</a><br/>        <span class="tsd-signature-symbol">|</span> <a href="accessors_ILivechatMessageBuilder.ILivechatMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessageBuilder</a><br/>        <span class="tsd-signature-symbol">|</span> <a href="accessors_IUserBuilder.IUserBuilder.html" class="tsd-signature-type tsd-kind-interface">IUserBuilder</a><br/>        <span class="tsd-signature-symbol">|</span> <a href="accessors_IVideoConferenceBuilder.IVideoConferenceBuilder.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceBuilder</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><a href="#finish-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Finishes the creating process, saving the object to the database.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">builder</span>: <br/>    <span class="tsd-signature-symbol">|</span> <a href="accessors_IRoomBuilder.IRoomBuilder.html" class="tsd-signature-type tsd-kind-interface">IRoomBuilder</a><br/>    <span class="tsd-signature-symbol">|</span> <a href="accessors_IMessageBuilder.IMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">IMessageBuilder</a><br/>    <span class="tsd-signature-symbol">|</span> <a href="accessors_IDiscussionBuilder.IDiscussionBuilder.html" class="tsd-signature-type tsd-kind-interface">IDiscussionBuilder</a><br/>    <span class="tsd-signature-symbol">|</span> <a href="accessors_ILivechatMessageBuilder.ILivechatMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessageBuilder</a><br/>    <span class="tsd-signature-symbol">|</span> <a href="accessors_IUserBuilder.IUserBuilder.html" class="tsd-signature-type tsd-kind-interface">IUserBuilder</a><br/>    <span class="tsd-signature-symbol">|</span> <a href="accessors_IVideoConferenceBuilder.IVideoConferenceBuilder.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceBuilder</a></span>
+<div class="tsd-comment tsd-typography"><p>the builder instance</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><p>the resulting <code>id</code> of the resulting object</p>
+<aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:113</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getblockbuilder"><span class="deprecated">get<wbr/>Block<wbr/>Builder</span><a href="#getblockbuilder" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getblockbuilder-1"><span class="tsd-kind-call-signature">getBlockBuilder</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="../classes/uikit_blocks_BlockBuilder.BlockBuilder.html" class="tsd-signature-type tsd-kind-class">BlockBuilder</a><a href="#getblockbuilder-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="../classes/uikit_blocks_BlockBuilder.BlockBuilder.html" class="tsd-signature-type tsd-kind-class">BlockBuilder</a></h4>
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-deprecated">
+<h4 class="tsd-anchor-link" id="deprecated">Deprecated<a href="#deprecated" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>please prefer the rocket.chat/ui-kit components</p>
+<p>Gets a new instance of a BlockBuilder</p>
+</div></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:53</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getcontactcreator"><span>get<wbr/>Contact<wbr/>Creator</span><a href="#getcontactcreator" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getcontactcreator-1"><span class="tsd-kind-call-signature">getContactCreator</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IContactCreator.IContactCreator.html" class="tsd-signature-type tsd-kind-interface">IContactCreator</a><a href="#getcontactcreator-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the creator object responsible for contact related operations.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IContactCreator.IContactCreator.html" class="tsd-signature-type tsd-kind-interface">IContactCreator</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:46</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getemailcreator"><span>get<wbr/>Email<wbr/>Creator</span><a href="#getemailcreator" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getemailcreator-1"><span class="tsd-kind-call-signature">getEmailCreator</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IEmailCreator.IEmailCreator.html" class="tsd-signature-type tsd-kind-interface">IEmailCreator</a><a href="#getemailcreator-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the creator object responsible for email sending</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IEmailCreator.IEmailCreator.html" class="tsd-signature-type tsd-kind-interface">IEmailCreator</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:41</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getlivechatcreator"><span>get<wbr/>Livechat<wbr/>Creator</span><a href="#getlivechatcreator" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getlivechatcreator-1"><span class="tsd-kind-call-signature">getLivechatCreator</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ILivechatCreator.ILivechatCreator.html" class="tsd-signature-type tsd-kind-interface">ILivechatCreator</a><a href="#getlivechatcreator-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Get the creator object responsible for the
+Livechat integrations</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_ILivechatCreator.ILivechatCreator.html" class="tsd-signature-type tsd-kind-interface">ILivechatCreator</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:31</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getuploadcreator"><span>get<wbr/>Upload<wbr/>Creator</span><a href="#getuploadcreator" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getuploadcreator-1"><span class="tsd-kind-call-signature">getUploadCreator</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUploadCreator.IUploadCreator.html" class="tsd-signature-type tsd-kind-interface">IUploadCreator</a><a href="#getuploadcreator-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Get the creator object responsible for the upload.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IUploadCreator.IUploadCreator.html" class="tsd-signature-type tsd-kind-interface">IUploadCreator</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:36</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="startbotuser"><span>start<wbr/>Bot<wbr/>User</span><a href="#startbotuser" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="startbotuser-1"><span class="tsd-kind-call-signature">startBotUser</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="users_IBotUser.IBotUser.html" class="tsd-signature-type tsd-kind-interface">IBotUser</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUserBuilder.IUserBuilder.html" class="tsd-signature-type tsd-kind-interface">IUserBuilder</a><a href="#startbotuser-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Starts the process for building a new bot user.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="users_IBotUser.IBotUser.html" class="tsd-signature-type tsd-kind-interface">IBotUser</a><span class="tsd-signature-symbol">&gt;</span></span>
+<div class="tsd-comment tsd-typography"><p>(optional) the initial data to pass into the builder,
+the <code>id</code> property will be ignored</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IUserBuilder.IUserBuilder.html" class="tsd-signature-type tsd-kind-interface">IUserBuilder</a></h4><p>an IUserBuilder instance</p>
+<aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:105</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="startdiscussion"><span>start<wbr/>Discussion</span><a href="#startdiscussion" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="startdiscussion-1"><span class="tsd-kind-call-signature">startDiscussion</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IDiscussionBuilder.IDiscussionBuilder.html" class="tsd-signature-type tsd-kind-interface">IDiscussionBuilder</a><a href="#startdiscussion-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Starts the process for building a new discussion.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a><span class="tsd-signature-symbol">&gt;</span></span>
+<div class="tsd-comment tsd-typography"><p>(optional) the initial data to pass into the builder,
+the <code>id</code> property will be ignored</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IDiscussionBuilder.IDiscussionBuilder.html" class="tsd-signature-type tsd-kind-interface">IDiscussionBuilder</a></h4><p>an IDiscussionBuilder instance</p>
+<aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:88</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="startlivechatmessage"><span>start<wbr/>Livechat<wbr/>Message</span><a href="#startlivechatmessage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="startlivechatmessage-1"><span class="tsd-kind-call-signature">startLivechatMessage</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <a href="livechat_ILivechatMessage.ILivechatMessage.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ILivechatMessageBuilder.ILivechatMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessageBuilder</a><a href="#startlivechatmessage-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Starts the process for building a new livechat message object.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <a href="livechat_ILivechatMessage.ILivechatMessage.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessage</a></span>
+<div class="tsd-comment tsd-typography"><p>(optional) the initial data to pass into the builder,
+the <code>id</code> property will be ignored</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_ILivechatMessageBuilder.ILivechatMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">ILivechatMessageBuilder</a></h4><p>an IMessageBuilder instance</p>
+<aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:70</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="startmessage"><span>start<wbr/>Message</span><a href="#startmessage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="startmessage-1"><span class="tsd-kind-call-signature">startMessage</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <a href="messages_IMessage.IMessage.html" class="tsd-signature-type tsd-kind-interface">IMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IMessageBuilder.IMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">IMessageBuilder</a><a href="#startmessage-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Starts the process for building a new message object.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <a href="messages_IMessage.IMessage.html" class="tsd-signature-type tsd-kind-interface">IMessage</a></span>
+<div class="tsd-comment tsd-typography"><p>(optional) the initial data to pass into the builder,
+the <code>id</code> property will be ignored</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IMessageBuilder.IMessageBuilder.html" class="tsd-signature-type tsd-kind-interface">IMessageBuilder</a></h4><p>an IMessageBuilder instance</p>
+<aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:61</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="startroom"><span>start<wbr/>Room</span><a href="#startroom" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="startroom-1"><span class="tsd-kind-call-signature">startRoom</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IRoomBuilder.IRoomBuilder.html" class="tsd-signature-type tsd-kind-interface">IRoomBuilder</a><a href="#startroom-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Starts the process for building a new room.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <a href="rooms_IRoom.IRoom.html" class="tsd-signature-type tsd-kind-interface">IRoom</a></span>
+<div class="tsd-comment tsd-typography"><p>(optional) the initial data to pass into the builder,
+the <code>id</code> property will be ignored</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IRoomBuilder.IRoomBuilder.html" class="tsd-signature-type tsd-kind-interface">IRoomBuilder</a></h4><p>an IRoomBuilder instance</p>
+<aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:79</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="startvideoconference"><span>start<wbr/>Video<wbr/>Conference</span><a href="#startvideoconference" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="startvideoconference-1"><span class="tsd-kind-call-signature">startVideoConference</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/videoConferences_AppVideoConference.AppVideoConference.html" class="tsd-signature-type tsd-kind-type-alias">AppVideoConference</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IVideoConferenceBuilder.IVideoConferenceBuilder.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceBuilder</a><a href="#startvideoconference-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Starts the process for building a new video conference.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/videoConferences_AppVideoConference.AppVideoConference.html" class="tsd-signature-type tsd-kind-type-alias">AppVideoConference</a><span class="tsd-signature-symbol">&gt;</span></span>
+<div class="tsd-comment tsd-typography"><p>(optional) the initial data to pass into the builder,</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IVideoConferenceBuilder.IVideoConferenceBuilder.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceBuilder</a></h4><p>an IVideoConferenceBuilder instance</p>
+<aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IModifyCreator.ts:96</li></ul></aside></div></li></ul></section></section></details></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details">
+<details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
+<div><a href="#finish"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>finish</span></a><a href="#getblockbuilder"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Block<wbr/>Builder</span></a><a href="#getcontactcreator"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Contact<wbr/>Creator</span></a><a href="#getemailcreator"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Email<wbr/>Creator</span></a><a href="#getlivechatcreator"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Livechat<wbr/>Creator</span></a><a href="#getuploadcreator"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Upload<wbr/>Creator</span></a><a href="#startbotuser"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Bot<wbr/>User</span></a><a href="#startdiscussion"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Discussion</span></a><a href="#startlivechatmessage"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Livechat<wbr/>Message</span></a><a href="#startmessage"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Message</span></a><a href="#startroom"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Room</span></a><a href="#startvideoconference"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Video<wbr/>Conference</span></a></div></details></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">Rocket.Chat Apps-Engine API Reference</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>

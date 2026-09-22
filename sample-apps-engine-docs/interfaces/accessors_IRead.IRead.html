@@ -1,0 +1,229 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>IRead | Rocket.Chat Apps-Engine API Reference</title><meta name="description" content="Documentation for Rocket.Chat Apps-Engine API Reference"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Rocket.Chat Apps-Engine API Reference</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="../modules/accessors_IRead.html">accessors/IRead</a></li>
+<li><a href="" aria-current="page">IRead</a></li></ul>
+<h1>Interface IRead</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>The IRead accessor provides methods for accessing the
+Rocket.Chat's environment in a read-only-fashion.
+It is safe to be injected in multiple places, idempotent and extensible</p>
+</div></section>
+<div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">IRead</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-call-signature" href="#getcallhistoryreader-1">getCallHistoryReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ICallHistoryRead.ICallHistoryRead.html" class="tsd-signature-type tsd-kind-interface">ICallHistoryRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getcloudworkspacereader-1">getCloudWorkspaceReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ICloudWorkspaceRead.ICloudWorkspaceRead.html" class="tsd-signature-type tsd-kind-interface">ICloudWorkspaceRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getcontactreader-1">getContactReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IContactRead.IContactRead.html" class="tsd-signature-type tsd-kind-interface">IContactRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getenvironmentreader-1">getEnvironmentReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IEnvironmentRead.IEnvironmentRead.html" class="tsd-signature-type tsd-kind-interface">IEnvironmentRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getexperimentalreader-1">getExperimentalReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IExperimentalRead.IExperimentalRead.html" class="tsd-signature-type tsd-kind-interface">IExperimentalRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getlivechatreader-1">getLivechatReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ILivechatRead.ILivechatRead.html" class="tsd-signature-type tsd-kind-interface">ILivechatRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getmessagereader-1">getMessageReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IMessageRead.IMessageRead.html" class="tsd-signature-type tsd-kind-interface">IMessageRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getnotifier-1">getNotifier</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_INotifier.INotifier.html" class="tsd-signature-type tsd-kind-interface">INotifier</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getoauthappsreader-1">getOAuthAppsReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IOAuthAppsReader.IOAuthAppsReader.html" class="tsd-signature-type tsd-kind-interface">IOAuthAppsReader</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getpersistencereader-1">getPersistenceReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IPersistenceRead.IPersistenceRead.html" class="tsd-signature-type tsd-kind-interface">IPersistenceRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getrolereader-1">getRoleReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IRoleRead.IRoleRead.html" class="tsd-signature-type tsd-kind-interface">IRoleRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getroomreader-1">getRoomReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IRoomRead.IRoomRead.html" class="tsd-signature-type tsd-kind-interface">IRoomRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getthreadreader-1">getThreadReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IThreadRead.IThreadRead.html" class="tsd-signature-type tsd-kind-interface">IThreadRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getuploadreader-1">getUploadReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUploadRead.IUploadRead.html" class="tsd-signature-type tsd-kind-interface">IUploadRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getuserreader-1">getUserReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUserRead.IUserRead.html" class="tsd-signature-type tsd-kind-interface">IUserRead</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#getvideoconferencereader-1">getVideoConferenceReader</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IVideoConferenceRead.IVideoConferenceRead.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceRead</a><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:23</li></ul></aside>
+<section class="tsd-panel-group tsd-index-group">
+<section class="tsd-panel tsd-index-panel">
+<details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h5 class="tsd-index-heading uppercase">Index</h5></summary>
+<div class="tsd-accordion-details">
+<section class="tsd-index-section">
+<h3 class="tsd-index-heading tsd-anchor-link" id="methods">Methods<a href="#methods" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-index-list"><a href="#getcallhistoryreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Call<wbr/>History<wbr/>Reader</span></a>
+<a href="#getcloudworkspacereader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Cloud<wbr/>Workspace<wbr/>Reader</span></a>
+<a href="#getcontactreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Contact<wbr/>Reader</span></a>
+<a href="#getenvironmentreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Environment<wbr/>Reader</span></a>
+<a href="#getexperimentalreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Experimental<wbr/>Reader</span></a>
+<a href="#getlivechatreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Livechat<wbr/>Reader</span></a>
+<a href="#getmessagereader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Message<wbr/>Reader</span></a>
+<a href="#getnotifier" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Notifier</span></a>
+<a href="#getoauthappsreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>O<wbr/>Auth<wbr/>Apps<wbr/>Reader</span></a>
+<a href="#getpersistencereader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Persistence<wbr/>Reader</span></a>
+<a href="#getrolereader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Role<wbr/>Reader</span></a>
+<a href="#getroomreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Room<wbr/>Reader</span></a>
+<a href="#getthreadreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Thread<wbr/>Reader</span></a>
+<a href="#getuploadreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Upload<wbr/>Reader</span></a>
+<a href="#getuserreader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>User<wbr/>Reader</span></a>
+<a href="#getvideoconferencereader" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Video<wbr/>Conference<wbr/>Reader</span></a>
+</div></section></div></details></section></section>
+<details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
+<section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getcallhistoryreader"><span>get<wbr/>Call<wbr/>History<wbr/>Reader</span><a href="#getcallhistoryreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getcallhistoryreader-1"><span class="tsd-kind-call-signature">getCallHistoryReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ICallHistoryRead.ICallHistoryRead.html" class="tsd-signature-type tsd-kind-interface">ICallHistoryRead</a><a href="#getcallhistoryreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_ICallHistoryRead.ICallHistoryRead.html" class="tsd-signature-type tsd-kind-interface">ICallHistoryRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:59</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getcloudworkspacereader"><span>get<wbr/>Cloud<wbr/>Workspace<wbr/>Reader</span><a href="#getcloudworkspacereader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getcloudworkspacereader-1"><span class="tsd-kind-call-signature">getCloudWorkspaceReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ICloudWorkspaceRead.ICloudWorkspaceRead.html" class="tsd-signature-type tsd-kind-interface">ICloudWorkspaceRead</a><a href="#getcloudworkspacereader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_ICloudWorkspaceRead.ICloudWorkspaceRead.html" class="tsd-signature-type tsd-kind-interface">ICloudWorkspaceRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:48</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getcontactreader"><span>get<wbr/>Contact<wbr/>Reader</span><a href="#getcontactreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getcontactreader-1"><span class="tsd-kind-call-signature">getContactReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IContactRead.IContactRead.html" class="tsd-signature-type tsd-kind-interface">IContactRead</a><a href="#getcontactreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_IContactRead.IContactRead.html" class="tsd-signature-type tsd-kind-interface">IContactRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:55</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getenvironmentreader"><span>get<wbr/>Environment<wbr/>Reader</span><a href="#getenvironmentreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getenvironmentreader-1"><span class="tsd-kind-call-signature">getEnvironmentReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IEnvironmentRead.IEnvironmentRead.html" class="tsd-signature-type tsd-kind-interface">IEnvironmentRead</a><a href="#getenvironmentreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the IEnvironmentRead instance, contains settings and environmental variables.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IEnvironmentRead.IEnvironmentRead.html" class="tsd-signature-type tsd-kind-interface">IEnvironmentRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:25</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getexperimentalreader"><span>get<wbr/>Experimental<wbr/>Reader</span><a href="#getexperimentalreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getexperimentalreader-1"><span class="tsd-kind-call-signature">getExperimentalReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IExperimentalRead.IExperimentalRead.html" class="tsd-signature-type tsd-kind-interface">IExperimentalRead</a><a href="#getexperimentalreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_IExperimentalRead.IExperimentalRead.html" class="tsd-signature-type tsd-kind-interface">IExperimentalRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:57</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getlivechatreader"><span>get<wbr/>Livechat<wbr/>Reader</span><a href="#getlivechatreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getlivechatreader-1"><span class="tsd-kind-call-signature">getLivechatReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_ILivechatRead.ILivechatRead.html" class="tsd-signature-type tsd-kind-interface">ILivechatRead</a><a href="#getlivechatreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_ILivechatRead.ILivechatRead.html" class="tsd-signature-type tsd-kind-interface">ILivechatRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:46</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getmessagereader"><span>get<wbr/>Message<wbr/>Reader</span><a href="#getmessagereader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getmessagereader-1"><span class="tsd-kind-call-signature">getMessageReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IMessageRead.IMessageRead.html" class="tsd-signature-type tsd-kind-interface">IMessageRead</a><a href="#getmessagereader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the IMessageRead instance.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IMessageRead.IMessageRead.html" class="tsd-signature-type tsd-kind-interface">IMessageRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:32</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getnotifier"><span>get<wbr/>Notifier</span><a href="#getnotifier" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getnotifier-1"><span class="tsd-kind-call-signature">getNotifier</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_INotifier.INotifier.html" class="tsd-signature-type tsd-kind-interface">INotifier</a><a href="#getnotifier-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the INotifier for notifying users/rooms.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_INotifier.INotifier.html" class="tsd-signature-type tsd-kind-interface">INotifier</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:44</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getoauthappsreader"><span>get<wbr/>O<wbr/>Auth<wbr/>Apps<wbr/>Reader</span><a href="#getoauthappsreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getoauthappsreader-1"><span class="tsd-kind-call-signature">getOAuthAppsReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IOAuthAppsReader.IOAuthAppsReader.html" class="tsd-signature-type tsd-kind-interface">IOAuthAppsReader</a><a href="#getoauthappsreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_IOAuthAppsReader.IOAuthAppsReader.html" class="tsd-signature-type tsd-kind-interface">IOAuthAppsReader</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:52</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getpersistencereader"><span>get<wbr/>Persistence<wbr/>Reader</span><a href="#getpersistencereader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getpersistencereader-1"><span class="tsd-kind-call-signature">getPersistenceReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IPersistenceRead.IPersistenceRead.html" class="tsd-signature-type tsd-kind-interface">IPersistenceRead</a><a href="#getpersistencereader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the IPersistenceRead instance.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IPersistenceRead.IPersistenceRead.html" class="tsd-signature-type tsd-kind-interface">IPersistenceRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:35</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getrolereader"><span>get<wbr/>Role<wbr/>Reader</span><a href="#getrolereader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getrolereader-1"><span class="tsd-kind-call-signature">getRoleReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IRoleRead.IRoleRead.html" class="tsd-signature-type tsd-kind-interface">IRoleRead</a><a href="#getrolereader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_IRoleRead.IRoleRead.html" class="tsd-signature-type tsd-kind-interface">IRoleRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:54</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getroomreader"><span>get<wbr/>Room<wbr/>Reader</span><a href="#getroomreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getroomreader-1"><span class="tsd-kind-call-signature">getRoomReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IRoomRead.IRoomRead.html" class="tsd-signature-type tsd-kind-interface">IRoomRead</a><a href="#getroomreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the IRoomRead instance.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IRoomRead.IRoomRead.html" class="tsd-signature-type tsd-kind-interface">IRoomRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:38</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getthreadreader"><span>get<wbr/>Thread<wbr/>Reader</span><a href="#getthreadreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getthreadreader-1"><span class="tsd-kind-call-signature">getThreadReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IThreadRead.IThreadRead.html" class="tsd-signature-type tsd-kind-interface">IThreadRead</a><a href="#getthreadreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the IThreadRead instance</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IThreadRead.IThreadRead.html" class="tsd-signature-type tsd-kind-interface">IThreadRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:29</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getuploadreader"><span>get<wbr/>Upload<wbr/>Reader</span><a href="#getuploadreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getuploadreader-1"><span class="tsd-kind-call-signature">getUploadReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUploadRead.IUploadRead.html" class="tsd-signature-type tsd-kind-interface">IUploadRead</a><a href="#getuploadreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_IUploadRead.IUploadRead.html" class="tsd-signature-type tsd-kind-interface">IUploadRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:47</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getuserreader"><span>get<wbr/>User<wbr/>Reader</span><a href="#getuserreader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getuserreader-1"><span class="tsd-kind-call-signature">getUserReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IUserRead.IUserRead.html" class="tsd-signature-type tsd-kind-interface">IUserRead</a><a href="#getuserreader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Gets the IUserRead instance.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <a href="accessors_IUserRead.IUserRead.html" class="tsd-signature-type tsd-kind-interface">IUserRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:41</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="getvideoconferencereader"><span>get<wbr/>Video<wbr/>Conference<wbr/>Reader</span><a href="#getvideoconferencereader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="getvideoconferencereader-1"><span class="tsd-kind-call-signature">getVideoConferenceReader</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <a href="accessors_IVideoConferenceRead.IVideoConferenceRead.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceRead</a><a href="#getvideoconferencereader-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<h4 class="tsd-returns-title">Returns <a href="accessors_IVideoConferenceRead.IVideoConferenceRead.html" class="tsd-signature-type tsd-kind-interface">IVideoConferenceRead</a></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/accessors/IRead.ts:50</li></ul></aside></div></li></ul></section></section></details></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details">
+<details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
+<div><a href="#getcallhistoryreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Call<wbr/>History<wbr/>Reader</span></a><a href="#getcloudworkspacereader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Cloud<wbr/>Workspace<wbr/>Reader</span></a><a href="#getcontactreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Contact<wbr/>Reader</span></a><a href="#getenvironmentreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Environment<wbr/>Reader</span></a><a href="#getexperimentalreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Experimental<wbr/>Reader</span></a><a href="#getlivechatreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Livechat<wbr/>Reader</span></a><a href="#getmessagereader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Message<wbr/>Reader</span></a><a href="#getnotifier"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Notifier</span></a><a href="#getoauthappsreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>O<wbr/>Auth<wbr/>Apps<wbr/>Reader</span></a><a href="#getpersistencereader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Persistence<wbr/>Reader</span></a><a href="#getrolereader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Role<wbr/>Reader</span></a><a href="#getroomreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Room<wbr/>Reader</span></a><a href="#getthreadreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Thread<wbr/>Reader</span></a><a href="#getuploadreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Upload<wbr/>Reader</span></a><a href="#getuserreader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>User<wbr/>Reader</span></a><a href="#getvideoconferencereader"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Video<wbr/>Conference<wbr/>Reader</span></a></div></details></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">Rocket.Chat Apps-Engine API Reference</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>

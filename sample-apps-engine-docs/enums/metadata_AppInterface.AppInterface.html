@@ -1,0 +1,365 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>AppInterface | Rocket.Chat Apps-Engine API Reference</title><meta name="description" content="Documentation for Rocket.Chat Apps-Engine API Reference"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Rocket.Chat Apps-Engine API Reference</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="../modules/metadata_AppInterface.html">metadata/AppInterface</a></li>
+<li><a href="" aria-current="page">AppInterface</a></li></ul>
+<h1>Enumeration AppInterface</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>The name of every event handler interface an App can implement.</p>
+<p>An App lists in <code>IAppInfo.implements</code> the handlers it wants the host to call,
+and in <code>IAppInfo.essentials</code> the ones whose failure must abort the action
+that triggered them.</p>
+</div></section><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:8</li></ul></aside>
+<section class="tsd-panel-group tsd-index-group">
+<section class="tsd-panel tsd-index-panel">
+<details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h5 class="tsd-index-heading uppercase">Index</h5></summary>
+<div class="tsd-accordion-details">
+<section class="tsd-index-section">
+<h3 class="tsd-index-heading tsd-anchor-link" id="enumeration-members">Enumeration Members<a href="#enumeration-members" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-index-list"><a href="#ilivechatroomclosedhandler" class="tsd-index-link deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Livechat<wbr/>Room<wbr/>Closed<wbr/>Handler</span></a>
+<a href="#imediacallhandler" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Media<wbr/>Call<wbr/>Handler</span></a>
+<a href="#ipostexternalcomponentclosed" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>External<wbr/>Component<wbr/>Closed</span></a>
+<a href="#ipostexternalcomponentopened" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>External<wbr/>Component<wbr/>Opened</span></a>
+<a href="#ipostlivechatagentassigned" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Agent<wbr/>Assigned</span></a>
+<a href="#ipostlivechatagentunassigned" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Agent<wbr/>Unassigned</span></a>
+<a href="#ipostlivechatdepartmentdisabled" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Department<wbr/>Disabled</span></a>
+<a href="#ipostlivechatdepartmentremoved" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Department<wbr/>Removed</span></a>
+<a href="#ipostlivechatguestsaved" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Guest<wbr/>Saved</span></a>
+<a href="#ipostlivechatroomclosed" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Closed</span></a>
+<a href="#ipostlivechatroomsaved" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Saved</span></a>
+<a href="#ipostlivechatroomstarted" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Started</span></a>
+<a href="#ipostlivechatroomtransferred" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Transferred</span></a>
+<a href="#ipostmessagedeleted" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Deleted</span></a>
+<a href="#ipostmessagefollowed" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Followed</span></a>
+<a href="#ipostmessagepinned" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Pinned</span></a>
+<a href="#ipostmessagereacted" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Reacted</span></a>
+<a href="#ipostmessagereported" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Reported</span></a>
+<a href="#ipostmessagesent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Sent</span></a>
+<a href="#ipostmessagesenttobot" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Sent<wbr/>To<wbr/>Bot</span></a>
+<a href="#ipostmessagestarred" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Starred</span></a>
+<a href="#ipostmessageupdated" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Updated</span></a>
+<a href="#ipostroomcreate" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>Create</span></a>
+<a href="#ipostroomdeleted" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>Deleted</span></a>
+<a href="#ipostroomuserjoined" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>User<wbr/>Joined</span></a>
+<a href="#ipostroomuserleave" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>User<wbr/>Leave</span></a>
+<a href="#ipostsystemmessagesent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>System<wbr/>Message<wbr/>Sent</span></a>
+<a href="#ipostusercreated" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Created</span></a>
+<a href="#ipostuserdeleted" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Deleted</span></a>
+<a href="#ipostuserloggedin" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Logged<wbr/>In</span></a>
+<a href="#ipostuserloggedout" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Logged<wbr/>Out</span></a>
+<a href="#ipostuserstatuschanged" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Status<wbr/>Changed</span></a>
+<a href="#ipostuserupdated" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Updated</span></a>
+<a href="#ipreemailsent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Email<wbr/>Sent</span></a>
+<a href="#iprefileupload" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>File<wbr/>Upload</span></a>
+<a href="#iprelivechatroomcreateprevent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Livechat<wbr/>Room<wbr/>Create<wbr/>Prevent</span></a>
+<a href="#ipremessagedeleteprevent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Delete<wbr/>Prevent</span></a>
+<a href="#ipremessagesentextend" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Extend</span></a>
+<a href="#ipremessagesentmodify" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Modify</span></a>
+<a href="#ipremessagesentprevent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Prevent</span></a>
+<a href="#ipremessageupdatedextend" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Extend</span></a>
+<a href="#ipremessageupdatedmodify" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Modify</span></a>
+<a href="#ipremessageupdatedprevent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Prevent</span></a>
+<a href="#ipreroomcreateextend" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Extend</span></a>
+<a href="#ipreroomcreatemodify" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Modify</span></a>
+<a href="#ipreroomcreateprevent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Prevent</span></a>
+<a href="#ipreroomdeleteprevent" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Delete<wbr/>Prevent</span></a>
+<a href="#ipreroomuserjoined" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>User<wbr/>Joined</span></a>
+<a href="#ipreroomuserleave" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>User<wbr/>Leave</span></a>
+<a href="#iuikitinteractionhandler" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>IUI<wbr/>Kit<wbr/>Interaction<wbr/>Handler</span></a>
+<a href="#iuikitlivechatinteractionhandler" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>IUI<wbr/>Kit<wbr/>Livechat<wbr/>Interaction<wbr/>Handler</span></a>
+</div></section></div></details></section></section>
+<details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Enumeration Members"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h2 class="tsd-anchor-link" id="enumeration-members-1">Enumeration Members<a href="#enumeration-members-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
+<section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ilivechatroomclosedhandler"><span class="deprecated">I<wbr/>Livechat<wbr/>Room<wbr/>Closed<wbr/>Handler</span><a href="#ilivechatroomclosedhandler" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">ILivechatRoomClosedHandler</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;ILivechatRoomClosedHandler&quot;</span></div>
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-deprecated">
+<h4 class="tsd-anchor-link" id="deprecated">Deprecated<a href="#deprecated" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>please use the AppMethod.EXECUTE_POST_LIVECHAT_ROOM_CLOSED method</p>
+</div></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:52</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="imediacallhandler"><span>I<wbr/>Media<wbr/>Call<wbr/>Handler</span><a href="#imediacallhandler" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IMediaCallHandler</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IMediaCallHandler&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:72</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostexternalcomponentclosed"><span>I<wbr/>Post<wbr/>External<wbr/>Component<wbr/>Closed</span><a href="#ipostexternalcomponentclosed" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostExternalComponentClosed</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostExternalComponentClosed&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:42</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostexternalcomponentopened"><span>I<wbr/>Post<wbr/>External<wbr/>Component<wbr/>Opened</span><a href="#ipostexternalcomponentopened" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostExternalComponentOpened</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostExternalComponentOpened&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:41</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatagentassigned"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Agent<wbr/>Assigned</span><a href="#ipostlivechatagentassigned" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatAgentAssigned</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatAgentAssigned&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:54</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatagentunassigned"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Agent<wbr/>Unassigned</span><a href="#ipostlivechatagentunassigned" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatAgentUnassigned</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatAgentUnassigned&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:55</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatdepartmentdisabled"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Department<wbr/>Disabled</span><a href="#ipostlivechatdepartmentdisabled" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatDepartmentDisabled</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatDepartmentDisabled&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:60</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatdepartmentremoved"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Department<wbr/>Removed</span><a href="#ipostlivechatdepartmentremoved" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatDepartmentRemoved</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatDepartmentRemoved&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:59</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatguestsaved"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Guest<wbr/>Saved</span><a href="#ipostlivechatguestsaved" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatGuestSaved</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatGuestSaved&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:57</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatroomclosed"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Closed</span><a href="#ipostlivechatroomclosed" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatRoomClosed</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatRoomClosed&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:48</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatroomsaved"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Saved</span><a href="#ipostlivechatroomsaved" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatRoomSaved</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatRoomSaved&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:58</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatroomstarted"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Started</span><a href="#ipostlivechatroomstarted" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatRoomStarted</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatRoomStarted&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:47</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostlivechatroomtransferred"><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Transferred</span><a href="#ipostlivechatroomtransferred" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostLivechatRoomTransferred</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostLivechatRoomTransferred&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:56</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagedeleted"><span>I<wbr/>Post<wbr/>Message<wbr/>Deleted</span><a href="#ipostmessagedeleted" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageDeleted</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageDeleted&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:19</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagefollowed"><span>I<wbr/>Post<wbr/>Message<wbr/>Followed</span><a href="#ipostmessagefollowed" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageFollowed</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageFollowed&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:25</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagepinned"><span>I<wbr/>Post<wbr/>Message<wbr/>Pinned</span><a href="#ipostmessagepinned" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessagePinned</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessagePinned&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:26</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagereacted"><span>I<wbr/>Post<wbr/>Message<wbr/>Reacted</span><a href="#ipostmessagereacted" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageReacted</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageReacted&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:24</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagereported"><span>I<wbr/>Post<wbr/>Message<wbr/>Reported</span><a href="#ipostmessagereported" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageReported</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageReported&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:28</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagesent"><span>I<wbr/>Post<wbr/>Message<wbr/>Sent</span><a href="#ipostmessagesent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageSent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageSent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:16</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagesenttobot"><span>I<wbr/>Post<wbr/>Message<wbr/>Sent<wbr/>To<wbr/>Bot</span><a href="#ipostmessagesenttobot" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageSentToBot</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageSentToBot&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:10</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessagestarred"><span>I<wbr/>Post<wbr/>Message<wbr/>Starred</span><a href="#ipostmessagestarred" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageStarred</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageStarred&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:27</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostmessageupdated"><span>I<wbr/>Post<wbr/>Message<wbr/>Updated</span><a href="#ipostmessageupdated" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostMessageUpdated</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostMessageUpdated&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:23</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostroomcreate"><span>I<wbr/>Post<wbr/>Room<wbr/>Create</span><a href="#ipostroomcreate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostRoomCreate</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostRoomCreate&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:33</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostroomdeleted"><span>I<wbr/>Post<wbr/>Room<wbr/>Deleted</span><a href="#ipostroomdeleted" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostRoomDeleted</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostRoomDeleted&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:35</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostroomuserjoined"><span>I<wbr/>Post<wbr/>Room<wbr/>User<wbr/>Joined</span><a href="#ipostroomuserjoined" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostRoomUserJoined</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostRoomUserJoined&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:37</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostroomuserleave"><span>I<wbr/>Post<wbr/>Room<wbr/>User<wbr/>Leave</span><a href="#ipostroomuserleave" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostRoomUserLeave</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostRoomUserLeave&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:39</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostsystemmessagesent"><span>I<wbr/>Post<wbr/>System<wbr/>Message<wbr/>Sent</span><a href="#ipostsystemmessagesent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostSystemMessageSent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostSystemMessageSent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:17</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostusercreated"><span>I<wbr/>Post<wbr/>User<wbr/>Created</span><a href="#ipostusercreated" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostUserCreated</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostUserCreated&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:65</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostuserdeleted"><span>I<wbr/>Post<wbr/>User<wbr/>Deleted</span><a href="#ipostuserdeleted" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostUserDeleted</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostUserDeleted&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:67</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostuserloggedin"><span>I<wbr/>Post<wbr/>User<wbr/>Logged<wbr/>In</span><a href="#ipostuserloggedin" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostUserLoggedIn</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostUserLoggedIn&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:68</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostuserloggedout"><span>I<wbr/>Post<wbr/>User<wbr/>Logged<wbr/>Out</span><a href="#ipostuserloggedout" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostUserLoggedOut</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostUserLoggedOut&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:69</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostuserstatuschanged"><span>I<wbr/>Post<wbr/>User<wbr/>Status<wbr/>Changed</span><a href="#ipostuserstatuschanged" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostUserStatusChanged</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostUserStatusChanged&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:70</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipostuserupdated"><span>I<wbr/>Post<wbr/>User<wbr/>Updated</span><a href="#ipostuserupdated" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPostUserUpdated</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPostUserUpdated&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:66</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipreemailsent"><span>I<wbr/>Pre<wbr/>Email<wbr/>Sent</span><a href="#ipreemailsent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreEmailSent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreEmailSent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:64</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="iprefileupload"><span>I<wbr/>Pre<wbr/>File<wbr/>Upload</span><a href="#iprefileupload" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreFileUpload</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreFileUpload&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:62</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="iprelivechatroomcreateprevent"><span>I<wbr/>Pre<wbr/>Livechat<wbr/>Room<wbr/>Create<wbr/>Prevent</span><a href="#iprelivechatroomcreateprevent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreLivechatRoomCreatePrevent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreLivechatRoomCreatePrevent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:53</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipremessagedeleteprevent"><span>I<wbr/>Pre<wbr/>Message<wbr/>Delete<wbr/>Prevent</span><a href="#ipremessagedeleteprevent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreMessageDeletePrevent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreMessageDeletePrevent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:18</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipremessagesentextend"><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Extend</span><a href="#ipremessagesentextend" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreMessageSentExtend</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreMessageSentExtend&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:14</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipremessagesentmodify"><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Modify</span><a href="#ipremessagesentmodify" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreMessageSentModify</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreMessageSentModify&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:15</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipremessagesentprevent"><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Prevent</span><a href="#ipremessagesentprevent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreMessageSentPrevent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreMessageSentPrevent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:13</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipremessageupdatedextend"><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Extend</span><a href="#ipremessageupdatedextend" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreMessageUpdatedExtend</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreMessageUpdatedExtend&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:21</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipremessageupdatedmodify"><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Modify</span><a href="#ipremessageupdatedmodify" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreMessageUpdatedModify</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreMessageUpdatedModify&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:22</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipremessageupdatedprevent"><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Prevent</span><a href="#ipremessageupdatedprevent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreMessageUpdatedPrevent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreMessageUpdatedPrevent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:20</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipreroomcreateextend"><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Extend</span><a href="#ipreroomcreateextend" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreRoomCreateExtend</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreRoomCreateExtend&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:31</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipreroomcreatemodify"><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Modify</span><a href="#ipreroomcreatemodify" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreRoomCreateModify</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreRoomCreateModify&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:32</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipreroomcreateprevent"><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Prevent</span><a href="#ipreroomcreateprevent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreRoomCreatePrevent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreRoomCreatePrevent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:30</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipreroomdeleteprevent"><span>I<wbr/>Pre<wbr/>Room<wbr/>Delete<wbr/>Prevent</span><a href="#ipreroomdeleteprevent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreRoomDeletePrevent</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreRoomDeletePrevent&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:34</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipreroomuserjoined"><span>I<wbr/>Pre<wbr/>Room<wbr/>User<wbr/>Joined</span><a href="#ipreroomuserjoined" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreRoomUserJoined</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreRoomUserJoined&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:36</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="ipreroomuserleave"><span>I<wbr/>Pre<wbr/>Room<wbr/>User<wbr/>Leave</span><a href="#ipreroomuserleave" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IPreRoomUserLeave</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IPreRoomUserLeave&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:38</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="iuikitinteractionhandler"><span>IUI<wbr/>Kit<wbr/>Interaction<wbr/>Handler</span><a href="#iuikitinteractionhandler" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IUIKitInteractionHandler</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IUIKitInteractionHandler&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:44</li></ul></aside></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="iuikitlivechatinteractionhandler"><span>IUI<wbr/>Kit<wbr/>Livechat<wbr/>Interaction<wbr/>Handler</span><a href="#iuikitlivechatinteractionhandler" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-enum-member">IUIKitLivechatInteractionHandler</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;IUIKitLivechatInteractionHandler&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in src/definition/metadata/AppInterface.ts:45</li></ul></aside></section></section></details></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details">
+<details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Enumeration Members"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Enumeration Members</summary>
+<div><a href="#ilivechatroomclosedhandler"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Livechat<wbr/>Room<wbr/>Closed<wbr/>Handler</span></a><a href="#imediacallhandler"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Media<wbr/>Call<wbr/>Handler</span></a><a href="#ipostexternalcomponentclosed"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>External<wbr/>Component<wbr/>Closed</span></a><a href="#ipostexternalcomponentopened"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>External<wbr/>Component<wbr/>Opened</span></a><a href="#ipostlivechatagentassigned"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Agent<wbr/>Assigned</span></a><a href="#ipostlivechatagentunassigned"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Agent<wbr/>Unassigned</span></a><a href="#ipostlivechatdepartmentdisabled"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Department<wbr/>Disabled</span></a><a href="#ipostlivechatdepartmentremoved"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Department<wbr/>Removed</span></a><a href="#ipostlivechatguestsaved"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Guest<wbr/>Saved</span></a><a href="#ipostlivechatroomclosed"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Closed</span></a><a href="#ipostlivechatroomsaved"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Saved</span></a><a href="#ipostlivechatroomstarted"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Started</span></a><a href="#ipostlivechatroomtransferred"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Livechat<wbr/>Room<wbr/>Transferred</span></a><a href="#ipostmessagedeleted"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Deleted</span></a><a href="#ipostmessagefollowed"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Followed</span></a><a href="#ipostmessagepinned"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Pinned</span></a><a href="#ipostmessagereacted"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Reacted</span></a><a href="#ipostmessagereported"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Reported</span></a><a href="#ipostmessagesent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Sent</span></a><a href="#ipostmessagesenttobot"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Sent<wbr/>To<wbr/>Bot</span></a><a href="#ipostmessagestarred"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Starred</span></a><a href="#ipostmessageupdated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Message<wbr/>Updated</span></a><a href="#ipostroomcreate"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>Create</span></a><a href="#ipostroomdeleted"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>Deleted</span></a><a href="#ipostroomuserjoined"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>User<wbr/>Joined</span></a><a href="#ipostroomuserleave"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>Room<wbr/>User<wbr/>Leave</span></a><a href="#ipostsystemmessagesent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>System<wbr/>Message<wbr/>Sent</span></a><a href="#ipostusercreated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Created</span></a><a href="#ipostuserdeleted"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Deleted</span></a><a href="#ipostuserloggedin"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Logged<wbr/>In</span></a><a href="#ipostuserloggedout"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Logged<wbr/>Out</span></a><a href="#ipostuserstatuschanged"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Status<wbr/>Changed</span></a><a href="#ipostuserupdated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Post<wbr/>User<wbr/>Updated</span></a><a href="#ipreemailsent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Email<wbr/>Sent</span></a><a href="#iprefileupload"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>File<wbr/>Upload</span></a><a href="#iprelivechatroomcreateprevent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Livechat<wbr/>Room<wbr/>Create<wbr/>Prevent</span></a><a href="#ipremessagedeleteprevent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Delete<wbr/>Prevent</span></a><a href="#ipremessagesentextend"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Extend</span></a><a href="#ipremessagesentmodify"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Modify</span></a><a href="#ipremessagesentprevent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Sent<wbr/>Prevent</span></a><a href="#ipremessageupdatedextend"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Extend</span></a><a href="#ipremessageupdatedmodify"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Modify</span></a><a href="#ipremessageupdatedprevent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Message<wbr/>Updated<wbr/>Prevent</span></a><a href="#ipreroomcreateextend"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Extend</span></a><a href="#ipreroomcreatemodify"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Modify</span></a><a href="#ipreroomcreateprevent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Create<wbr/>Prevent</span></a><a href="#ipreroomdeleteprevent"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>Delete<wbr/>Prevent</span></a><a href="#ipreroomuserjoined"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>User<wbr/>Joined</span></a><a href="#ipreroomuserleave"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>I<wbr/>Pre<wbr/>Room<wbr/>User<wbr/>Leave</span></a><a href="#iuikitinteractionhandler"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>IUI<wbr/>Kit<wbr/>Interaction<wbr/>Handler</span></a><a href="#iuikitlivechatinteractionhandler"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Enumeration Member"><use href="../assets/icons.svg#icon-16"></use></svg><span>IUI<wbr/>Kit<wbr/>Livechat<wbr/>Interaction<wbr/>Handler</span></a></div></details></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">Rocket.Chat Apps-Engine API Reference</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>
