@@ -35,6 +35,7 @@ Support documents:
 
 - [Glossary](glossary.md) — one-line definitions for every term in this set.
 - [Sources](sources.md) — the reference list, with a trust tier for each source.
+- [Anatomy of an LLM process](https://claude.ai/artifact/TvETLLNWN1Xtuk8jewHo41) — a diagram of one serving process: startup, threads, memory allocation, and the path of one user request. It expands on [08 Inference runtime](08-inference-runtime.md).
 
 ## How the documents connect
 
