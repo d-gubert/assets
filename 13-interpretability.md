@@ -1,7 +1,7 @@
 # 13 — Interpretability: Features and Circuits
 
 **Scope:** what researchers find when they look inside an LLM: features, superposition, and circuits. This is the "debugger" view of the model.
-**Previous:** [12 Training lifecycle](12-training-lifecycle.md). **Index:** [README](README.md).
+**Previous:** [12 Training lifecycle](12-training-lifecycle.md). **Next:** [14 Reasoning models](14-reasoning-models.md).
 
 ## Why a system designer should care
 

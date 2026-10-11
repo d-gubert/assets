@@ -29,6 +29,7 @@ Read the documents in number order for a full walk through the request path. Eac
 | 11 | [Model files and quantization](11-model-files-and-quantization.md) | What is on disk, and how do smaller number formats shrink it? |
 | 12 | [Training lifecycle](12-training-lifecycle.md) | Where do the weights come from? |
 | 13 | [Interpretability: features and circuits](13-interpretability.md) | What do researchers find when they look inside? |
+| 14 | [Reasoning models](14-reasoning-models.md) | What is "reasoning" in an LLM, how are reasoning models trained, and what happens in one thinking request? |
 
 Support documents:
 
@@ -53,6 +54,9 @@ flowchart LR
     M[12 Training lifecycle] --> L
     F --> N[13 Interpretability]
     E --> N
+    M --> R[14 Reasoning models]
+    H --> R
+    N --> R
 ```
 
 ## Method

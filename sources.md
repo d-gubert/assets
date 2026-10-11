@@ -12,7 +12,7 @@ This page lists every source in the document set, grouped by trust tier. Each en
 
 ## Method and limits
 
-- Research date: 2026-10-08.
+- Research date: 2026-10-08. Document 14 was added on 2026-10-11.
 - The network policy of the research environment blocked direct page fetches for arxiv.org, huggingface.co, and transformer-circuits.pub. The research confirmed each source through web search results: titles, authors, venues, abstracts, and quoted passages.
 - Some claims rest on well-established facts that the search did not quote word for word. Examples: the Llama 2 7B layer sizes, and the tensor names in [11](11-model-files-and-quantization.md). Verify exact numbers against the primary source before you rely on them.
 
@@ -75,7 +75,7 @@ This page lists every source in the document set, grouped by trust tier. Each en
 | Templeton et al., *Scaling Monosemanticity*, 2024 — https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html | 2 | 04, 13 |
 | Anthropic, *Golden Gate Claude*, 2024 — https://www.anthropic.com/news/golden-gate-claude | 2 | 13 |
 | Ameisen et al., *Circuit Tracing*, 2025 — https://transformer-circuits.pub/2025/attribution-graphs/methods.html | 2 | 13 |
-| Lindsey et al., *On the Biology of a Large Language Model*, 2025 — https://transformer-circuits.pub/2025/attribution-graphs/biology.html | 2 | 13 |
+| Lindsey et al., *On the Biology of a Large Language Model*, 2025 — https://transformer-circuits.pub/2025/attribution-graphs/biology.html | 2 | 13, 14 |
 
 ## Output and sampling
 
@@ -125,6 +125,29 @@ This page lists every source in the document set, grouped by trust tier. Each en
 | Ouyang et al., *InstructGPT*, NeurIPS 2022 — https://arxiv.org/abs/2203.02155 | 1 | 12 |
 | Rafailov et al., *DPO*, NeurIPS 2023 — https://arxiv.org/abs/2305.18290 | 1 | 12 |
 | Hu et al., *LoRA*, ICLR 2022 — https://arxiv.org/abs/2106.09685 | 1 | 12 |
+
+## Reasoning models
+
+| Source | Tier | Used in |
+|--------|------|---------|
+| Wei et al., *Chain-of-Thought Prompting*, NeurIPS 2022 — https://arxiv.org/abs/2201.11903 | 1 | 14 |
+| Kojima et al., *Large Language Models are Zero-Shot Reasoners*, NeurIPS 2022 — https://arxiv.org/abs/2205.11916 | 1 | 14 |
+| Wang et al., *Self-Consistency*, ICLR 2023 — https://arxiv.org/abs/2203.11171 | 1 | 14 |
+| Lightman et al., *Let's Verify Step by Step*, ICLR 2024 — https://arxiv.org/abs/2305.20050 | 1 | 14 |
+| Li et al., *Chain of Thought Empowers Transformers to Solve Inherently Serial Problems*, ICLR 2024 — https://arxiv.org/abs/2402.12875 | 1 | 14 |
+| OpenAI, *Learning to Reason with LLMs*, 2024 — https://openai.com/index/learning-to-reason-with-llms/ | 2 | 14 |
+| Snell et al., *Scaling LLM Test-Time Compute Optimally*, 2024 — https://arxiv.org/abs/2408.03314 | 2 | 14 |
+| Shao et al., *DeepSeekMath* (GRPO), 2024 — https://arxiv.org/abs/2402.03300 | 2 | 14 |
+| Lambert et al., *Tülu 3* (RLVR), 2024 — https://arxiv.org/abs/2411.15124 | 2 | 14 |
+| DeepSeek-AI, *DeepSeek-R1*, 2025 — https://arxiv.org/abs/2501.12948 | 2 | 14 |
+| Muennighoff et al., *s1: Simple test-time scaling*, EMNLP 2025 — https://arxiv.org/abs/2501.19393 | 1 | 14 |
+| Yue et al., *Does RL Really Incentivize Reasoning Capacity Beyond the Base Model?*, NeurIPS 2025 — https://arxiv.org/abs/2504.13837 | 1 | 14 |
+| Chen et al. (Anthropic), *Reasoning Models Don't Always Say What They Think*, 2025 — https://www.anthropic.com/research/reasoning-models-dont-say-think | 2 | 14 |
+| Baker et al. (OpenAI), *Monitoring Reasoning Models for Misbehavior*, 2025 — https://arxiv.org/abs/2503.11926 | 2 | 14 |
+| Anthropic, *Tracing the thoughts of a large language model*, 2025 — https://www.anthropic.com/research/tracing-thoughts-language-model | 2 | 14 |
+| Shojaee et al. (Apple), *The Illusion of Thinking*, 2025 — https://machinelearning.apple.com/research/illusion-of-thinking | 2 | 14 |
+| Lawsen, *The Illusion of the Illusion of Thinking*, 2025 — https://arxiv.org/abs/2506.09250 | 2 | 14 |
+| Anthropic, *Building with extended thinking* (API docs) — https://platform.claude.com/docs/en/build-with-claude/extended-thinking | 1 | 14 |
 
 ## Teaching material for intuition
 
