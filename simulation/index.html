@@ -1,0 +1,2549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Life of a Token</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Follow one chat request through a small Llama-style transformer that runs in the browser, from the chat template to the stop token.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a bench instrument. A control deck on top, a live readout of the
+   request state (context window, KV cache, client stream), the pipeline rail
+   at the left, a large scope for the current stage at the right, and a
+   transport bar fixed to the bottom edge. */
+:root {
+  --bg: #ECEFF3;
+  --panel: #FBFCFD;
+  --inset: #F1F3F6;
+  --ink: #13171C;
+  --ink-2: #58626D;
+  --rule: #D3D9E0;
+  --focus: #5A43D6;
+  --focus-ink: #FFFFFF;
+  --neg: #2E6BB2;
+  --pos: #CF522A;
+  --prompt-bg: #DCE5F1;
+  --prompt-ink: #224C84;
+  --output-bg: #F5E2C4;
+  --output-ink: #7B4605;
+  --control-bg: #E5E8ED;
+  --control-ink: #46505B;
+  --ok: #1D7A4B;
+  --halt: #B3261E;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C0F13;
+    --panel: #14191F;
+    --inset: #1A2028;
+    --ink: #E3E8ED;
+    --ink-2: #95A1AD;
+    --rule: #29313B;
+    --focus: #A08FFF;
+    --focus-ink: #110D26;
+    --neg: #5C9DEB;
+    --pos: #F2865B;
+    --prompt-bg: #1B2A3E;
+    --prompt-ink: #A9C8F3;
+    --output-bg: #3A2913;
+    --output-ink: #F3C177;
+    --control-bg: #212831;
+    --control-ink: #B3BCC6;
+    --ok: #4CC48B;
+    --halt: #FF8070;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C0F13;
+  --panel: #14191F;
+  --inset: #1A2028;
+  --ink: #E3E8ED;
+  --ink-2: #95A1AD;
+  --rule: #29313B;
+  --focus: #A08FFF;
+  --focus-ink: #110D26;
+  --neg: #5C9DEB;
+  --pos: #F2865B;
+  --prompt-bg: #1B2A3E;
+  --prompt-ink: #A9C8F3;
+  --output-bg: #3A2913;
+  --output-ink: #F3C177;
+  --control-bg: #212831;
+  --control-ink: #B3BCC6;
+  --ok: #4CC48B;
+  --halt: #FF8070;
+  color-scheme: dark;
+}
+
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 14px/1.5 var(--font-body); -webkit-font-smoothing: antialiased; }
+[hidden] { display: none !important; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+a { color: var(--focus); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.muted { color: var(--ink-2); }
+.mono { font-family: var(--font-data); }
+
+.page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 22px 120px;
+  display: grid;
+  gap: 14px;
+}
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: var(--radius); min-width: 0; }
+.label {
+  font: 600 10.5px/1.2 var(--font-data);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* Masthead */
+.masthead { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 40px; align-items: end; padding-block: 2px 4px; }
+.kicker { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 12px; }
+.brand h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 820;
+  font-size: clamp(32px, 4.6vw, 52px);
+  line-height: .92;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.brand h1 .tick { color: var(--focus); }
+.brand p { margin: 12px 0 0; max-width: 64ch; color: var(--ink-2); font-size: 15px; text-wrap: pretty; }
+.spec { overflow-x: auto; }
+.spec table { border-collapse: collapse; font: 400 11.5px/1.3 var(--font-data); font-variant-numeric: tabular-nums; }
+.spec th, .spec td { padding: 3px 0 3px 16px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+.spec th:first-child, .spec td:first-child { text-align: left; padding-left: 0; color: var(--ink-2); font-weight: 400; }
+.spec thead th { font-weight: 600; color: var(--ink); border-bottom: 1px solid var(--ink-2); }
+.spec thead th:nth-child(2) { color: var(--focus); }
+
+/* Control deck */
+.deck { padding: 14px 16px 16px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 18px 28px; }
+.deck .label { display: block; margin-bottom: 8px; }
+.msg-row { display: flex; gap: 8px; }
+.msg-row input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--inset);
+  font-family: var(--font-data);
+  font-size: 14.5px;
+}
+.btn-run {
+  height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--focus);
+  color: var(--focus-ink);
+  font-weight: 650;
+  font-stretch: 112%;
+}
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.preset {
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 12.5px;
+  display: inline-flex;
+  gap: 7px;
+  align-items: baseline;
+}
+.preset small { color: var(--ink-2); font: 400 10.5px/1 var(--font-data); }
+.preset:hover { border-color: var(--ink-2); }
+.preset[aria-pressed="true"] { border-color: var(--focus); box-shadow: inset 0 0 0 1px var(--focus); }
+.sampler { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px 16px; align-content: start; }
+.ctl { display: grid; gap: 3px; min-width: 0; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-2); }
+.ctl output { font-family: var(--font-data); color: var(--ink); font-size: 12px; }
+.ctl input[type=range] { width: 100%; margin: 4px 0 0; accent-color: var(--focus); }
+.ctl input[type=number], .ctl input[type=text] {
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--inset);
+  font-family: var(--font-data);
+  font-size: 12.5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.seed-row { display: flex; gap: 6px; }
+.seed-row button { flex: none; height: 30px; padding: 0 9px; border: 1px solid var(--rule); background: var(--panel); border-radius: 6px; font-size: 12px; }
+.deck-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font-size: 12px; color: var(--ink-2); border-top: 1px dashed var(--rule); padding-top: 10px; }
+.deck-foot button { background: none; border: 0; padding: 0; color: var(--focus); text-decoration: underline; text-underline-offset: 2px; font-size: 12px; }
+
+/* Request state: context window, KV cache, client stream */
+.state { padding: 12px 16px 14px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 12px 24px; }
+.state-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.meta { font: 400 11.5px/1.3 var(--font-data); color: var(--ink-2); text-align: right; }
+.tokens { display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; min-height: 42px; }
+.empty-note { color: var(--ink-2); font-size: 13px; padding: 8px 0; }
+.side { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.kv-grid canvas { display: block; }
+.kv-note { font: 400 11px/1.3 var(--font-data); color: var(--ink-2); margin-top: 6px; }
+.stream {
+  font-family: var(--font-data);
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--inset);
+  border-radius: 8px;
+  padding: 7px 10px;
+  min-height: 1.5em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.stream .fresh { background: color-mix(in srgb, var(--focus) 24%, transparent); border-radius: 3px; }
+.stream .placeholder { color: var(--ink-2); }
+.caret { display: inline-block; width: 7px; height: 1.05em; background: var(--focus); vertical-align: -3px; margin-left: 2px; animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Token chips */
+.chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  padding: 3px 6px 2px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background: var(--prompt-bg);
+  color: var(--prompt-ink);
+  font: 500 12.5px/1.2 var(--font-data);
+  white-space: pre;
+  vertical-align: middle;
+}
+.chip .t { display: block; }
+.chip .id { display: block; font-size: 9.5px; font-weight: 400; opacity: .72; font-variant-numeric: tabular-nums; }
+.chip.is-output { background: var(--output-bg); color: var(--output-ink); }
+.chip.is-special {
+  background-color: var(--control-bg);
+  color: var(--control-ink);
+  background-image: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, currentColor 11%, transparent) 5px 6px);
+  font-size: 11px;
+}
+.chip .ws { opacity: .45; }
+button.chip { cursor: pointer; }
+button.chip:hover { border-color: var(--ink-2); }
+.chip.is-live { box-shadow: 0 0 0 1.5px var(--focus); }
+.tokens.is-prefill .chip.is-live { box-shadow: inset 0 -2px 0 var(--focus); }
+.chip.is-new { box-shadow: 0 0 0 2px var(--focus); animation: pop .45s ease-out; }
+.chip.is-selected { outline: 2px dashed var(--ink); outline-offset: 2px; }
+.chip.is-dim { opacity: .4; }
+.chip.small { font-size: 11px; padding: 1px 5px; }
+@keyframes pop { from { transform: scale(1.25); } to { transform: none; } }
+
+/* Bench: rail + scope */
+.bench { display: grid; grid-template-columns: 252px minmax(0, 1fr); gap: 14px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); padding: 12px 10px 14px; }
+.rail-phase { padding: 2px 8px 10px; border-bottom: 1px solid var(--rule); margin-bottom: 4px; }
+.rail-phase .big { font: 760 17px/1.2 var(--font-display); font-stretch: 115%; }
+.rail-phase .small { font: 400 11.5px/1.45 var(--font-data); color: var(--ink-2); margin-top: 2px; }
+.rail-group { padding: 10px 8px 4px; }
+.node {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 13.5px;
+}
+.node:hover { background: var(--inset); }
+.node .shape { font: 400 10.5px/1 var(--font-data); color: var(--ink-2); white-space: pre; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+.node.is-done { color: var(--ink-2); }
+.node.is-active { background: var(--focus); color: var(--focus-ink); }
+.node.is-active .shape { color: inherit; opacity: .85; }
+.loop-box { position: relative; margin: 2px 0 2px 10px; padding-left: 8px; border-left: 2px solid var(--rule); }
+.loop-box::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: -2px;
+  border: 5px solid transparent;
+  border-bottom: 7px solid var(--rule);
+  border-top: 0;
+}
+.loop-box.is-looping { border-left-color: var(--focus); }
+.loop-box.is-looping::before { border-bottom-color: var(--focus); }
+.loop-note { font: 400 10.5px/1.3 var(--font-data); color: var(--ink-2); padding: 4px 8px 2px; }
+.loop-box.is-looping .loop-note { color: var(--focus); }
+.blk { display: grid; grid-template-columns: 62px 1fr 1fr; gap: 4px; align-items: center; padding: 2px 8px; font-size: 13.5px; }
+.blk .lbl.is-done { color: var(--ink-2); }
+.sub { border: 1px solid var(--rule); background: var(--panel); border-radius: 5px; padding: 3px 0; font-size: 11.5px; text-align: center; }
+.sub:hover { border-color: var(--ink-2); }
+.sub.is-done { color: var(--ink-2); background: var(--inset); }
+.sub.is-active { background: var(--focus); color: var(--focus-ink); border-color: var(--focus); }
+
+.scope { padding: 18px 22px 22px; min-height: 560px; }
+.scope-head { display: grid; gap: 7px; }
+.eyebrow { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.doc {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  font: 500 11px/1 var(--font-data);
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.doc:hover { color: var(--focus); border-color: var(--focus); }
+.scope h2 { margin: 0; font: 760 27px/1.1 var(--font-display); font-stretch: 112%; letter-spacing: -0.005em; text-wrap: balance; }
+.explain { margin: 0; max-width: 74ch; font-size: 14.5px; text-wrap: pretty; }
+.explain + .explain { margin-top: 2px; }
+.fig { margin-top: 18px; display: grid; gap: 18px; min-width: 0; }
+.fig > * { min-width: 0; }
+.fig-label { margin-bottom: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; }
+.fig-label .note { font: 400 11px/1.3 var(--font-data); color: var(--ink-2); text-transform: none; letter-spacing: 0; }
+.scale {
+  margin-top: 22px;
+  padding: 10px 12px;
+  background: var(--inset);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+  display: grid;
+  gap: 4px;
+}
+.scale .label { margin-bottom: 2px; }
+.scale b { color: var(--ink); font-weight: 600; }
+.callout { border: 1px solid var(--rule); border-radius: 8px; padding: 9px 12px; font-size: 13.5px; }
+.callout.is-focus { border-color: var(--focus); background: color-mix(in srgb, var(--focus) 7%, var(--panel)); }
+pre.code {
+  margin: 0;
+  font: 400 12.5px/1.55 var(--font-data);
+  background: var(--inset);
+  border-radius: 8px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  white-space: pre;
+}
+.canvas-wrap { overflow-x: auto; }
+.canvas-wrap canvas { display: block; }
+.row { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: flex-start; }
+.row > * { min-width: 0; }
+
+/* At a glance */
+.glance { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; counter-reset: g; }
+.glance li { counter-increment: g; border: 1px solid var(--rule); border-radius: 8px; padding: 9px 11px; }
+.glance li::before { content: counter(g); display: block; font: 600 11px/1 var(--font-data); color: var(--focus); margin-bottom: 6px; }
+.glance .k { font-weight: 650; display: block; }
+.glance .v { color: var(--ink-2); font: 400 12px/1.4 var(--font-data); display: block; margin-top: 2px; }
+
+/* Template, split, BPE */
+.tape { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-family: var(--font-data); font-size: 13px; }
+.seg-text { padding: 3px 6px; border-radius: 5px; background: var(--inset); white-space: pre; }
+.seg-text.is-content { background: var(--prompt-bg); color: var(--prompt-ink); font-weight: 500; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink-2); align-items: center; }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.swatch { width: 14px; height: 10px; border-radius: 3px; display: inline-block; }
+.split-rows { display: grid; gap: 6px; }
+.split-row { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 10px; align-items: center; }
+.split-kind { font: 400 11px/1 var(--font-data); color: var(--ink-2); }
+.chunks { display: flex; flex-wrap: wrap; gap: 3px; }
+.chunkbox { font: 500 13px/1.2 var(--font-data); padding: 4px 6px; border: 1px solid var(--ink-2); border-radius: 4px; white-space: pre; }
+.chunkbox .ws { opacity: .45; }
+.bpe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+.bpe-card { border: 1px solid var(--rule); border-radius: 8px; padding: 9px 10px; display: grid; gap: 4px; align-content: start; }
+.bpe-title { display: flex; justify-content: space-between; gap: 8px; font: 600 12.5px/1.3 var(--font-data); white-space: pre; }
+.bpe-title .muted { font-weight: 400; font-size: 11px; }
+.bpe-row { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; }
+.bpe-tile { font: 500 11.5px/1 var(--font-data); padding: 3px 4px; border-radius: 3px; background: var(--inset); white-space: pre; }
+.bpe-tile.is-byte { color: var(--ink-2); }
+.bpe-tile.is-merged { background: var(--focus); color: var(--focus-ink); }
+.bpe-rule { font: 400 10.5px/1 var(--font-data); color: var(--ink-2); margin-left: auto; }
+.id-compare { border-collapse: collapse; font: 400 11.5px/1.25 var(--font-data); font-variant-numeric: tabular-nums; }
+.id-compare th { text-align: left; font-weight: 400; color: var(--ink-2); padding: 4px 10px 4px 0; white-space: nowrap; }
+.id-compare td { padding: 3px 3px; text-align: center; white-space: nowrap; }
+
+/* Data tables */
+.table-wrap { overflow-x: auto; }
+table.data { border-collapse: collapse; font: 400 12.5px/1.3 var(--font-data); font-variant-numeric: tabular-nums; }
+table.data th { text-align: left; font: 600 10.5px/1.2 var(--font-data); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); padding: 6px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; vertical-align: bottom; }
+table.data td { padding: 5px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+table.data .num { text-align: right; }
+table.data tr.is-chosen td { background: color-mix(in srgb, var(--focus) 12%, transparent); }
+table.data .cut { color: var(--ink-2); opacity: .55; }
+table.data .kept { color: var(--ok); }
+.pbar { display: inline-block; height: 8px; border-radius: 2px; background: var(--focus); vertical-align: 0; margin-right: 8px; }
+.pcell { display: flex; align-items: center; min-width: 150px; }
+
+/* Heads, ribbon, neurons */
+.heads { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+.kvgroup { display: grid; gap: 5px; }
+.kvgroup .label { padding-left: 2px; }
+.kvgroup-heads { display: flex; gap: 6px; padding: 6px; border: 1px dashed var(--rule); border-radius: 8px; }
+.headbtn { display: grid; gap: 4px; justify-items: center; padding: 5px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); font-size: 11.5px; }
+.headbtn[aria-pressed="true"] { border-color: var(--focus); box-shadow: inset 0 0 0 1px var(--focus); color: var(--focus); }
+.headbtn canvas { display: block; }
+.ribbon { display: flex; flex-wrap: wrap; gap: 3px; }
+.ribbon .chip { border: 1px solid var(--rule); }
+.lens { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px; }
+.lens .p { font: 400 11px/1 var(--font-data); color: var(--ink-2); margin-left: 4px; }
+.neuron-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.updates { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 10px; align-items: center; font: 400 12px/1.2 var(--font-data); max-width: 520px; }
+.updates .track { height: 10px; background: var(--inset); border-radius: 3px; overflow: hidden; }
+.updates .fill { height: 100%; background: var(--ink-2); }
+.updates .fill.is-mlp { background: var(--pos); }
+.updates .fill.is-attn { background: var(--focus); }
+
+/* Sampler draw, detok, stop */
+.flow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.flow .arrow { color: var(--ink-2); font-family: var(--font-data); }
+.bytes { display: flex; gap: 3px; flex-wrap: wrap; }
+.byte { font: 500 12px/1 var(--font-data); padding: 5px 5px; border-radius: 4px; background: var(--inset); }
+.textpiece { font: 600 15px/1.2 var(--font-data); padding: 5px 9px; border-radius: 6px; border: 1px solid var(--focus); white-space: pre; }
+.checks { display: grid; gap: 6px; max-width: 640px; }
+.check { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 12px; }
+.check .mark { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font: 700 11px/1 var(--font-data); border: 1.5px solid var(--rule); color: var(--ink-2); }
+.check.is-fired { border-color: var(--halt); }
+.check.is-fired .mark { background: var(--halt); border-color: var(--halt); color: var(--panel); }
+.check .what { font-weight: 600; }
+.check .detail { font: 400 12px/1.3 var(--font-data); color: var(--ink-2); }
+.check .res { font: 600 11px/1 var(--font-data); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); }
+.check.is-fired .res { color: var(--halt); }
+.verdict { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; padding: 10px 14px; border-radius: 8px; font-weight: 600; }
+.verdict.is-go { background: color-mix(in srgb, var(--ok) 12%, var(--panel)); color: var(--ok); }
+.verdict.is-halt { background: color-mix(in srgb, var(--halt) 12%, var(--panel)); color: var(--halt); }
+.verdict .mono { font-weight: 400; color: var(--ink); }
+.spark { display: flex; gap: 3px; align-items: flex-end; overflow-x: auto; padding-bottom: 2px; }
+.spark .col { display: grid; gap: 4px; justify-items: center; flex: none; }
+.spark .barbox { width: 22px; height: 64px; background: var(--inset); border-radius: 3px; display: flex; align-items: flex-end; overflow: hidden; }
+.spark .bar { width: 100%; background: var(--halt); }
+.spark .col.is-current .barbox { box-shadow: 0 0 0 2px var(--focus); }
+.spark .pv { font: 400 9.5px/1 var(--font-data); color: var(--ink-2); }
+
+/* Lifecycle */
+.lifecycle { padding: 16px 20px 18px; }
+.life-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.life-head h3 { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font: 720 19px/1.2 var(--font-display); font-stretch: 112%; }
+.life-head .follow { background: none; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 10px; font-size: 12px; }
+.life-events { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 8px; counter-reset: ev; }
+.ev { counter-increment: ev; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px 9px; display: grid; gap: 2px; align-content: start; }
+.ev .when { font: 500 10.5px/1.2 var(--font-data); color: var(--ink-2); text-transform: uppercase; letter-spacing: .06em; }
+.ev .when::before { content: counter(ev) " · "; color: var(--focus); }
+.ev .what { font-weight: 650; }
+.ev .detail { font-size: 12.5px; color: var(--ink-2); }
+.ev.is-pending { opacity: .5; border-style: dashed; }
+.ev.is-now { border-color: var(--focus); background: color-mix(in srgb, var(--focus) 8%, var(--panel)); }
+.readgrid { display: grid; gap: 2px; align-items: center; justify-content: start; overflow-x: auto; padding-bottom: 4px; }
+.readgrid .rl { font: 400 10.5px/1 var(--font-data); color: var(--ink-2); padding-right: 6px; white-space: nowrap; }
+.readgrid .cell { width: 16px; height: 16px; border-radius: 2px; background: var(--inset); }
+.readgrid .colhead { writing-mode: vertical-rl; transform: rotate(180deg); font: 400 10.5px/1.35 var(--font-data); color: var(--prompt-ink); max-height: 92px; overflow: hidden; white-space: pre; justify-self: center; align-self: end; }
+.readgrid .colhead.is-output { color: var(--output-ink); }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 28px; font-size: 13px; color: var(--ink-2); padding: 6px 2px 0; }
+.notes h4 { margin: 0 0 4px; color: var(--ink); font: 650 13px/1.3 var(--font-body); }
+.notes p { margin: 0; }
+
+/* Transport */
+.transport {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--panel) 93%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--rule);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.transport-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 8px 10px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 6px 16px;
+  align-items: center;
+}
+.tbtns { display: flex; gap: 4px; }
+.tbtn { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--rule); background: var(--panel); border-radius: 8px; padding: 0; }
+.tbtn:hover { border-color: var(--ink-2); }
+.tbtn.play { width: 50px; background: var(--focus); color: var(--focus-ink); border-color: var(--focus); }
+.tbtn svg { width: 15px; height: 15px; fill: currentColor; }
+.tbtn:disabled { opacity: .4; cursor: default; }
+.scrub-wrap { display: grid; gap: 4px; min-width: 0; }
+.scrub-label { display: flex; justify-content: space-between; gap: 12px; font: 500 12px/1.2 var(--font-data); white-space: nowrap; min-width: 0; }
+.scrub-label span:first-child { overflow: hidden; text-overflow: ellipsis; }
+.scrub-label .muted { font-weight: 400; }
+.scrub { position: relative; height: 22px; display: flex; gap: 2px; cursor: pointer; touch-action: none; }
+.segm {
+  --fill: 0;
+  flex: 1 1 0;
+  min-width: 2px;
+  border-radius: 3px;
+  overflow: hidden;
+  font: 500 9.5px/22px var(--font-data);
+  color: var(--ink-2);
+  text-align: center;
+  white-space: nowrap;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--focus) 32%, var(--inset)) calc(var(--fill) * 100%), var(--inset) 0);
+}
+.segm.is-prefill { color: var(--prompt-ink); }
+.playhead { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1px; background: var(--focus); border-radius: 2px; pointer-events: none; }
+.tside { display: flex; gap: 8px; align-items: center; }
+.tside select { height: 32px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); padding: 0 6px; font-family: var(--font-data); font-size: 12px; }
+.keys { font: 400 11px/1.3 var(--font-data); color: var(--ink-2); }
+
+.tip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: var(--ink);
+  color: var(--panel);
+  font: 400 12px/1.45 var(--font-data);
+  padding: 6px 9px;
+  border-radius: 6px;
+  max-width: 340px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .2);
+  white-space: pre-wrap;
+}
+.tip .k { opacity: .65; }
+
+@media (max-width: 1100px) {
+  .deck { grid-template-columns: minmax(0, 1fr); }
+  .state { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 920px) {
+  .bench { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; }
+  .rail-body { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .rail-group, .loop-note { display: none; }
+  .loop-box { display: contents; }
+  .node { width: auto; padding: 4px 8px; border: 1px solid var(--rule); }
+  .node .shape { display: none; }
+  .blk { display: flex; padding: 0; gap: 3px; }
+  .blk .lbl { font-size: 12px; padding: 0 2px 0 6px; }
+  .sub { padding: 4px 6px; }
+  .glance { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .masthead { grid-template-columns: minmax(0, 1fr); }
+  .transport-inner { grid-template-columns: auto minmax(0, 1fr); }
+  .tside { display: none; }
+  .scope { padding: 14px 14px 18px; }
+  .scope h2 { font-size: 23px; }
+  .split-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .tbtn { width: 32px; height: 34px; }
+  .tbtn.play { width: 42px; }
+  .tbtn.hide-narrow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="brand">
+      <div class="kicker label"><span>Interactive simulation</span><span>LLM internals, documents 00–08</span></div>
+      <h1>Life of a Token<span class="tick">.</span></h1>
+      <p>Follow one chat request through a small Llama-style transformer that runs in this page. The tokenizer, the four blocks, the sampler, and the stop check all run live, so every number on the page comes from the model.</p>
+    </div>
+    <div class="spec" id="spec"></div>
+  </header>
+
+  <section class="deck panel" aria-label="Request settings">
+    <form id="msg-form" autocomplete="off">
+      <label class="label" for="msg">User message</label>
+      <div class="msg-row">
+        <input id="msg" name="msg" maxlength="160" spellcheck="false">
+        <button class="btn-run" type="submit">Run</button>
+      </div>
+      <div class="presets" id="presets" aria-label="Example messages"></div>
+    </form>
+    <div>
+      <span class="label">Sampler and stop settings</span>
+      <div class="sampler">
+        <div class="ctl">
+          <label for="temperature">Temperature <output id="temperature-out"></output></label>
+          <input type="range" id="temperature" min="0" max="2" step="0.05">
+        </div>
+        <div class="ctl">
+          <label for="top-p">Top-p <output id="top-p-out"></output></label>
+          <input type="range" id="top-p" min="0.05" max="1" step="0.01">
+        </div>
+        <div class="ctl">
+          <label for="penalty">Repeat penalty <output id="penalty-out"></output></label>
+          <input type="range" id="penalty" min="1" max="3" step="0.05">
+        </div>
+        <div class="ctl">
+          <label for="top-k">Top-k (0 = off)</label>
+          <input type="number" id="top-k" min="0" max="582" step="1">
+        </div>
+        <div class="ctl">
+          <label for="max-tokens">Max tokens</label>
+          <input type="number" id="max-tokens" min="1" max="60" step="1">
+        </div>
+        <div class="ctl">
+          <label for="seed">Seed</label>
+          <div class="seed-row"><input type="number" id="seed" min="0" max="999999" step="1"><button type="button" id="new-seed">New</button></div>
+        </div>
+        <div class="ctl">
+          <label for="stop-seq">Stop sequence</label>
+          <input type="text" id="stop-seq" maxlength="20" placeholder="none" spellcheck="false">
+        </div>
+      </div>
+    </div>
+    <div class="deck-foot">
+      <span id="defaults-note">Defaults: temperature 0.6 and top-p 0.9, as in the generation_config.json of Llama 3 8B Instruct.</span>
+      <button type="button" id="reset-settings">Reset settings</button>
+    </div>
+  </section>
+
+  <section class="state panel" aria-label="Request state">
+    <div>
+      <div class="state-head"><span class="label">Context window</span><span class="meta" id="ctx-meta"></span></div>
+      <div class="tokens" id="ctx-tokens"></div>
+    </div>
+    <div class="side">
+      <div>
+        <div class="state-head"><span class="label">KV cache</span><span class="meta" id="kv-meta"></span></div>
+        <div class="kv-grid" id="kv-grid"></div>
+      </div>
+      <div>
+        <div class="state-head"><span class="label">Client receives</span><span class="meta" id="stream-meta"></span></div>
+        <div class="stream" id="stream"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="bench">
+    <nav class="rail panel" id="rail" aria-label="Pipeline stages"></nav>
+    <section class="scope panel" id="scope" aria-labelledby="scope-title"></section>
+  </div>
+
+  <section class="lifecycle panel" id="lifecycle" aria-label="Token lifecycle"></section>
+
+  <footer class="notes">
+    <div>
+      <h4>What is real here</h4>
+      <p>The model is a real transformer with 296,256 parameters. It trained for about a minute on a laptop CPU, on 60,000 short chat transcripts about 16 animals. It knows those facts and little else, so other questions give confident nonsense.</p>
+    </div>
+    <div>
+      <h4>What a real server does differently</h4>
+      <p>A real server runs a model about 27,000 times larger on GPUs, with many requests in one batch, a paged KV cache, and fused kernels. This page runs one request in plain JavaScript. It feeds the prompt one position at a time, which gives the same numbers as one parallel prefill pass.</p>
+    </div>
+    <div>
+      <h4>Source</h4>
+      <p>The page, the engine, and the training script are in the <span class="mono">simulation/</span> folder of the research repository. Its README explains how to rebuild the model.</p>
+    </div>
+  </footer>
+</div>
+
+<div class="transport" id="transport">
+  <div class="transport-inner">
+    <div class="tbtns">
+      <button class="tbtn hide-narrow" id="t-start" type="button" aria-label="Go to the first step" title="First step (Home)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h2v12H2zM15 2v12L5 8z"/></svg></button>
+      <button class="tbtn" id="t-prev" type="button" aria-label="Previous step" title="Previous step (Left arrow)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12 2v12L3 8z"/></svg></button>
+      <button class="tbtn play" id="t-play" type="button" aria-label="Play" title="Play or pause (Space)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg></button>
+      <button class="tbtn" id="t-next" type="button" aria-label="Next step" title="Next step (Right arrow)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2v12l9-6z"/></svg></button>
+      <button class="tbtn" id="t-token" type="button" aria-label="Next token" title="Next token (Shift + Right arrow)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 2v12l7-6zM8 2v12l7-6z"/></svg></button>
+      <button class="tbtn hide-narrow" id="t-end" type="button" aria-label="Go to the last step" title="Last step (End)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 2v12l10-6zM12 2h2v12h-2z"/></svg></button>
+    </div>
+    <div class="scrub-wrap">
+      <div class="scrub-label"><span id="t-title"></span><span class="muted" id="t-count"></span></div>
+      <div class="scrub" id="scrub" role="slider" tabindex="0" aria-label="Simulation step"></div>
+    </div>
+    <div class="tside">
+      <label class="sr" for="speed">Playback speed</label>
+      <select id="speed">
+        <option value="0.5">0.5×</option>
+        <option value="1" selected>1×</option>
+        <option value="2">2×</option>
+        <option value="4">4×</option>
+      </select>
+      <span class="keys">Space · ← → · Shift+→</span>
+    </div>
+  </div>
+</div>
+<div class="sr" aria-live="polite" id="live"></div>
+
+<script src="toy-model.js"></script>
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const E = window.TokenEngine;
+  const model = new E.Model(window.TOY_MODEL);
+  const tok = model.tokenizer;
+  const cfg = model.config;
+  const V = cfg.vocab_size;
+  const D = cfg.dim;
+  const L = cfg.n_layers;
+  const H = cfg.n_heads;
+  const GROUP = cfg.n_heads / cfg.n_kv_heads;
+  const EOT = tok.special["<|eot_id|>"];
+  const MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace';
+
+  // Llama 3 8B, from its config.json and the Llama 3 paper (see sources.md).
+  const LLAMA = { layers: 32, dim: 4096, heads: 32, kvHeads: 8, headDim: 128, hidden: 14336, vocab: 128256, context: 8192, params: 8030261248 };
+  const BYTES = 2; // both models at 2 bytes per number (bf16) in every size comparison
+  const TOY_KV = 2 * L * cfg.n_kv_heads * model.headDim * BYTES;
+  const LLAMA_KV = 2 * LLAMA.layers * LLAMA.kvHeads * LLAMA.headDim * BYTES;
+  const GPU_BYTES_PER_S = 2e12; // the rough data-center GPU bandwidth in document 08
+
+  const DEFAULTS = { temperature: 0.6, topK: 0, topP: 0.9, repetitionPenalty: 1, maxTokens: 48, seed: 7, stop: [] };
+  const PRESETS = [
+    { text: "What does the cat eat?", note: "one fact" },
+    { text: "Tell me about the owl.", note: "three sentences" },
+    { text: "Tell me a fact.", note: "uncertain stop" },
+    { text: "Pick an animal.", note: "random pick" },
+    { text: "What does the zebra eat?", note: "unknown animal" },
+    { text: "Who are you?", note: "small talk" },
+  ];
+
+  // The same requests in the real Llama 3 tokenizer, with the chat template applied.
+  const LLAMA_TOKENS = {
+    "What does the cat eat?": [[128000, "<|begin_of_text|>"], [128006, "<|start_header_id|>"], [882, "user"], [128007, "<|end_header_id|>"], [271, "\n\n"], [3923, "What"], [1587, " does"], [279, " the"], [8415, " cat"], [8343, " eat"], [30, "?"], [128009, "<|eot_id|>"], [128006, "<|start_header_id|>"], [78191, "assistant"], [128007, "<|end_header_id|>"], [271, "\n\n"]],
+    "Tell me about the owl.": [[128000, "<|begin_of_text|>"], [128006, "<|start_header_id|>"], [882, "user"], [128007, "<|end_header_id|>"], [271, "\n\n"], [41551, "Tell"], [757, " me"], [922, " about"], [279, " the"], [53369, " owl"], [13, "."], [128009, "<|eot_id|>"], [128006, "<|start_header_id|>"], [78191, "assistant"], [128007, "<|end_header_id|>"], [271, "\n\n"]],
+    "Tell me a fact.": [[128000, "<|begin_of_text|>"], [128006, "<|start_header_id|>"], [882, "user"], [128007, "<|end_header_id|>"], [271, "\n\n"], [41551, "Tell"], [757, " me"], [264, " a"], [2144, " fact"], [13, "."], [128009, "<|eot_id|>"], [128006, "<|start_header_id|>"], [78191, "assistant"], [128007, "<|end_header_id|>"], [271, "\n\n"]],
+    "Pick an animal.": [[128000, "<|begin_of_text|>"], [128006, "<|start_header_id|>"], [882, "user"], [128007, "<|end_header_id|>"], [271, "\n\n"], [38053, "Pick"], [459, " an"], [10065, " animal"], [13, "."], [128009, "<|eot_id|>"], [128006, "<|start_header_id|>"], [78191, "assistant"], [128007, "<|end_header_id|>"], [271, "\n\n"]],
+    "What does the zebra eat?": [[128000, "<|begin_of_text|>"], [128006, "<|start_header_id|>"], [882, "user"], [128007, "<|end_header_id|>"], [271, "\n\n"], [3923, "What"], [1587, " does"], [279, " the"], [1167, " z"], [51313, "ebra"], [8343, " eat"], [30, "?"], [128009, "<|eot_id|>"], [128006, "<|start_header_id|>"], [78191, "assistant"], [128007, "<|end_header_id|>"], [271, "\n\n"]],
+    "Who are you?": [[128000, "<|begin_of_text|>"], [128006, "<|start_header_id|>"], [882, "user"], [128007, "<|end_header_id|>"], [271, "\n\n"], [15546, "Who"], [527, " are"], [499, " you"], [30, "?"], [128009, "<|eot_id|>"], [128006, "<|start_header_id|>"], [78191, "assistant"], [128007, "<|end_header_id|>"], [271, "\n\n"]],
+  };
+
+  const DOCS_BASE = "https://github.com/d-gubert/assets/blob/llm-research/";
+  const DOCS = {
+    "00": ["00-big-picture.md", "Big picture"],
+    "01": ["01-tokenizer.md", "Tokenizer"],
+    "02": ["02-tensors-and-weights.md", "Tensors and weights"],
+    "03": ["03-embeddings-and-positions.md", "Embeddings and positions"],
+    "04": ["04-transformer-block.md", "Transformer block"],
+    "05": ["05-attention.md", "Attention"],
+    "06": ["06-mlp-and-neurons.md", "MLP and neurons"],
+    "07": ["07-output-and-sampling.md", "Output and sampling"],
+    "08": ["08-inference-runtime.md", "Inference runtime"],
+    "13": ["13-interpretability.md", "Interpretability"],
+  };
+
+  const SPEEDS = { "0.5": 1900, "1": 1000, "2": 500, "4": 230 };
+
+  const state = {
+    message: PRESETS[0].text,
+    settings: Object.assign({}, DEFAULTS),
+    run: null,
+    steps: [],
+    stepIndex: new Map(),
+    index: 0,
+    playing: false,
+    timer: 0,
+    speed: "1",
+    head: 0,
+    query: null,
+    mlpPos: null,
+    selected: null,
+  };
+
+  // ---------------------------------------------------------------------------
+  // Small helpers
+  // ---------------------------------------------------------------------------
+
+  const $ = (sel) => document.querySelector(sel);
+
+  function el(tag, props, ...children) {
+    const node = document.createElement(tag);
+    if (props) {
+      for (const [key, value] of Object.entries(props)) {
+        if (value == null || value === false) continue;
+        if (key === "class") node.className = value;
+        else if (key === "style") Object.assign(node.style, value);
+        else if (key.startsWith("on")) node.addEventListener(key.slice(2), value);
+        else node.setAttribute(key, value === true ? "" : value);
+      }
+    }
+    for (const child of children.flat(Infinity)) {
+      if (child == null || child === false) continue;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    }
+    return node;
+  }
+
+  const nf = new Intl.NumberFormat("en-US");
+  const fmtInt = (n) => nf.format(n);
+
+  function fmtBytes(b) {
+    if (b < 1024) return `${Math.round(b)} B`;
+    const units = ["KiB", "MiB", "GiB", "TiB"];
+    let v = b / 1024;
+    let i = 0;
+    while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+    return `${v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2)} ${units[i]}`;
+  }
+
+  function fmtDecimalBytes(b) {
+    const units = ["B", "kB", "MB", "GB", "TB"];
+    let v = b;
+    let i = 0;
+    while (v >= 1000 && i < units.length - 1) { v /= 1000; i++; }
+    return `${v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2)} ${units[i]}`;
+  }
+
+  function fmtFlops(f) {
+    const units = ["", "k", "M", "G", "T", "P"];
+    let v = f;
+    let i = 0;
+    while (v >= 1000 && i < units.length - 1) { v /= 1000; i++; }
+    return `${v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2)} ${units[i]}FLOP`;
+  }
+
+  function fmtProb(p) {
+    if (p >= 0.9995) return "1.000";
+    if (p === 0) return "0";
+    if (p < 0.0005) return "<0.001";
+    return p.toFixed(3);
+  }
+
+  function fmtPct(p) {
+    if (p >= 0.995) return "100%";
+    if (p === 0) return "0%";
+    if (p < 0.005) return "<1%";
+    return `${Math.round(p * 100)}%`;
+  }
+
+  const fmtNum = (x, d = 2) => (x < 0 ? "−" : "") + Math.abs(x).toFixed(d);
+
+  function visibleText(text) {
+    const frag = document.createDocumentFragment();
+    let buf = "";
+    const flush = () => { if (buf) { frag.append(buf); buf = ""; } };
+    for (const ch of text) {
+      const mark = ch === " " ? "·" : ch === "\n" ? "↵" : ch === "\t" ? "⇥" : null;
+      if (mark) { flush(); frag.append(el("span", { class: "ws" }, mark)); }
+      else buf += ch;
+    }
+    flush();
+    return frag;
+  }
+
+  function plainLabel(id) {
+    const text = tok.label(id);
+    if (tok.isSpecial(id)) return text;
+    return text.replace(/ /g, "·").replace(/\n/g, "↵").replace(/\t/g, "⇥");
+  }
+
+  function tokenGlyphs(id) {
+    return tok.isSpecial(id) ? document.createTextNode(tok.label(id)) : visibleText(tok.label(id));
+  }
+
+  function chip(id, opts = {}) {
+    const kind = tok.isSpecial(id) ? "special" : opts.origin === "generated" ? "output" : "prompt";
+    const node = el(opts.button ? "button" : "span", {
+      class: `chip is-${kind}${opts.cls ? " " + opts.cls : ""}`,
+      type: opts.button ? "button" : null,
+      title: opts.title || null,
+    });
+    node.append(el("span", { class: "t" }, tokenGlyphs(id)));
+    if (opts.sub != null) node.append(el("span", { class: "id" }, opts.sub));
+    else if (!opts.noId) node.append(el("span", { class: "id" }, String(id)));
+    return node;
+  }
+
+  function docLink(num) {
+    const [file, title] = DOCS[num];
+    return el("a", { class: "doc", href: DOCS_BASE + file, target: "_blank", rel: "noopener" }, `Doc ${num} · ${title}`);
+  }
+
+  function figLabel(text, note) {
+    return el("div", { class: "fig-label" }, el("span", { class: "label" }, text), note ? el("span", { class: "note" }, note) : null);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Colors for canvas drawings, read from the theme tokens
+  // ---------------------------------------------------------------------------
+
+  let colors = null;
+  const imageCache = new Map();
+
+  function hexToRgb(hex) {
+    const n = parseInt(hex.replace("#", ""), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  function readColors() {
+    const style = getComputedStyle(document.documentElement);
+    colors = {};
+    for (const name of ["panel", "inset", "ink", "ink-2", "rule", "focus", "focus-ink", "neg", "pos", "halt", "prompt-bg", "output-bg"]) {
+      const value = style.getPropertyValue("--" + name).trim() || "#888888";
+      colors[name] = value;
+      colors[name + ":rgb"] = hexToRgb(value);
+    }
+    imageCache.clear();
+  }
+
+  const css = (rgb) => `rgb(${rgb[0] | 0},${rgb[1] | 0},${rgb[2] | 0})`;
+  const alpha = (name, a) => { const c = colors[name + ":rgb"]; return `rgba(${c[0]},${c[1]},${c[2]},${a})`; };
+
+  function mix(a, b, t) {
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  }
+
+  /** Signed values: blue below zero, orange above, the panel color at zero. */
+  function diverging(v, scale) {
+    const t = Math.max(-1, Math.min(1, v / (scale || 1)));
+    return mix(colors["panel:rgb"], t >= 0 ? colors["pos:rgb"] : colors["neg:rgb"], Math.pow(Math.abs(t), 0.8));
+  }
+
+  /** Weights and probabilities from 0 to 1, in the focus color. */
+  function ramp(t) {
+    return mix(colors["panel:rgb"], colors["focus:rgb"], Math.pow(Math.max(0, Math.min(1, t)), 0.6));
+  }
+
+  function robustScale(values) {
+    const abs = Array.from(values, Math.abs).sort((a, b) => a - b);
+    return abs[Math.floor((abs.length - 1) * 0.98)] || 1;
+  }
+
+  function makeCanvas(width, height, label) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const canvas = el("canvas", { width: Math.round(width * dpr), height: Math.round(height * dpr), role: "img", "aria-label": label });
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    const g = canvas.getContext("2d");
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.imageSmoothingEnabled = false;
+    return { canvas, g };
+  }
+
+  /** A canvas with one pixel per cell. Draw it scaled with smoothing off. */
+  function matrixImage(rows, cols, colorAt) {
+    const c = document.createElement("canvas");
+    c.width = cols;
+    c.height = rows;
+    const g = c.getContext("2d");
+    const img = g.createImageData(cols, rows);
+    for (let r = 0; r < rows; r++) {
+      for (let k = 0; k < cols; k++) {
+        const rgb = colorAt(r, k);
+        const i = (r * cols + k) * 4;
+        img.data[i] = rgb[0];
+        img.data[i + 1] = rgb[1];
+        img.data[i + 2] = rgb[2];
+        img.data[i + 3] = 255;
+      }
+    }
+    g.putImageData(img, 0, 0);
+    return c;
+  }
+
+  function hatch(g) {
+    const p = document.createElement("canvas");
+    p.width = 6;
+    p.height = 6;
+    const pg = p.getContext("2d");
+    pg.fillStyle = colors.inset;
+    pg.fillRect(0, 0, 6, 6);
+    pg.strokeStyle = colors.rule;
+    pg.lineWidth = 1;
+    pg.beginPath();
+    pg.moveTo(0, 6);
+    pg.lineTo(6, 0);
+    pg.stroke();
+    return g.createPattern(p, "repeat");
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tooltip
+  // ---------------------------------------------------------------------------
+
+  const tip = el("div", { class: "tip", "aria-hidden": "true" });
+  tip.hidden = true;
+  document.body.append(tip);
+
+  function showTip(lines, clientX, clientY) {
+    tip.replaceChildren(...lines.map(([k, v]) => el("div", null, el("span", { class: "k" }, k + " "), v)));
+    tip.hidden = false;
+    const w = tip.offsetWidth;
+    const h = tip.offsetHeight;
+    let x = clientX + 14;
+    let y = clientY + 16;
+    if (x + w > window.innerWidth - 8) x = clientX - w - 14;
+    if (y + h > window.innerHeight - 8) y = clientY - h - 14;
+    tip.style.transform = `translate(${Math.max(4, x)}px, ${Math.max(4, y)}px)`;
+  }
+
+  function hover(canvas, hit, click) {
+    canvas.addEventListener("mousemove", (e) => {
+      const r = canvas.getBoundingClientRect();
+      const lines = hit(e.clientX - r.left, e.clientY - r.top);
+      if (lines) showTip(lines, e.clientX, e.clientY);
+      else tip.hidden = true;
+      canvas.style.cursor = lines && click ? "pointer" : "default";
+    });
+    canvas.addEventListener("mouseleave", () => { tip.hidden = true; });
+    if (click) {
+      canvas.addEventListener("click", (e) => {
+        const r = canvas.getBoundingClientRect();
+        click(e.clientX - r.left, e.clientY - r.top);
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // The run and its steps
+  // ---------------------------------------------------------------------------
+
+  const REQUEST_TYPES = ["request", "template", "split", "bpe", "ids"];
+  const PASS_TYPES = ["embed", "attn", "mlp", "head", "sample", "detok", "stop"];
+
+  function buildSteps(run) {
+    const steps = [];
+    const add = (s) => steps.push(Object.assign({ index: steps.length }, s));
+    for (const type of REQUEST_TYPES) add({ type });
+    if (run.error) {
+      add({ type: "error" });
+      return steps;
+    }
+    run.passes.forEach((pass, p) => {
+      add({ type: "embed", pass: p });
+      for (let l = 0; l < L; l++) {
+        add({ type: "attn", pass: p, layer: l });
+        add({ type: "mlp", pass: p, layer: l });
+      }
+      for (const type of ["head", "sample", "detok", "stop"]) add({ type, pass: p });
+    });
+    add({ type: "finish" });
+    return steps;
+  }
+
+  const stepKey = (type, pass, layer) => `${type}:${pass ?? ""}:${layer ?? ""}`;
+
+  function stepTitle(s) {
+    switch (s.type) {
+      case "request": return "Request arrives";
+      case "template": return "Chat template";
+      case "split": return "Pre-tokenizer";
+      case "bpe": return "BPE merges";
+      case "ids": return "Token IDs";
+      case "error": return "Prompt too long";
+      case "embed": return "Embedding lookup";
+      case "attn": return `Block ${s.layer + 1} · Attention`;
+      case "mlp": return `Block ${s.layer + 1} · MLP`;
+      case "head": return "Output head";
+      case "sample": return "Sampler";
+      case "detok": return "Detokenizer";
+      case "stop": return "Stop check";
+      case "finish": return "Response done";
+      default: return s.type;
+    }
+  }
+
+  /** The order of a stage inside the request: used for done / active / pending. */
+  function stageOrder(type, layer) {
+    switch (type) {
+      case "request": return 0;
+      case "template": return 1;
+      case "split": case "bpe": case "ids": case "error": return 2;
+      case "embed": return 10;
+      case "attn": return 11 + 2 * layer;
+      case "mlp": return 12 + 2 * layer;
+      case "head": return 11 + 2 * L;
+      case "sample": return 12 + 2 * L;
+      case "detok": return 13 + 2 * L;
+      case "stop": return 14 + 2 * L;
+      case "finish": return 100;
+      default: return -1;
+    }
+  }
+
+  function runSimulation(keepPlace) {
+    const previous = state.steps[state.index];
+    state.run = E.simulate(model, state.message, state.settings);
+    state.steps = buildSteps(state.run);
+    state.stepIndex = new Map(state.steps.map((s) => [stepKey(s.type, s.pass, s.layer), s.index]));
+    let index = 0;
+    if (keepPlace && previous) {
+      const same = state.stepIndex.get(stepKey(previous.type, previous.pass, previous.layer));
+      index = same ?? Math.min(previous.index, state.steps.length - 1);
+    }
+    state.index = index;
+    state.query = null;
+    state.mlpPos = null;
+    state.selected = null;
+    syncPresets();
+    render();
+  }
+
+  /** The request state at a step: tokens in the context, KV cache rows, client text. */
+  function snapshot(step) {
+    const run = state.run;
+    const P = run.prompt.ids.length;
+    const snap = { tokens: [], live: new Set(), fresh: -1, cache: new Array(L).fill(0), writeFrom: 0, writing: -1, text: "", freshText: "", freed: false, pass: null };
+    if (["request", "template", "split", "bpe"].includes(step.type)) return snap;
+    if (step.type === "ids" || step.type === "error") {
+      snap.tokens = run.tokens.slice(0, P);
+      return snap;
+    }
+    if (step.type === "finish") {
+      snap.tokens = run.tokens.slice();
+      snap.text = run.text;
+      snap.freed = true;
+      snap.cache.fill(run.passes[run.passes.length - 1].cacheLength);
+      return snap;
+    }
+    const p = step.pass;
+    const pass = run.passes[p];
+    const before = p === 0 ? 0 : run.passes[p - 1].cacheLength;
+    const after = pass.cacheLength;
+    snap.pass = p;
+    snap.tokens = run.tokens.slice(0, after);
+    for (const rec of pass.positions) snap.live.add(rec.pos);
+    const order = stageOrder(step.type, step.layer);
+    for (let l = 0; l < L; l++) snap.cache[l] = order >= stageOrder("attn", l) ? after : before;
+    snap.writeFrom = before;
+    if (step.type === "attn") snap.writing = step.layer;
+    if (["sample", "detok", "stop"].includes(step.type)) {
+      snap.fresh = pass.tokenPos;
+      snap.tokens = run.tokens.slice(0, after + 1);
+    }
+    snap.text = p === 0 ? "" : run.passes[p - 1].textAfter;
+    if (step.type === "detok" || step.type === "stop") {
+      const now = pass.textAfter;
+      snap.freshText = now.startsWith(snap.text) ? now.slice(snap.text.length) : "";
+      snap.text = now;
+    }
+    return snap;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Static parts: spec table, presets, settings, rail
+  // ---------------------------------------------------------------------------
+
+  function renderSpec() {
+    const rows = [
+      ["Layers (blocks)", L, LLAMA.layers],
+      ["Model dimension", D, LLAMA.dim],
+      ["Query / KV heads", `${H} / ${cfg.n_kv_heads}`, `${LLAMA.heads} / ${LLAMA.kvHeads}`],
+      ["Head dimension", model.headDim, LLAMA.headDim],
+      ["MLP neurons per layer", cfg.hidden_dim, LLAMA.hidden],
+      ["Vocabulary", V, LLAMA.vocab],
+      ["Context window", cfg.max_seq_len, LLAMA.context],
+      ["Parameters", model.parameterCount, "8.03 B"],
+      ["KV cache per token (bf16)", fmtBytes(TOY_KV), fmtBytes(LLAMA_KV)],
+    ];
+    const table = el("table", null,
+      el("thead", null, el("tr", null, el("th", null, ""), el("th", null, "This model"), el("th", null, "Llama 3 8B"))),
+      el("tbody", null, rows.map(([k, a, b]) => el("tr", null, el("td", null, k), el("td", null, typeof a === "number" ? fmtInt(a) : a), el("td", null, typeof b === "number" ? fmtInt(b) : b)))));
+    $("#spec").replaceChildren(table);
+  }
+
+  function renderPresets() {
+    $("#presets").replaceChildren(...PRESETS.map((p) =>
+      el("button", { class: "preset", type: "button", "aria-pressed": "false", "data-text": p.text, onclick: () => setMessage(p.text) }, p.text, el("small", null, p.note))));
+  }
+
+  function syncPresets() {
+    for (const b of document.querySelectorAll(".preset")) b.setAttribute("aria-pressed", String(b.dataset.text === state.message));
+  }
+
+  function setMessage(text) {
+    pause();
+    state.message = text;
+    $("#msg").value = text;
+    runSimulation(false);
+  }
+
+  const controls = {
+    temperature: { el: "#temperature", out: "#temperature-out", get: (s) => s.temperature, set: (s, v) => { s.temperature = Number(v); }, show: (v) => (Number(v) === 0 ? "greedy" : Number(v).toFixed(2)) },
+    topP: { el: "#top-p", out: "#top-p-out", get: (s) => s.topP, set: (s, v) => { s.topP = Number(v); }, show: (v) => (Number(v) >= 1 ? "off" : Number(v).toFixed(2)) },
+    penalty: { el: "#penalty", out: "#penalty-out", get: (s) => s.repetitionPenalty, set: (s, v) => { s.repetitionPenalty = Number(v); }, show: (v) => (Number(v) === 1 ? "off" : Number(v).toFixed(2)) },
+    topK: { el: "#top-k", get: (s) => s.topK, set: (s, v) => { s.topK = Math.max(0, Math.min(V, Math.round(Number(v) || 0))); } },
+    maxTokens: { el: "#max-tokens", get: (s) => s.maxTokens, set: (s, v) => { s.maxTokens = Math.max(1, Math.min(60, Math.round(Number(v) || 1))); } },
+    seed: { el: "#seed", get: (s) => s.seed, set: (s, v) => { s.seed = Math.max(0, Math.round(Number(v) || 0)); } },
+    stop: { el: "#stop-seq", get: (s) => s.stop[0] || "", set: (s, v) => { s.stop = v ? [v] : []; } },
+  };
+
+  function syncControls() {
+    for (const c of Object.values(controls)) {
+      const input = $(c.el);
+      input.value = c.get(state.settings);
+      if (c.out) $(c.out).textContent = c.show(input.value);
+    }
+  }
+
+  let rerunTimer = 0;
+  function bindControls() {
+    for (const c of Object.values(controls)) {
+      const input = $(c.el);
+      const apply = () => {
+        c.set(state.settings, input.value);
+        if (c.out) $(c.out).textContent = c.show(input.value);
+        clearTimeout(rerunTimer);
+        rerunTimer = setTimeout(() => runSimulation(true), 120);
+      };
+      input.addEventListener(input.type === "range" ? "input" : "change", apply);
+    }
+    $("#new-seed").addEventListener("click", () => {
+      state.settings.seed = Math.floor(Math.random() * 100000);
+      syncControls();
+      runSimulation(true);
+    });
+    $("#reset-settings").addEventListener("click", () => {
+      state.settings = Object.assign({}, DEFAULTS, { stop: [] });
+      syncControls();
+      runSimulation(true);
+    });
+    $("#msg-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = $("#msg").value.trim();
+      if (!text) return;
+      setMessage(text);
+    });
+  }
+
+  function buildRail() {
+    const rail = $("#rail");
+    const node = (id, label, onclick) => el("button", { class: "node", type: "button", "data-node": id, onclick }, el("span", null, label), el("span", { class: "shape" }));
+    const blocks = [];
+    for (let l = 0; l < L; l++) {
+      blocks.push(el("div", { class: "blk", "data-node": `block${l}` },
+        el("span", { class: "lbl" }, `Block ${l + 1}`),
+        el("button", { class: "sub", type: "button", "data-sub": `attn${l}`, onclick: () => jumpTo("attn", l) }, "Attention"),
+        el("button", { class: "sub", type: "button", "data-sub": `mlp${l}`, onclick: () => jumpTo("mlp", l) }, "MLP")));
+    }
+    rail.replaceChildren(
+      el("div", { class: "rail-phase" }, el("div", { class: "big", id: "phase-big" }), el("div", { class: "small", id: "phase-small" })),
+      el("div", { class: "rail-body" },
+        el("div", { class: "rail-group label" }, "Request"),
+        node("request", "API server", () => jumpTo("request")),
+        node("template", "Chat template", () => jumpTo("template")),
+        node("tokenizer", "Tokenizer", () => jumpTo("split")),
+        el("div", { class: "rail-group label" }, "Generation loop"),
+        el("div", { class: "loop-box", id: "loop-box" },
+          node("embed", "Embedding", () => jumpTo("embed")),
+          blocks,
+          node("head", "Output head", () => jumpTo("head")),
+          node("sample", "Sampler", () => jumpTo("sample")),
+          node("detok", "Detokenizer", () => jumpTo("detok")),
+          node("stop", "Stop check", () => jumpTo("stop")),
+          el("div", { class: "loop-note" }, "↑ back to the embedding with the new token")),
+        node("finish", "Response done", () => jumpTo("finish"))));
+  }
+
+  function jumpTo(type, layer) {
+    const current = state.steps[state.index];
+    let pass = PASS_TYPES.includes(type) ? current.pass ?? 0 : undefined;
+    if (pass !== undefined && pass >= state.run.passes.length) pass = 0;
+    const index = state.stepIndex.get(stepKey(type, pass, layer));
+    if (index !== undefined) go(index);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Render: request state
+  // ---------------------------------------------------------------------------
+
+  function renderState(step, snap) {
+    const run = state.run;
+    const box = $("#ctx-tokens");
+    box.replaceChildren();
+    box.classList.toggle("is-prefill", snap.live.size > 1);
+    if (!snap.tokens.length) {
+      box.append(el("div", { class: "empty-note" }, "The context is empty. The tokenizer fills it with the prompt tokens."));
+    }
+    const selected = selectedToken(snap);
+    for (const t of snap.tokens) {
+      const cls = [];
+      if (snap.live.has(t.pos)) cls.push("is-live");
+      if (t.pos === snap.fresh) cls.push("is-new");
+      if (t.pos === selected) cls.push("is-selected");
+      const c = chip(t.id, { origin: t.origin, button: true, cls: cls.join(" "), title: `Position ${t.pos}. Select to follow this token.` });
+      c.addEventListener("click", () => { state.selected = t.pos; render(); });
+      box.append(c);
+    }
+    const prompt = Math.min(snap.tokens.length, run.prompt.ids.length);
+    const generated = snap.tokens.length - prompt;
+    $("#ctx-meta").textContent = snap.tokens.length
+      ? `${snap.tokens.length} of ${cfg.max_seq_len} positions · ${prompt} prompt${generated ? ` + ${generated} new` : ""}`
+      : `0 of ${cfg.max_seq_len} positions`;
+
+    renderKv(snap);
+
+    const stream = $("#stream");
+    stream.replaceChildren();
+    const finished = step.type === "finish";
+    if (!snap.text && !finished) stream.append(el("span", { class: "placeholder" }, step.pass == null ? "Nothing yet. Text arrives after the first sample." : "Waiting for the first token…"));
+    else {
+      stream.append(snap.text.slice(0, snap.text.length - snap.freshText.length));
+      if (snap.freshText) stream.append(el("span", { class: "fresh" }, snap.freshText));
+    }
+    if (!finished && step.pass != null) stream.append(el("span", { class: "caret", "aria-hidden": "true" }));
+    $("#stream-meta").textContent = finished ? `finish_reason "${run.finish.reason}"` : snap.text ? `${snap.text.length} characters` : "";
+  }
+
+  function renderKv(snap) {
+    const host = $("#kv-grid");
+    const width = Math.max(200, host.clientWidth || 300);
+    const labelW = 24;
+    const cols = cfg.max_seq_len;
+    const cellW = (width - labelW) / cols;
+    const rowH = 9;
+    const gap = 3;
+    const { canvas, g } = makeCanvas(width, L * (rowH + gap), "KV cache: one row per layer, one cell per position");
+    g.font = `10px ${MONO}`;
+    g.textBaseline = "middle";
+    for (let l = 0; l < L; l++) {
+      const y = l * (rowH + gap);
+      g.fillStyle = colors["ink-2"];
+      g.fillText(`L${l + 1}`, 0, y + rowH / 2 + 0.5);
+      for (let c = 0; c < cols; c++) {
+        let fill = colors.inset;
+        if (c < snap.cache[l]) {
+          if (snap.freed) fill = colors.rule;
+          else if (l === snap.writing && c >= snap.writeFrom) fill = colors.focus;
+          else fill = alpha("focus", 0.42);
+        }
+        g.fillStyle = fill;
+        g.fillRect(labelW + c * cellW, y, Math.max(1, cellW - 1), rowH);
+      }
+    }
+    const n = Math.max(...snap.cache);
+    host.replaceChildren(canvas, el("div", { class: "kv-note" }, snap.freed
+      ? `The server freed ${fmtBytes(n * TOY_KV)}. Llama 3 8B would free ${fmtBytes(n * LLAMA_KV)}.`
+      : n ? `The same ${n} positions in Llama 3 8B: ${fmtBytes(n * LLAMA_KV)}.` : "Empty. Prefill fills it, one layer at a time."));
+    $("#kv-meta").textContent = snap.freed ? "freed" : `${n} positions · ${fmtBytes(n * TOY_KV)}`;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Render: rail
+  // ---------------------------------------------------------------------------
+
+  function renderRail(step) {
+    const run = state.run;
+    const order = stageOrder(step.type, step.layer);
+    const inPass = step.pass != null;
+    const set = (node, nodeOrder, active) => {
+      node.classList.toggle("is-active", active);
+      node.classList.toggle("is-done", !active && (step.type === "finish" || (inPass && nodeOrder < 10) || nodeOrder < order));
+    };
+    const shape = (id, text) => { const s = document.querySelector(`[data-node="${id}"] .shape`); if (s) s.textContent = text || ""; };
+
+    set(document.querySelector('[data-node="request"]'), 0, step.type === "request");
+    set(document.querySelector('[data-node="template"]'), 1, step.type === "template");
+    set(document.querySelector('[data-node="tokenizer"]'), 2, ["split", "bpe", "ids", "error"].includes(step.type));
+    for (const id of ["embed", "head", "sample", "detok", "stop"]) set(document.querySelector(`[data-node="${id}"]`), stageOrder(id), step.type === id);
+    for (let l = 0; l < L; l++) {
+      for (const kind of ["attn", "mlp"]) {
+        const b = document.querySelector(`[data-sub="${kind}${l}"]`);
+        const o = stageOrder(kind, l);
+        b.classList.toggle("is-active", step.type === kind && step.layer === l);
+        b.classList.toggle("is-done", !(step.type === kind && step.layer === l) && (step.type === "finish" || (inPass && o < order)));
+      }
+      document.querySelector(`[data-node="block${l}"] .lbl`).classList.toggle("is-done", step.type === "finish" || (inPass && stageOrder("mlp", l) < order));
+    }
+    set(document.querySelector('[data-node="finish"]'), 100, step.type === "finish");
+
+    const P = run.prompt.ids.length;
+    shape("request", "");
+    shape("tokenizer", stageOrder(step.type) >= 2 ? `${P} tokens` : "text → IDs");
+    const pass = inPass ? run.passes[step.pass] : null;
+    shape("embed", pass ? `[${pass.positions.length} × ${D}]` : `[n × ${D}]`);
+    shape("head", `${D} → ${V}`);
+    shape("sample", pass && order >= stageOrder("sample") ? plainLabel(pass.token) : "");
+    shape("detok", pass && order >= stageOrder("detok") ? (pass.emitted.special ? "(none)" : JSON.stringify(pass.emitted.text)) : "");
+    shape("stop", pass && order >= stageOrder("stop") ? (pass.finish ? "stop" : "continue") : "");
+    shape("finish", step.type === "finish" ? `"${run.finish.reason}"` : "");
+
+    $("#loop-box").classList.toggle("is-looping", step.type === "stop" && !pass.finish);
+
+    let big;
+    let small;
+    if (!inPass && step.type !== "finish") {
+      big = "Before the model";
+      small = run.error ? "The prompt does not fit." : "The server prepares the input.";
+    } else if (step.type === "finish") {
+      big = "Done";
+      small = `${run.passes.length} forward passes · finish_reason "${run.finish.reason}"`;
+    } else {
+      big = pass.kind === "prefill" ? "Prefill" : `Decode step ${step.pass}`;
+      small = `Forward pass ${step.pass + 1} of ${run.passes.length} · ${pass.positions.length === 1 ? `1 position in (#${pass.positions[0].pos})` : `${pass.positions.length} positions in`}`;
+    }
+    $("#phase-big").textContent = big;
+    $("#phase-small").textContent = small;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Render: scope (one view per stage)
+  // ---------------------------------------------------------------------------
+
+  function scopeWidth() {
+    const scope = $("#scope");
+    const style = getComputedStyle(scope);
+    return Math.max(280, scope.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
+  }
+
+  function eyebrow(step) {
+    const run = state.run;
+    if (step.pass == null) return step.type === "finish" ? "After the last forward pass" : "Before the model runs";
+    const pass = run.passes[step.pass];
+    return pass.kind === "prefill"
+      ? `Prefill · forward pass 1 of ${run.passes.length} · positions 0–${pass.positions.length - 1}`
+      : `Decode · forward pass ${step.pass + 1} of ${run.passes.length} · position ${pass.positions[0].pos}`;
+  }
+
+  function renderScope(step) {
+    const view = VIEWS[step.type](step);
+    const scope = $("#scope");
+    const head = el("div", { class: "scope-head" },
+      el("div", { class: "eyebrow" }, el("span", { class: "label" }, eyebrow(step)), (view.docs || []).map(docLink)),
+      el("h2", { id: "scope-title" }, view.title || stepTitle(step)),
+      (view.explain || []).map((p) => el("p", { class: "explain" }, p)));
+    const fig = el("div", { class: "fig" }, view.figure || []);
+    const scale = view.scale && view.scale.length
+      ? el("div", { class: "scale" }, el("div", { class: "label" }, "At Llama 3 8B scale"), view.scale.map((line) => el("div", null, line)))
+      : null;
+    scope.replaceChildren(head, fig, scale || []);
+  }
+
+  function lensRow(dist, caption) {
+    const top = E.topIndices(dist, 4);
+    return el("div", null,
+      figLabel("Logit lens", caption),
+      el("div", { class: "lens" }, top.map((id) => el("span", null, chip(id, { noId: true, cls: "small" }), el("span", { class: "p" }, fmtPct(dist[id]))))));
+  }
+
+  const VIEWS = {
+    request() {
+      const run = state.run;
+      const s = run.settings;
+      const body = { model: "toy-llama", messages: [{ role: "user", content: run.userText }], stream: true, temperature: s.temperature, top_p: s.topP };
+      if (s.topK) body.top_k = s.topK;
+      if (s.repetitionPenalty !== 1) body.repetition_penalty = s.repetitionPenalty;
+      body.max_tokens = s.maxTokens;
+      body.seed = s.seed;
+      if (s.stop.length) body.stop = s.stop;
+      const P = run.prompt.ids.length;
+      const n = run.passes.length;
+      const item = (k, v) => el("li", null, el("span", { class: "k" }, k), el("span", { class: "v" }, v));
+      const glance = run.error
+        ? el("div", { class: "callout" }, run.error)
+        : el("ol", { class: "glance" },
+          item("Template and tokenizer", `${P} prompt tokens`),
+          item("Prefill", `1 forward pass over ${P} positions`),
+          item("Decode", `${n - 1} forward pass${n - 1 === 1 ? "" : "es"}, 1 position each`),
+          item("Finish", `${n} new tokens · finish_reason "${run.finish.reason}"`));
+      return {
+        docs: ["00", "08"],
+        explain: [
+          "The client sends the whole conversation and the sampler settings in one HTTP request. The model keeps no memory between requests, so the request carries all of the state.",
+          "The API server applies the chat template and the tokenizer. Then the scheduler gives the request to the model, one forward pass at a time.",
+        ],
+        figure: [
+          el("div", null, figLabel("HTTP request", "OpenAI-compatible chat API"), el("pre", { class: "code" }, "POST /v1/chat/completions\n\n" + JSON.stringify(body, null, 2))),
+          el("div", null, figLabel("This run at a glance"), glance),
+        ],
+        scale: [
+          el("span", null, "Llama 3 8B Instruct ships with ", el("b", null, "temperature 0.6"), " and ", el("b", null, "top_p 0.9"), " in its generation_config.json. This page starts with the same values."),
+        ],
+      };
+    },
+
+    template() {
+      const run = state.run;
+      const tape = el("div", { class: "tape" }, run.prompt.segments.map((seg) =>
+        seg.kind === "special"
+          ? el("span", { class: "chip is-special" }, seg.text)
+          : el("span", { class: `seg-text${seg.kind === "content" ? " is-content" : ""}` }, visibleText(seg.text))));
+      const legend = el("div", { class: "legend" },
+        el("span", null, el("span", { class: "chip is-special small" }, "<|…|>"), "special token, added by ID"),
+        el("span", null, el("span", { class: "swatch", style: { background: "var(--inset)", border: "1px solid var(--rule)" } }), "role name or separator"),
+        el("span", null, el("span", { class: "swatch", style: { background: "var(--prompt-bg)" } }), "the user's message"));
+      const injected = Object.keys(tok.special).filter((name) => run.userText.includes(name));
+      return {
+        docs: ["01"],
+        explain: [
+          "The chat template wraps the message in special tokens. They mark who speaks and where each turn ends.",
+          "The template ends with an open assistant header. So the next token that the model writes is the first token of the reply.",
+        ],
+        figure: [
+          el("div", null, figLabel("Llama 3 chat format", "↵ is a newline"), tape),
+          legend,
+          injected.length
+            ? el("div", { class: "callout is-focus" }, `Your message contains the text ${injected.join(", ")}. The tokenizer encodes it as plain text, not as a control token, so a user cannot end the turn early.`)
+            : el("div", { class: "callout" }, "The template inserts special tokens by ID. If a user types \"<|eot_id|>\", the tokenizer encodes that text as plain characters, so a user cannot inject a control token."),
+        ],
+        scale: [
+          el("span", null, "Llama 3 uses this exact format. Its special tokens are ", el("b", null, "<|begin_of_text|> 128000, <|start_header_id|> 128006, <|end_header_id|> 128007, <|eot_id|> 128009"), `. In this toy model they are ${tok.special["<|begin_of_text|>"]}–${tok.special["<|eot_id|>"]}.`),
+        ],
+      };
+    },
+
+    split() {
+      const run = state.run;
+      const rows = el("div", { class: "split-rows" }, run.prompt.segments.map((seg) => {
+        if (seg.kind === "special") {
+          return el("div", { class: "split-row" }, el("span", { class: "split-kind" }, "special"),
+            el("span", { class: "chunks" }, el("span", { class: "chip is-special small" }, seg.text), el("span", { class: "split-kind" }, "  skips this step")));
+        }
+        return el("div", { class: "split-row" }, el("span", { class: "split-kind" }, seg.kind === "content" ? "message" : "template"),
+          el("span", { class: "chunks" }, seg.chunks.length ? seg.chunks.map((c) => el("span", { class: "chunkbox" }, visibleText(c.text))) : el("span", { class: "muted" }, "(empty)")));
+      }));
+      const chunkCount = run.prompt.segments.reduce((n, s) => n + (s.chunks ? s.chunks.length : 0), 0);
+      return {
+        docs: ["01"],
+        explain: [
+          `The pre-tokenizer cuts each text part into chunks with a regular expression: ${chunkCount} chunks here. A chunk holds a word with its leading space, a number, punctuation, or whitespace.`,
+          "BPE then works inside each chunk. So a token never crosses a chunk boundary.",
+        ],
+        figure: [
+          el("div", null, figLabel("Chunks", "· is a space, ↵ is a newline"), rows),
+          el("div", null, figLabel("The Llama 3 pre-tokenizer pattern", "this toy model uses it too"), el("pre", { class: "code" }, tok.pattern)),
+        ],
+        scale: [el("span", null, "Llama 3 and GPT-4 use this pattern. It keeps letters, digits, and punctuation apart, and it splits numbers into groups of at most three digits.")],
+      };
+    },
+
+    bpe() {
+      const run = state.run;
+      const cards = [];
+      for (const seg of run.prompt.segments) {
+        if (seg.kind === "special") continue;
+        for (const c of seg.chunks) cards.push(bpeCard(c));
+      }
+      const merges = run.prompt.segments.reduce((n, s) => n + (s.chunks ? s.chunks.reduce((m, c) => m + c.steps.length - 1, 0) : 0), 0);
+      return {
+        docs: ["01"],
+        explain: [
+          "BPE starts from the UTF-8 bytes of each chunk. It applies the learned merge rules, lowest rank first, until no rule fits. Each merge joins two adjacent tokens into one.",
+          `This toy tokenizer learned ${fmtInt(tok.merges.length)} merges from its training text. This prompt uses ${merges} merge steps. A word that the tokenizer never saw stays in small pieces.`,
+        ],
+        figure: [el("div", null, figLabel("Merges per chunk", "purple: the token that the last merge made"), el("div", { class: "bpe-grid" }, cards))],
+        scale: [el("span", null, "Llama 3 has ", el("b", null, "128,000 merge-made tokens"), " plus 256 special tokens. With more merges, more words become one token, so the same text needs fewer positions.")],
+      };
+    },
+
+    ids() {
+      const run = state.run;
+      const ids = run.prompt.ids;
+      const chips = el("div", { class: "tokens" }, ids.map((id) => chip(id)));
+      const llama = LLAMA_TOKENS[run.userText];
+      let compare = null;
+      if (llama && llama.length === ids.length) {
+        compare = el("div", { class: "table-wrap" }, el("table", { class: "id-compare" },
+          el("tr", null, el("th", null, "token"), ids.map((id) => el("td", null, chip(id, { noId: true, cls: "small" })))),
+          el("tr", null, el("th", null, "this model"), ids.map((id) => el("td", null, id))),
+          el("tr", null, el("th", null, "Llama 3 8B"), llama.map(([id]) => el("td", null, id)))));
+      } else if (llama) {
+        compare = el("div", { class: "tokens" }, llama.map(([id, text]) => el("span", { class: `chip ${id >= 128000 ? "is-special" : "is-prompt"}` }, el("span", { class: "t" }, id >= 128000 ? text : visibleText(text)), el("span", { class: "id" }, id))));
+      }
+      return {
+        docs: ["01", "03"],
+        explain: [
+          `The prompt is now ${ids.length} integers. The model never sees the text, only these IDs.`,
+          `The context window of this model holds ${cfg.max_seq_len} positions. The prompt takes ${ids.length}, so the reply can use at most ${cfg.max_seq_len - ids.length}.`,
+        ],
+        figure: [
+          el("div", null, figLabel("Prompt token IDs", `${ids.length} of ${cfg.max_seq_len} positions`), chips),
+          compare ? el("div", null, figLabel("The same request in the Llama 3 tokenizer", llama.length === ids.length ? "same tokens, different IDs" : `${llama.length} tokens: Llama 3 knows more merges`), compare) : null,
+        ],
+        scale: [el("span", null, "Llama 3 8B has a context window of ", el("b", null, "8,192 positions"), ". Its vocabulary has 128,256 entries, so its IDs run from 0 to 128,255.")],
+      };
+    },
+
+    error() {
+      return {
+        docs: ["08"],
+        explain: [state.run.error, "A real server rejects such a request before the model runs. Shorten the message and run again."],
+        figure: [],
+      };
+    },
+
+    embed(step) {
+      const pass = state.run.passes[step.pass];
+      const n = pass.positions.length;
+      const explain = pass.kind === "prefill"
+        ? [`The embedding table has one row of ${D} numbers for each of the ${V} vocabulary entries. The lookup copies one row per token ID: ${n} rows here. It does no arithmetic.`,
+          "The copied rows become the residual stream: one vector per position. Every block reads this stream and adds to it."]
+        : ["Decode feeds only the new token, so the lookup copies one row. The earlier positions do not run again. Their keys and values wait in the KV cache.",
+          `This is the second life of the token: the sampler made it in the last pass, and now it is input at position ${pass.positions[0].pos}.`];
+      return {
+        docs: ["03"],
+        explain,
+        figure: [
+          el("div", null, figLabel("Lookup", "blue below zero, orange above zero"), el("div", { class: "canvas-wrap" }, embedFigure(pass))),
+          el("div", { class: "callout" }, "No position vector is added here. Position enters inside attention, as a rotation of the queries and keys (RoPE)."),
+        ],
+        scale: [el("span", null, "The Llama 3 8B table has ", el("b", null, "128,256 × 4,096 numbers"), ": 525 million parameters, 1.05 GB in bf16. One row is 8 KiB.")],
+      };
+    },
+
+    attn(step) {
+      const run = state.run;
+      const pass = run.passes[step.pass];
+      const l = step.layer;
+      const recs = pass.positions;
+      const last = recs[recs.length - 1];
+      const prefill = pass.kind === "prefill";
+      const qPos = prefill && state.query != null && state.query <= last.pos ? state.query : last.pos;
+      const qRec = recs.find((r) => r.pos === qPos) || last;
+      const h = state.head;
+      const weights = qRec.layers[l].weights[h];
+      const top = E.topIndices(weights, 3);
+      const width = scopeWidth();
+
+      const figure = [el("div", null, figLabel("Heads", `grouped-query attention: ${GROUP} query heads share one key/value head`), headPicker(pass, l, prefill))];
+      if (prefill) {
+        figure.push(el("div", null,
+          figLabel(`Head ${h + 1}: attention weights`, "rows: queries · columns: keys · hatched: masked future · select a row"),
+          el("div", { class: "canvas-wrap" }, attnMatrix(recs, l, h, qPos, width))));
+      }
+      figure.push(el("div", null,
+        figLabel(`Where position ${qPos} (${plainLabel(run.tokens[qPos].id)}) reads, head ${h + 1}`, `top: ${top.map((j) => `${plainLabel(run.tokens[j].id)} ${fmtPct(weights[j])}`).join(", ")}`),
+        ribbon(weights)));
+      figure.push(el("div", { class: "callout" }, prefill
+        ? `KV cache: layer ${l + 1} writes ${recs.length} keys and ${recs.length} values, one pair per position and key/value head (${fmtBytes(recs.length * TOY_KV / L)} here).`
+        : `KV cache: layer ${l + 1} reads ${last.pos} cached keys and values, then appends one new pair for position ${last.pos}.`));
+      figure.push(lensRow(run.passes[step.pass].lens[l].afterAttention, `the output head applied early: position ${last.pos}, after this sub-layer`));
+
+      return {
+        docs: ["05", "03"],
+        explain: prefill
+          ? [`Each position makes a query, a key, and a value from its vector. A query compares itself with the keys of all earlier positions. The causal mask hides later positions.`,
+            "Softmax turns the scores into weights that add up to 1. The head takes the weighted mix of the values and adds it, through one more matrix, to the residual stream."]
+          : [`Only the new token makes a query. It compares the query with the ${last.pos + 1} keys in the cache, its own included, and mixes their values.`,
+            "This is the only place where a token gets information from other tokens."],
+        figure,
+        scale: [el("span", null, "Llama 3 8B has ", el("b", null, "32 query heads and 8 key/value heads"), " in each of 32 layers, with 128 numbers per head. Its KV cache grows by 128 KiB per token.")],
+      };
+    },
+
+    mlp(step) {
+      const run = state.run;
+      const pass = run.passes[step.pass];
+      const l = step.layer;
+      const recs = pass.positions;
+      const last = recs[recs.length - 1];
+      const prefill = pass.kind === "prefill";
+      const pos = prefill && state.mlpPos != null && state.mlpPos <= last.pos ? state.mlpPos : last.pos;
+      const rec = recs.find((r) => r.pos === pos) || last;
+      const layer = rec.layers[l];
+      const effects = model.neuronEffects(l);
+      const scale = robustScale(recs.flatMap((r) => Array.from(r.layers[l].act)));
+      const width = scopeWidth();
+      const ranked = E.topIndices(Array.from(layer.act, Math.abs), 6);
+
+      const table = el("table", { class: "data" },
+        el("thead", null, el("tr", null, el("th", null, "Neuron"), el("th", { class: "num" }, "Activation"), el("th", null, "Its write vector raises"))),
+        el("tbody", null, ranked.map((n) => {
+          const a = layer.act[n];
+          const raises = a >= 0 ? effects[n].promotes : effects[n].suppresses;
+          return el("tr", null, el("td", null, `#${n}`), el("td", { class: "num" }, fmtNum(a)),
+            el("td", null, el("div", { class: "neuron-row" }, raises.map((id) => chip(id, { noId: true, cls: "small" })))));
+        })));
+
+      const an = E.norm2(layer.attnOut);
+      const mn = E.norm2(layer.mlpOut);
+      const maxN = Math.max(an, mn, 1e-9);
+      const updates = el("div", { class: "updates" },
+        el("span", null, "attention"), el("div", { class: "track" }, el("div", { class: "fill is-attn", style: { width: `${(an / maxN) * 100}%` } })), el("span", null, an.toFixed(2)),
+        el("span", null, "MLP"), el("div", { class: "track" }, el("div", { class: "fill is-mlp", style: { width: `${(mn / maxN) * 100}%` } })), el("span", null, mn.toFixed(2)));
+
+      const figure = [];
+      if (prefill) {
+        figure.push(el("div", null,
+          figLabel(`All ${recs.length} positions × ${cfg.hidden_dim} neurons`, "the MLP runs on each position alone · select a row"),
+          el("div", { class: "canvas-wrap" }, neuronStrip(recs, l, pos, scale, width))));
+      }
+      figure.push(el("div", { class: "row" },
+        el("div", null, figLabel(`Position ${pos} (${plainLabel(rec.tokenId)}): ${cfg.hidden_dim} neurons`, "14 × 16 grid"), neuronGrid(layer.act, scale, effects)),
+        el("div", { style: { flex: "1 1 300px" } }, figLabel("Strongest neurons", "direct effect on the logits"), el("div", { class: "table-wrap" }, table))));
+      figure.push(el("div", null, figLabel(`Size of the updates to the residual stream, block ${l + 1}`, `position ${pos}`), updates));
+      figure.push(lensRow(pass.lens[l].afterMlp, `the output head applied early: position ${last.pos}, after block ${l + 1}`));
+
+      return {
+        docs: ["06", "13"],
+        explain: [
+          `The MLP works on each position alone. It expands the ${D} numbers to ${cfg.hidden_dim} neurons, gates them with SiLU, and compresses the result back to ${D}. The result is added to the residual stream.`,
+          "Each neuron is a rule: if the input matches its read vector, add its write vector to the stream. The table reads each write vector through the output head to show which tokens it pushes up.",
+        ],
+        figure,
+        scale: [el("span", null, "Llama 3 8B has ", el("b", null, "14,336 neurons in each of 32 MLP layers"), ": 176 million parameters per layer, about two thirds of the model.")],
+      };
+    },
+
+    head(step) {
+      const run = state.run;
+      const pass = run.passes[step.pass];
+      const last = pass.positions[pass.positions.length - 1];
+      const probs = pass.draw.modelProbs;
+      const top = E.topIndices(last.logits, 8);
+      const table = el("table", { class: "data" },
+        el("thead", null, el("tr", null, el("th", null, "Rank"), el("th", null, "Token"), el("th", { class: "num" }, "ID"), el("th", { class: "num" }, "Logit"), el("th", null, "Softmax (T = 1)"))),
+        el("tbody", null, top.map((id, i) => el("tr", null, el("td", null, i + 1), el("td", null, chip(id, { noId: true, cls: "small" })), el("td", { class: "num" }, id), el("td", { class: "num" }, fmtNum(last.logits[id])),
+          el("td", null, el("div", { class: "pcell" }, el("span", { class: "pbar", style: { width: `${Math.max(1, probs[id] * 110)}px` } }), fmtProb(probs[id])))))));
+      const context = pass.kind === "prefill"
+        ? el("div", null, figLabel("Which positions go through the head", "prefill made a vector for every position"),
+          el("div", { class: "tokens" }, pass.positions.map((r) => chip(r.tokenId, { noId: true, cls: r.pos === last.pos ? "is-live small" : "is-dim small" }))))
+        : null;
+      return {
+        docs: ["07"],
+        explain: [
+          `The final RMSNorm rescales the vector of the last position. The output head multiplies it by a ${D} × ${V} matrix: one score, a logit, for each vocabulary entry.`,
+          pass.kind === "prefill"
+            ? `Prefill computed vectors for all ${pass.positions.length} positions, but generation needs only the last one. Training uses all positions, because each position predicts its own next token.`
+            : "Decode has one position, so the head runs once.",
+        ],
+        figure: [
+          context,
+          el("div", null, figLabel(`All ${V} logits, in vocabulary order`, "the tallest bars win"), el("div", { class: "canvas-wrap" }, logitLandscape(last.logits, scopeWidth()))),
+          el("div", null, figLabel("Highest logits"), el("div", { class: "table-wrap" }, table)),
+        ],
+        scale: [el("span", null, "The Llama 3 8B output head is ", el("b", null, "4,096 × 128,256"), ": 525 million parameters. It makes 128,256 logits for each new token.")],
+      };
+    },
+
+    sample(step) {
+      const run = state.run;
+      const pass = run.passes[step.pass];
+      const d = pass.draw;
+      const s = run.settings;
+      const ids = new Set(E.topIndices(d.afterPenalty, 7));
+      ids.add(d.chosen);
+      ids.add(EOT);
+      const rows = Array.from(ids).sort((a, b) => d.afterPenalty[b] - d.afterPenalty[a]);
+      const state3 = (set, id, cutBefore) => (set == null ? "off" : cutBefore ? "—" : set.has(id) ? "kept" : "cut");
+      const cls = (v) => (v === "cut" ? "cut" : v === "kept" ? "kept" : "muted");
+      const table = el("table", { class: "data" },
+        el("thead", null, el("tr", null,
+          el("th", null, "Token"),
+          el("th", { class: "num" }, "Logit"),
+          el("th", { class: "num" }, s.repetitionPenalty === 1 ? "Penalty off" : `Penalty ${s.repetitionPenalty}`),
+          el("th", { class: "num" }, d.greedy ? "Greedy" : `÷ T = ${s.temperature}`),
+          el("th", null, s.topK ? `Top-k ${s.topK}` : "Top-k"),
+          el("th", null, s.topP < 1 ? `Top-p ${s.topP}` : "Top-p"),
+          el("th", null, "Final probability"))),
+        el("tbody", null, rows.map((id) => {
+          const k = d.greedy ? "off" : state3(d.keptTopK, id, false);
+          const p = d.greedy ? "off" : state3(d.keptTopP, id, k === "cut");
+          return el("tr", { class: id === d.chosen ? "is-chosen" : null },
+            el("td", null, chip(id, { noId: true, cls: "small" }), id === d.chosen ? el("span", { class: "muted" }, "  chosen") : null),
+            el("td", { class: "num" }, fmtNum(d.raw[id])),
+            el("td", { class: "num" + (d.penalized.has(id) ? "" : " muted") }, s.repetitionPenalty === 1 ? "—" : fmtNum(d.afterPenalty[id])),
+            el("td", { class: "num" }, d.greedy ? (id === d.chosen ? "max" : "—") : fmtNum(d.scaled[id])),
+            el("td", { class: cls(k) }, k),
+            el("td", { class: cls(p) }, p),
+            el("td", null, el("div", { class: "pcell" }, el("span", { class: "pbar", style: { width: `${d.probs[id] > 0 ? Math.max(1, d.probs[id] * 110) : 0}px` } }), fmtProb(d.probs[id]))));
+        })));
+      const pStop = d.modelProbs[EOT];
+      return {
+        docs: ["07"],
+        explain: [
+          "The model's work ends with the logits. The sampler is a policy of the runtime: the client sets it per request, and no training is involved.",
+          d.greedy
+            ? "Temperature 0 means greedy decoding: the sampler takes the highest logit and makes no random draw."
+            : "The processors run in the Hugging Face order: repetition penalty, temperature, top-k, top-p. Then one random number picks a token in proportion to its probability.",
+        ],
+        figure: [
+          el("div", null, figLabel("Logit processors", `${d.greedy ? 1 : d.keptCount} of ${V} tokens stay in the draw`), el("div", { class: "table-wrap" }, table)),
+          el("div", null, figLabel("The draw", d.greedy ? "no random number" : `u = ${d.u.toFixed(4)} from seed ${s.seed}`), el("div", { class: "canvas-wrap" }, drawBar(d, scopeWidth()))),
+          el("div", { class: "callout" + (pStop > 0.05 ? " is-focus" : "") },
+            `The model gives <|eot_id|> a probability of ${fmtProb(pStop)} here. `,
+            pStop > 0.95 ? "The model is sure that the reply is complete." : pStop > 0.05 ? "The model is unsure if the reply is complete, so the draw decides." : "The model expects more text."),
+        ],
+        scale: [el("span", null, "vLLM applies penalties first, then temperature, min-p, top-k, and top-p. ", el("b", null, "Llama 3 8B Instruct defaults: temperature 0.6, top_p 0.9."))],
+      };
+    },
+
+    detok(step) {
+      const run = state.run;
+      const pass = run.passes[step.pass];
+      const em = pass.emitted;
+      const id = pass.token;
+      const first = step.pass === 0;
+      const sse = em.special ? "(no event: the server sends no text for a special token)" : `data: ${JSON.stringify({ choices: [{ index: 0, delta: { content: em.text } }] })}`;
+      const flow = el("div", { class: "flow" },
+        chip(id, { origin: "generated" }),
+        el("span", { class: "arrow" }, "→"),
+        em.special ? el("span", { class: "muted" }, "special token: skipped") : el("span", { class: "bytes" }, em.bytes.map((b) => el("span", { class: "byte" }, b.toString(16).toUpperCase().padStart(2, "0")))),
+        em.special ? null : el("span", { class: "arrow" }, "→"),
+        em.special ? null : el("span", { class: "textpiece" }, visibleText(em.text || "")),
+        em.held ? el("span", { class: "muted" }, `${em.held} byte(s) held back`) : null);
+      return {
+        docs: ["01", "08"],
+        explain: em.special
+          ? ["Special tokens are control signals, not text. The detokenizer skips them, so the client gets no text for this token."]
+          : [`The detokenizer maps ID ${id} back to its bytes and decodes them as UTF-8. The server streams the new text to the client at once.`,
+            "A byte-level token can end in the middle of a character. Then the server holds those bytes back until the next token completes the character."],
+        figure: [
+          el("div", null, figLabel("Token → bytes → text"), flow),
+          el("div", null, figLabel("Server-sent event"), el("pre", { class: "code" }, sse)),
+          first ? el("div", { class: "callout is-focus" }, "This is the first text that the client sees. The wait until now is the time to first token (TTFT): one prefill pass plus one sample.") : null,
+        ],
+        scale: [el("span", null, first
+          ? "For Llama 3 8B, TTFT grows with the prompt length, because prefill is compute-bound."
+          : "For Llama 3 8B, the gap between two tokens is at least the time to read 16 GB of weights: about 8 ms at 2 TB/s.")],
+      };
+    },
+
+    stop(step) {
+      const run = state.run;
+      const pass = run.passes[step.pass];
+      const checks = el("div", { class: "checks" }, pass.checks.map((c) =>
+        el("div", { class: `check${c.passed ? " is-fired" : ""}` },
+          el("span", { class: "mark", "aria-hidden": "true" }, c.passed ? "!" : ""),
+          el("div", null, el("div", { class: "what" }, c.label), el("div", { class: "detail" }, checkDetail(c, pass, run))),
+          el("span", { class: "res" }, c.passed ? "fires" : "no"))));
+      const verdict = pass.finish
+        ? el("div", { class: "verdict is-halt" }, "Stop.", el("span", { class: "mono" }, `finish_reason "${pass.finish.reason}" (${pass.finish.by === "stop-token" ? "stop token" : pass.finish.by === "stop-sequence" ? "stop sequence" : pass.finish.by === "max-tokens" ? "max_tokens" : "context window"})`))
+        : el("div", { class: "verdict is-go" }, "Continue.", el("span", { class: "mono" }, `Append ${JSON.stringify(tok.label(pass.token))} at position ${pass.tokenPos} and run forward pass ${step.pass + 2}.`));
+      return {
+        docs: ["07"],
+        explain: [
+          "After each token, the runtime checks four stop conditions. If none fires, it appends the token to the context and runs the next forward pass.",
+          "The model has no stop button. It stops by predicting a stop token, the same way it predicts any other token.",
+        ],
+        figure: [
+          checks,
+          verdict,
+          el("div", null, figLabel("Probability of <|eot_id|> at each pass", "the model's own estimate, before the sampler"), stopSpark(step.pass)),
+        ],
+        scale: [el("span", null, "Llama 3 8B Instruct lists two stop tokens in its generation_config.json: ", el("b", null, "<|end_of_text|> 128001 and <|eot_id|> 128009"), ".")],
+      };
+    },
+
+    finish() {
+      const run = state.run;
+      const P = run.prompt.ids.length;
+      const n = run.passes.length;
+      const positions = P + n - 1;
+      const usage = { prompt_tokens: P, completion_tokens: n, total_tokens: P + n };
+      const last = `data: ${JSON.stringify({ choices: [{ index: 0, delta: {}, finish_reason: run.finish.reason }], usage })}\n\ndata: [DONE]`;
+      const toyWeights = model.parameterCount * BYTES;
+      const llamaWeights = LLAMA.params * BYTES;
+      const cost = el("table", { class: "data" },
+        el("thead", null, el("tr", null, el("th", null, ""), el("th", { class: "num" }, "This model"), el("th", { class: "num" }, "Llama 3 8B"))),
+        el("tbody", null,
+          el("tr", null, el("td", null, "Forward passes"), el("td", { class: "num" }, n), el("td", { class: "num" }, n)),
+          el("tr", null, el("td", null, "Positions computed"), el("td", { class: "num" }, positions), el("td", { class: "num" }, positions)),
+          el("tr", null, el("td", null, "KV cache at the end"), el("td", { class: "num" }, fmtBytes(positions * TOY_KV)), el("td", { class: "num" }, fmtBytes(positions * LLAMA_KV))),
+          el("tr", null, el("td", null, "Weights read (once per pass)"), el("td", { class: "num" }, fmtDecimalBytes(n * toyWeights)), el("td", { class: "num" }, fmtDecimalBytes(n * llamaWeights))),
+          el("tr", null, el("td", null, "Arithmetic (≈ 2 × parameters per position)"), el("td", { class: "num" }, fmtFlops(2 * model.parameterCount * positions)), el("td", { class: "num" }, fmtFlops(2 * LLAMA.params * positions))),
+          el("tr", null, el("td", null, "Decode time floor at 2 TB/s"), el("td", { class: "num" }, `${((n - 1) * toyWeights / GPU_BYTES_PER_S * 1e6).toFixed(1)} µs`), el("td", { class: "num" }, `${((n - 1) * llamaWeights / GPU_BYTES_PER_S * 1e3).toFixed(0)} ms`))));
+      return {
+        docs: ["08", "02"],
+        explain: [
+          `The request is done after ${n} forward passes: one prefill over ${P} positions and ${n - 1} decode passes. The server sends the finish reason and the token counts, then frees the KV cache.`,
+          "The last token never goes back into the model. The runtime stopped before it needed a new pass.",
+        ],
+        figure: [
+          el("div", null, figLabel("Final reply"), el("div", { class: "stream" }, run.text || el("span", { class: "placeholder" }, "(empty)"))),
+          el("div", null, figLabel("Last server-sent events"), el("pre", { class: "code" }, last)),
+          el("div", null, figLabel("Probability of <|eot_id|> at each pass"), stopSpark(n - 1)),
+          el("div", null, figLabel("Cost of this request", "both models at 2 bytes per number"), el("div", { class: "table-wrap" }, cost)),
+        ],
+        scale: [el("span", null, "Decode is memory-bound: each pass reads every weight once. A server batches many requests, so one read of the weights serves many tokens.")],
+      };
+    },
+  };
+
+  function checkDetail(c, pass, run) {
+    if (c.id === "stop-token") {
+      const name = tok.isSpecial(pass.token) ? tok.label(pass.token) : JSON.stringify(tok.label(pass.token));
+      return c.passed ? `${name} is a stop token` : `${name} is not a stop token (<|eot_id|> or <|end_of_text|>)`;
+    }
+    if (c.id === "stop-sequence") return run.settings.stop.length ? (c.passed ? `the text ends with ${JSON.stringify(c.detail)}` : `no ${JSON.stringify(run.settings.stop[0])} in the new text`) : "none set";
+    return c.detail;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Figures
+  // ---------------------------------------------------------------------------
+
+  function bpeCard(trace) {
+    const byteCount = trace.steps[0].ids.length;
+    const rows = trace.steps.map((st, i) => {
+      const merged = st.merge ? st.merge.id : -1;
+      return el("div", { class: "bpe-row" },
+        st.ids.map((id) => el("span", { class: `bpe-tile${i === 0 ? " is-byte" : ""}${id === merged ? " is-merged" : ""}` }, i === 0 ? byteGlyph(id) : tokenGlyphs(id))),
+        el("span", { class: "bpe-rule" }, i === 0 ? "bytes" : `rule #${st.merge.rank}`));
+    });
+    return el("div", { class: "bpe-card" },
+      el("div", { class: "bpe-title" }, el("span", null, visibleText(trace.text)), el("span", { class: "muted" }, `${byteCount} B → ${trace.ids.length} token${trace.ids.length === 1 ? "" : "s"}`)),
+      rows,
+      el("div", { class: "bpe-row" }, trace.ids.map((id) => el("span", { class: "chip is-prompt small" }, el("span", { class: "t" }, tokenGlyphs(id)), el("span", { class: "id" }, id)))));
+  }
+
+  function byteGlyph(b) {
+    if (b === 0x20) return el("span", { class: "ws" }, "·");
+    if (b === 0x0a) return el("span", { class: "ws" }, "↵");
+    if (b > 0x20 && b < 0x7f) return String.fromCharCode(b);
+    return b.toString(16).toUpperCase().padStart(2, "0");
+  }
+
+  function embeddingImage() {
+    if (!imageCache.has("embedding")) {
+      const scale = robustScale(model.embedding);
+      imageCache.set("embedding-scale", scale);
+      imageCache.set("embedding", matrixImage(V, D, (r, c) => diverging(model.embedding[r * D + c], scale)));
+    }
+    return imageCache.get("embedding");
+  }
+
+  function embedFigure(pass) {
+    const recs = pass.positions;
+    const n = recs.length;
+    const width = scopeWidth();
+    const narrow = width < 560;
+    const tableW = narrow ? 64 : 104;
+    const gapW = narrow ? 40 : 96;
+    const labelW = narrow ? 92 : 132;
+    const rowH = n === 1 ? 24 : Math.max(11, Math.min(18, Math.floor(320 / n)));
+    const rowsH = rowH * n;
+    const tableH = Math.max(230, Math.min(330, rowsH));
+    const top = 20;
+    const height = top + Math.max(tableH, rowsH) + 6;
+    const rowsX = tableW + gapW + labelW;
+    const cellW = Math.max(2, Math.floor(((width - rowsX) / D) * 10) / 10);
+    const totalW = Math.ceil(rowsX + cellW * D);
+    const { canvas, g } = makeCanvas(totalW, height, `Embedding lookup of ${n} token(s)`);
+    const img = embeddingImage();
+    const scale = imageCache.get("embedding-scale");
+    g.drawImage(img, 0, top, tableW, tableH);
+    g.strokeStyle = colors.rule;
+    g.strokeRect(0.5, top + 0.5, tableW - 1, tableH - 1);
+    g.font = `10.5px ${MONO}`;
+    g.fillStyle = colors["ink-2"];
+    g.textBaseline = "alphabetic";
+    g.fillText(`table [${V} × ${D}]`, 0, 12);
+    g.fillText(`residual stream [${n} × ${D}]`, rowsX, 12);
+    const rowsTop = top + Math.max(0, (tableH - rowsH) / 2);
+    g.textBaseline = "middle";
+    g.font = `${Math.min(12, rowH - 1)}px ${MONO}`;
+    recs.forEach((rec, i) => {
+      const y = rowsTop + i * rowH;
+      const ty = top + ((rec.tokenId + 0.5) / V) * tableH;
+      g.strokeStyle = colors.focus;
+      g.lineWidth = 1.5;
+      g.beginPath();
+      g.moveTo(0, ty);
+      g.lineTo(tableW, ty);
+      g.stroke();
+      g.strokeStyle = alpha("focus", 0.45);
+      g.lineWidth = 1;
+      g.beginPath();
+      g.moveTo(tableW + 2, ty);
+      g.bezierCurveTo(tableW + gapW * 0.55, ty, tableW + gapW * 0.45, y + rowH / 2, tableW + gapW - 2, y + rowH / 2);
+      g.stroke();
+      for (let d = 0; d < D; d++) {
+        g.fillStyle = css(diverging(rec.embedding[d], scale));
+        g.fillRect(rowsX + d * cellW, y, Math.ceil(cellW), rowH - 1);
+      }
+      g.fillStyle = colors.ink;
+      let label = `${plainLabel(rec.tokenId)}`;
+      const idText = ` ${rec.tokenId}`;
+      while (label.length > 2 && g.measureText(label + idText).width > labelW - 10) label = label.slice(0, -2) + "…";
+      g.fillText(label, tableW + gapW + 4, y + rowH / 2);
+      g.fillStyle = colors["ink-2"];
+      g.fillText(idText, tableW + gapW + 4 + g.measureText(label).width, y + rowH / 2);
+    });
+    hover(canvas, (x, y) => {
+      if (x >= rowsX && y >= rowsTop && y < rowsTop + rowsH) {
+        const i = Math.floor((y - rowsTop) / rowH);
+        const d = Math.min(D - 1, Math.floor((x - rowsX) / cellW));
+        const rec = recs[i];
+        if (!rec) return null;
+        return [["position", String(rec.pos)], ["token", `${plainLabel(rec.tokenId)} (row ${rec.tokenId})`], ["dimension", String(d)], ["value", rec.embedding[d].toFixed(4)]];
+      }
+      if (x < tableW && y >= top && y < top + tableH) {
+        const r = Math.min(V - 1, Math.floor(((y - top) / tableH) * V));
+        return [["row", String(r)], ["token", plainLabel(r)]];
+      }
+      return null;
+    });
+    return canvas;
+  }
+
+  function headPicker(pass, l, prefill) {
+    const recs = pass.positions;
+    const groups = [];
+    for (let kv = 0; kv < cfg.n_kv_heads; kv++) {
+      const buttons = [];
+      for (let h = kv * GROUP; h < (kv + 1) * GROUP; h++) {
+        const size = 56;
+        const { canvas, g } = makeCanvas(size, prefill ? size : 18, `Head ${h + 1} thumbnail`);
+        if (prefill) {
+          const n = recs.length;
+          const img = matrixImage(n, n, (i, j) => (j <= i ? ramp(recs[i].layers[l].weights[h][j]) : colors["inset:rgb"]));
+          g.drawImage(img, 0, 0, size, size);
+        } else {
+          const w = recs[0].layers[l].weights[h];
+          const img = matrixImage(1, w.length, (i, j) => ramp(w[j]));
+          g.drawImage(img, 0, 0, size, 18);
+        }
+        g.strokeStyle = colors.rule;
+        g.strokeRect(0.5, 0.5, size - 1, (prefill ? size : 18) - 1);
+        buttons.push(el("button", { class: "headbtn", type: "button", "aria-pressed": String(state.head === h), onclick: () => { state.head = h; render(); } }, canvas, `Head ${h + 1}`));
+      }
+      groups.push(el("div", { class: "kvgroup" }, el("span", { class: "label" }, `Key/value head ${kv + 1}`), el("div", { class: "kvgroup-heads" }, buttons)));
+    }
+    return el("div", { class: "heads" }, groups);
+  }
+
+  function attnMatrix(recs, l, h, qPos, width) {
+    const n = recs.length;
+    const labelW = Math.min(132, Math.max(76, Math.floor(width * 0.18)));
+    const cell = Math.max(5, Math.min(24, Math.floor((width - labelW - 10) / n)));
+    const size = cell * n;
+    const { canvas, g } = makeCanvas(labelW + size + 2, size + 2, `Attention weights of head ${h + 1}`);
+    const pattern = hatch(g);
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        if (j <= i) g.fillStyle = css(ramp(recs[i].layers[l].weights[h][j]));
+        else g.fillStyle = pattern;
+        g.fillRect(labelW + j * cell, i * cell, cell - (cell > 8 ? 1 : 0), cell - (cell > 8 ? 1 : 0));
+      }
+    }
+    if (cell >= 9) {
+      g.font = `${Math.min(12, cell - 2)}px ${MONO}`;
+      g.textBaseline = "middle";
+      g.textAlign = "right";
+      for (let i = 0; i < n; i++) {
+        let label = plainLabel(recs[i].tokenId);
+        while (label.length > 2 && g.measureText(label).width > labelW - 12) label = label.slice(0, -2) + "…";
+        g.fillStyle = recs[i].pos === qPos ? colors.focus : colors["ink-2"];
+        g.fillText(label, labelW - 6, i * cell + cell / 2);
+      }
+      g.textAlign = "left";
+    }
+    const qi = recs.findIndex((r) => r.pos === qPos);
+    if (qi >= 0) {
+      g.strokeStyle = colors.ink;
+      g.lineWidth = 1.5;
+      g.strokeRect(labelW + 0.75, qi * cell + 0.75, (qi + 1) * cell - 1.5, cell - 1.5);
+    }
+    const at = (x, y) => {
+      if (x < labelW) return null;
+      const i = Math.floor(y / cell);
+      const j = Math.floor((x - labelW) / cell);
+      if (i < 0 || i >= n || j < 0 || j >= n) return null;
+      return [i, j];
+    };
+    hover(canvas, (x, y) => {
+      const ij = at(x, y);
+      if (!ij) return null;
+      const [i, j] = ij;
+      const q = recs[i];
+      const k = recs[j];
+      if (j > i) return [["query", `${plainLabel(q.tokenId)} @${q.pos}`], ["key", `${plainLabel(k.tokenId)} @${k.pos}`], ["masked", "a later position"]];
+      return [["query", `${plainLabel(q.tokenId)} @${q.pos}`], ["key", `${plainLabel(k.tokenId)} @${k.pos}`], ["weight", fmtProb(q.layers[l].weights[h][j])], ["score", fmtNum(q.layers[l].scores[h][j], 3)]];
+    }, (x, y) => {
+      const i = Math.floor(y / cell);
+      if (i >= 0 && i < n) { state.query = recs[i].pos; render(); }
+    });
+    return canvas;
+  }
+
+  function ribbon(weights) {
+    const run = state.run;
+    return el("div", { class: "ribbon" }, Array.from(weights, (w, j) => {
+      const t = run.tokens[j];
+      const c = chip(t.id, { origin: t.origin, sub: fmtPct(w), title: `Position ${j}: weight ${fmtProb(w)}` });
+      c.style.background = css(ramp(w));
+      c.style.color = w > 0.45 ? colors["focus-ink"] : colors.ink;
+      return c;
+    }));
+  }
+
+  function neuronStrip(recs, l, pos, scale, width) {
+    const n = recs.length;
+    const labelW = Math.min(120, Math.max(70, Math.floor(width * 0.16)));
+    const cellW = Math.max(1.5, Math.floor(((width - labelW) / cfg.hidden_dim) * 10) / 10);
+    const rowH = Math.max(7, Math.min(14, Math.floor(260 / n)));
+    const totalW = Math.ceil(labelW + cellW * cfg.hidden_dim);
+    const { canvas, g } = makeCanvas(totalW, n * rowH, "MLP activations for every position");
+    const img = matrixImage(n, cfg.hidden_dim, (i, j) => diverging(recs[i].layers[l].act[j], scale));
+    g.drawImage(img, labelW, 0, cellW * cfg.hidden_dim, n * rowH);
+    g.font = `${Math.min(11, rowH - 1)}px ${MONO}`;
+    g.textBaseline = "middle";
+    g.textAlign = "right";
+    recs.forEach((r, i) => {
+      if (rowH < 9 && r.pos !== pos && i % 2) return;
+      let label = plainLabel(r.tokenId);
+      while (label.length > 2 && g.measureText(label).width > labelW - 10) label = label.slice(0, -2) + "…";
+      g.fillStyle = r.pos === pos ? colors.focus : colors["ink-2"];
+      g.fillText(label, labelW - 6, i * rowH + rowH / 2);
+    });
+    const si = recs.findIndex((r) => r.pos === pos);
+    g.strokeStyle = colors.ink;
+    g.lineWidth = 1.5;
+    g.strokeRect(labelW + 0.75, si * rowH + 0.75, cellW * cfg.hidden_dim - 1.5, rowH - 1.5);
+    const effects = model.neuronEffects(l);
+    hover(canvas, (x, y) => {
+      const i = Math.floor(y / rowH);
+      const j = Math.floor((x - labelW) / cellW);
+      if (x < labelW || i < 0 || i >= n || j < 0 || j >= cfg.hidden_dim) return null;
+      const a = recs[i].layers[l].act[j];
+      return [["position", `${recs[i].pos} ${plainLabel(recs[i].tokenId)}`], ["neuron", `#${j}`], ["activation", fmtNum(a, 3)], ["raises", (a >= 0 ? effects[j].promotes : effects[j].suppresses).map(plainLabel).join("  ")]];
+    }, (x, y) => {
+      const i = Math.floor(y / rowH);
+      if (i >= 0 && i < n) { state.mlpPos = recs[i].pos; render(); }
+    });
+    return canvas;
+  }
+
+  function neuronGrid(act, scale, effects) {
+    const cols = 16;
+    const rows = Math.ceil(act.length / cols);
+    const cell = 17;
+    const { canvas, g } = makeCanvas(cols * cell, rows * cell, "MLP neuron activations");
+    for (let n = 0; n < act.length; n++) {
+      g.fillStyle = css(diverging(act[n], scale));
+      g.fillRect((n % cols) * cell, Math.floor(n / cols) * cell, cell - 1, cell - 1);
+    }
+    hover(canvas, (x, y) => {
+      const n = Math.floor(y / cell) * cols + Math.floor(x / cell);
+      if (n < 0 || n >= act.length) return null;
+      return [["neuron", `#${n}`], ["activation", fmtNum(act[n], 3)], ["raises", (act[n] >= 0 ? effects[n].promotes : effects[n].suppresses).map(plainLabel).join("  ")]];
+    });
+    return canvas;
+  }
+
+  function logitLandscape(logits, width) {
+    const height = 150;
+    const top = 22;
+    const bottom = 14;
+    const W = Math.max(300, Math.floor(width));
+    const { canvas, g } = makeCanvas(W, height, `All ${V} logits`);
+    let min = Infinity;
+    let max = -Infinity;
+    for (const v of logits) { if (v < min) min = v; if (v > max) max = v; }
+    const y = (v) => top + ((max - v) / (max - min || 1)) * (height - top - bottom);
+    const y0 = y(Math.max(min, Math.min(max, 0)));
+    const bw = W / V;
+    g.strokeStyle = colors.rule;
+    g.beginPath();
+    g.moveTo(0, y0 + 0.5);
+    g.lineTo(W, y0 + 0.5);
+    g.stroke();
+    const top3 = new Set(E.topIndices(logits, 3));
+    for (let i = 0; i < V; i++) {
+      g.fillStyle = top3.has(i) ? colors.focus : alpha("ink-2", 0.55);
+      const yy = y(logits[i]);
+      g.fillRect(i * bw, Math.min(yy, y0), Math.max(1, bw), Math.max(1, Math.abs(y0 - yy)));
+    }
+    g.font = `11px ${MONO}`;
+    g.fillStyle = colors.ink;
+    g.textBaseline = "alphabetic";
+    for (const i of top3) {
+      const label = plainLabel(i);
+      const tw = g.measureText(label).width;
+      const x = Math.max(0, Math.min(W - tw, i * bw - tw / 2));
+      g.fillText(label, x, Math.max(11, y(logits[i]) - 5));
+    }
+    g.fillStyle = colors["ink-2"];
+    g.font = `10px ${MONO}`;
+    g.fillText(`max ${fmtNum(max)}`, W - 70, height - 2);
+    g.fillText("ID 0", 0, height - 2);
+    hover(canvas, (x) => {
+      const i = Math.max(0, Math.min(V - 1, Math.floor(x / bw)));
+      return [["ID", String(i)], ["token", plainLabel(i)], ["logit", fmtNum(logits[i], 3)]];
+    });
+    return canvas;
+  }
+
+  function drawBar(d, width) {
+    const W = Math.max(280, Math.floor(width));
+    const height = 46;
+    const { canvas, g } = makeCanvas(W, height, "The random draw over the final probabilities");
+    const order = d.greedy ? [d.chosen] : d.order.filter((id) => d.probs[id] > 0);
+    const segs = [];
+    let x = 0;
+    for (const id of order) {
+      const w = (d.greedy ? 1 : d.probs[id]) * W;
+      segs.push({ id, x, w });
+      x += w;
+    }
+    const ux = d.greedy ? -100 : d.u * W;
+    segs.forEach((s, i) => {
+      g.fillStyle = s.id === d.chosen ? colors.focus : i % 2 ? alpha("focus", 0.22) : alpha("focus", 0.36);
+      g.fillRect(s.x, 8, Math.max(1, s.w - 1), 24);
+      if (s.w > 34) {
+        g.fillStyle = s.id === d.chosen ? colors["focus-ink"] : colors.ink;
+        g.font = `11px ${MONO}`;
+        g.textBaseline = "middle";
+        let label = plainLabel(s.id);
+        while (label.length > 1 && g.measureText(label).width > s.w - 8) label = label.slice(0, -1);
+        const tw = g.measureText(label).width;
+        let lx = s.x + 4;
+        if (ux > lx - 6 && ux < lx + tw + 6 && ux + 8 + tw < s.x + s.w) lx = ux + 8;
+        g.fillText(label, lx, 20);
+      }
+    });
+    if (!d.greedy) {
+      g.fillStyle = colors.ink;
+      g.fillRect(ux - 1, 2, 2, 34);
+      g.beginPath();
+      g.moveTo(ux - 5, 0);
+      g.lineTo(ux + 5, 0);
+      g.lineTo(ux, 6);
+      g.fill();
+      g.font = `10px ${MONO}`;
+      g.textBaseline = "alphabetic";
+      const label = `u = ${d.u.toFixed(3)}`;
+      const tw = g.measureText(label).width;
+      g.fillText(label, Math.max(0, Math.min(W - tw, ux - tw / 2)), height - 1);
+    }
+    hover(canvas, (mx) => {
+      const s = segs.find((seg) => mx >= seg.x && mx < seg.x + seg.w);
+      if (!s) return null;
+      return [["token", plainLabel(s.id)], ["probability", fmtProb(d.greedy ? 1 : d.probs[s.id])], ["covers", d.greedy ? "0 to 1" : `${(s.x / W).toFixed(3)} to ${((s.x + s.w) / W).toFixed(3)}`]];
+    });
+    return canvas;
+  }
+
+  function stopSpark(upto) {
+    const run = state.run;
+    return el("div", { class: "spark" }, run.passes.slice(0, upto + 1).map((p, i) => {
+      const v = p.draw.modelProbs[EOT];
+      return el("div", { class: `col${i === upto ? " is-current" : ""}`, title: `Pass ${i + 1}: chose ${tok.label(p.token)}, P(<|eot_id|>) = ${fmtProb(v)}` },
+        el("div", { class: "pv" }, v >= 0.005 ? fmtPct(v) : ""),
+        el("div", { class: "barbox" }, el("div", { class: "bar", style: { height: `${Math.max(v > 0.005 ? 2 : 0, v * 100)}%` } })),
+        chip(p.token, { origin: "generated", noId: true, cls: "small" }));
+    }));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Render: token lifecycle
+  // ---------------------------------------------------------------------------
+
+  function selectedToken(snap) {
+    if (state.selected != null && state.selected < snap.tokens.length) return state.selected;
+    if (snap.fresh >= 0) return snap.fresh;
+    if (snap.live.size) return Math.max(...snap.live);
+    return snap.tokens.length ? snap.tokens[snap.tokens.length - 1].pos : null;
+  }
+
+  function renderLifecycle(step, snap) {
+    const host = $("#lifecycle");
+    const run = state.run;
+    const pos = selectedToken(snap);
+    if (pos == null) {
+      host.replaceChildren(
+        el("div", { class: "life-head" }, el("h3", null, "Token lifecycle")),
+        el("p", { class: "muted", style: { margin: 0 } }, "Tokens appear after the tokenizer step. Then select any token in the context window to follow it from birth to the end of the request."));
+      return;
+    }
+    const t = run.tokens[pos];
+    const now = state.index;
+    const at = (type, pass, layer) => state.stepIndex.get(stepKey(type, pass, layer));
+    const events = [];
+    const generated = t.origin === "generated";
+    const fedPass = generated ? (t.fed ? t.pass + 1 : null) : 0;
+
+    if (!generated) {
+      const seg = run.prompt.segments[t.segment];
+      events.push({ when: "Tokenizer", what: "Born from text", detail: seg.kind === "special" ? `The chat template added ${tok.label(t.id)} by ID.` : `BPE made it from the ${seg.kind === "content" ? "message" : "template"} text.`, step: at("ids") });
+    } else {
+      const d = run.passes[t.pass].draw;
+      const rank = Array.from(d.raw).filter((v) => v > d.raw[t.id]).length + 1;
+      events.push({ when: `Pass ${t.pass + 1} · sampler`, what: "Born from a draw", detail: `p = ${fmtProb(d.probs[t.id])} after the sampler (model: ${fmtProb(d.modelProbs[t.id])}, rank ${rank} of ${V}).`, step: at("sample", t.pass) });
+      const em = run.passes[t.pass].emitted;
+      events.push({ when: `Pass ${t.pass + 1} · detokenizer`, what: em.special ? "Not shown" : "Streamed", detail: em.special ? "A special token sends no text to the client." : `The client gets ${JSON.stringify(em.text)}.`, step: at("detok", t.pass) });
+    }
+    if (run.error) {
+      events.push({ when: "Before prefill", what: "Rejected", detail: "The prompt does not fit in the context window, so the model never runs.", step: at("error") });
+    } else if (fedPass != null) {
+      events.push({ when: `Pass ${fedPass + 1} · embedding`, what: generated ? "Fed back as input" : "Enters the model", detail: `Row ${t.id} of the table becomes the vector at position ${pos}.`, step: at("embed", fedPass) });
+      events.push({ when: `Pass ${fedPass + 1} · attention`, what: "Written to the KV cache", detail: `Its keys and values enter layers 1–${L}: ${fmtBytes(TOY_KV)} here, ${fmtBytes(LLAMA_KV)} in Llama 3 8B.`, step: at("attn", fedPass, 0) });
+      const reads = run.passes[run.passes.length - 1].cacheLength - pos - 1;
+      const firstRead = pos + 1 < run.prompt.ids.length ? at("attn", 0, 0) : at("attn", fedPass + 1, 0);
+      events.push({ when: "Later positions", what: "Read by later tokens", detail: reads ? `${reads} later position${reads === 1 ? "" : "s"} attend to it. The grid shows how much.` : "No later token reads it.", step: reads ? firstRead : at("finish") });
+      events.push({ when: "Request end", what: "Freed", detail: "The server frees the KV cache, unless it keeps it for prefix caching.", step: at("finish") });
+    } else {
+      events.push({ when: "Stop check", what: "Never fed back", detail: "The runtime stopped, so this token never enters the model.", step: at("stop", t.pass) });
+    }
+
+    let nowMarked = false;
+    const items = events.map((ev, i) => {
+      const next = events[i + 1];
+      const isNow = !nowMarked && ev.step <= now && (!next || next.step > now);
+      if (isNow) nowMarked = true;
+      return el("li", { class: `ev${ev.step > now ? " is-pending" : ""}${isNow ? " is-now" : ""}` },
+        el("span", { class: "when" }, ev.when), el("span", { class: "what" }, ev.what), el("span", { class: "detail" }, ev.detail));
+    });
+
+    const head = el("div", { class: "life-head" },
+      el("h3", null, "Life of", chip(t.id, { origin: t.origin }), el("span", { class: "muted", style: { fontSize: "14px", fontWeight: 400 } }, `position ${pos} · ${generated ? "generated" : "prompt"}`)),
+      state.selected != null ? el("button", { class: "follow", type: "button", onclick: () => { state.selected = null; render(); } }, "Follow the current token") : el("span", { class: "muted", style: { fontSize: "12px" } }, "Select any token in the context window."));
+
+    host.replaceChildren(head, el("ol", { class: "life-events" }, items), fedPass != null && !run.error ? readGrid(pos, step) : null);
+  }
+
+  /** Every later position that read this token, with its strongest attention weight per layer. */
+  function readGrid(pos, step) {
+    const run = state.run;
+    const P = run.prompt.ids.length;
+    const passOf = (q) => (q < P ? 0 : q - P + 1);
+    const fedCount = run.passes[run.passes.length - 1].cacheLength;
+    const readers = [];
+    for (let q = pos + 1; q < fedCount; q++) readers.push(run.passes[passOf(q)].positions.find((r) => r.pos === q));
+    if (!readers.length) return null;
+    const currentPass = step.type === "finish" ? Infinity : step.pass ?? -1;
+    const currentOrder = stageOrder(step.type, step.layer);
+    const visible = (q, l) => {
+      const p = passOf(q);
+      return p < currentPass || (p === currentPass && currentOrder >= stageOrder("attn", l));
+    };
+    const grid = el("div", { class: "readgrid", style: { gridTemplateColumns: `auto repeat(${readers.length}, 16px)` } });
+    grid.append(el("span", { class: "rl" }, "reader"));
+    for (const r of readers) {
+      const t = run.tokens[r.pos];
+      grid.append(el("span", { class: `colhead${t.origin === "generated" ? " is-output" : ""}`, title: `Position ${r.pos}: ${tok.label(r.tokenId)}` }, plainLabel(r.tokenId)));
+    }
+    for (let l = 0; l < L; l++) {
+      grid.append(el("span", { class: "rl" }, `layer ${l + 1}`));
+      for (const r of readers) {
+        let best = 0;
+        let bestHead = 0;
+        r.layers[l].weights.forEach((w, h) => { if (w[pos] > best) { best = w[pos]; bestHead = h; } });
+        const show = visible(r.pos, l);
+        grid.append(el("span", {
+          class: "cell",
+          style: show ? { background: css(ramp(best)) } : null,
+          title: show ? `${tok.label(r.tokenId)} at position ${r.pos}, layer ${l + 1}: ${fmtPct(best)} of head ${bestHead + 1}` : "not computed yet",
+        }));
+      }
+    }
+    return el("div", { style: { marginTop: "14px" } },
+      figLabel("How much each later token reads this one", "strongest head per layer · empty cells are not computed yet"),
+      grid);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Render: transport
+  // ---------------------------------------------------------------------------
+
+  function buildScrubber() {
+    const scrub = $("#scrub");
+    const run = state.run;
+    const segments = [];
+    const first = state.steps.findIndex((s) => s.pass != null);
+    segments.push({ label: "request", from: 0, to: (first < 0 ? state.steps.length : first) - 1, cls: "" });
+    run.passes.forEach((pass, p) => {
+      const idx = state.steps.filter((s) => s.pass === p).map((s) => s.index);
+      segments.push({ label: p === 0 ? "prefill" : String(p), from: idx[0], to: idx[idx.length - 1], cls: p === 0 ? "is-prefill" : "" });
+    });
+    const fin = state.stepIndex.get(stepKey("finish"));
+    if (fin != null) segments.push({ label: "end", from: fin, to: fin, cls: "" });
+    const perStep = (scrub.clientWidth || 600) / state.steps.length;
+    scrub.replaceChildren(...segments.map((s) => {
+      const count = s.to - s.from + 1;
+      return el("div", { class: `segm ${s.cls}`, style: { flexGrow: String(count) }, "data-from": s.from, "data-to": s.to, title: s.label }, count * perStep > s.label.length * 6.5 + 8 ? s.label : "");
+    }), el("div", { class: "playhead", id: "playhead" }));
+  }
+
+  function renderTransport(step) {
+    const scrub = $("#scrub");
+    if (scrub.dataset.built !== String(state.runId)) {
+      buildScrubber();
+      scrub.dataset.built = String(state.runId);
+    }
+    for (const seg of scrub.querySelectorAll(".segm")) {
+      const from = Number(seg.dataset.from);
+      const to = Number(seg.dataset.to);
+      const fill = state.index > to ? 1 : state.index < from ? 0 : (state.index - from + 1) / (to - from + 1);
+      seg.style.setProperty("--fill", String(fill));
+    }
+    const total = state.steps.length;
+    const segEls = Array.from(scrub.querySelectorAll(".segm"));
+    const seg = segEls.find((s) => state.index >= Number(s.dataset.from) && state.index <= Number(s.dataset.to));
+    if (seg) {
+      const from = Number(seg.dataset.from);
+      const to = Number(seg.dataset.to);
+      const x = seg.offsetLeft + ((state.index - from + 0.5) / (to - from + 1)) * seg.offsetWidth;
+      $("#playhead").style.left = `${x}px`;
+    }
+    scrub.setAttribute("aria-valuemin", "1");
+    scrub.setAttribute("aria-valuemax", String(total));
+    scrub.setAttribute("aria-valuenow", String(state.index + 1));
+    scrub.setAttribute("aria-valuetext", stepTitle(step));
+    const run = state.run;
+    const where = step.pass == null ? "" : run.passes[step.pass].kind === "prefill" ? "Prefill · " : `Decode ${step.pass} · `;
+    $("#t-title").textContent = `${where}${stepTitle(step)}`;
+    $("#t-count").textContent = `step ${state.index + 1} of ${total}`;
+    $("#t-prev").disabled = state.index === 0;
+    $("#t-start").disabled = state.index === 0;
+    $("#t-next").disabled = state.index >= total - 1;
+    $("#t-end").disabled = state.index >= total - 1;
+    $("#t-token").disabled = state.index >= total - 1;
+    const play = $("#t-play");
+    play.setAttribute("aria-label", state.playing ? "Pause" : "Play");
+    play.innerHTML = state.playing
+      ? '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>'
+      : '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>';
+  }
+
+  function scrubTo(clientX) {
+    const scrub = $("#scrub");
+    for (const seg of scrub.querySelectorAll(".segm")) {
+      const r = seg.getBoundingClientRect();
+      if (clientX >= r.left - 1 && clientX <= r.right + 1) {
+        const from = Number(seg.dataset.from);
+        const to = Number(seg.dataset.to);
+        const t = Math.max(0, Math.min(0.999, (clientX - r.left) / r.width));
+        go(from + Math.floor(t * (to - from + 1)));
+        return;
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Navigation and playback
+  // ---------------------------------------------------------------------------
+
+  function go(index, announce = true) {
+    const clamped = Math.max(0, Math.min(state.steps.length - 1, index));
+    if (clamped === state.index && state.rendered) return;
+    state.index = clamped;
+    render();
+    if (announce && !state.playing) $("#live").textContent = stepTitle(state.steps[state.index]);
+  }
+
+  function nextToken() {
+    const next = state.steps.find((s) => s.index > state.index && (s.type === "sample" || s.type === "finish"));
+    go(next ? next.index : state.steps.length - 1);
+  }
+
+  function play() {
+    if (state.index >= state.steps.length - 1) state.index = 0;
+    state.playing = true;
+    render();
+    schedule();
+    // Bring the request state and the scope into view when they are below the fold.
+    const panel = document.querySelector(".state");
+    if ($("#scope").getBoundingClientRect().top > window.innerHeight * 0.6) {
+      panel.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    }
+  }
+
+  function pause() {
+    state.playing = false;
+    clearTimeout(state.timer);
+    if (state.steps.length) renderTransport(state.steps[state.index]);
+  }
+
+  function schedule() {
+    clearTimeout(state.timer);
+    if (!state.playing) return;
+    state.timer = setTimeout(() => {
+      if (state.index < state.steps.length - 1) {
+        state.index++;
+        render();
+        schedule();
+      } else {
+        pause();
+      }
+    }, SPEEDS[state.speed]);
+  }
+
+  function bindTransport() {
+    $("#t-start").addEventListener("click", () => go(0));
+    $("#t-prev").addEventListener("click", () => go(state.index - 1));
+    $("#t-next").addEventListener("click", () => go(state.index + 1));
+    $("#t-token").addEventListener("click", nextToken);
+    $("#t-end").addEventListener("click", () => go(state.steps.length - 1));
+    $("#t-play").addEventListener("click", () => (state.playing ? pause() : play()));
+    $("#speed").addEventListener("change", (e) => { state.speed = e.target.value; schedule(); });
+    const scrub = $("#scrub");
+    let dragging = false;
+    scrub.addEventListener("pointerdown", (e) => { dragging = true; scrub.setPointerCapture(e.pointerId); scrubTo(e.clientX); });
+    scrub.addEventListener("pointermove", (e) => { if (dragging) scrubTo(e.clientX); });
+    scrub.addEventListener("pointerup", () => { dragging = false; });
+    scrub.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); e.stopPropagation(); go(state.index + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); e.stopPropagation(); go(state.index - 1); }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.target.closest("input, select, textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "ArrowRight") { e.preventDefault(); if (e.shiftKey) nextToken(); else go(state.index + 1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); go(state.index - 1); }
+      else if (e.key === " " && !e.target.closest("button")) { e.preventDefault(); state.playing ? pause() : play(); }
+      else if (e.key === "Home") { e.preventDefault(); go(0); }
+      else if (e.key === "End") { e.preventDefault(); go(state.steps.length - 1); }
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Main render
+  // ---------------------------------------------------------------------------
+
+  let runCounter = 0;
+  function render() {
+    if (!state.steps.length) return;
+    if (state.run !== state.lastRun) {
+      state.lastRun = state.run;
+      state.runId = ++runCounter;
+    }
+    const step = state.steps[state.index];
+    const snap = snapshot(step);
+    tip.hidden = true;
+    renderState(step, snap);
+    renderRail(step);
+    renderScope(step);
+    renderLifecycle(step, snap);
+    renderTransport(step);
+    state.rendered = true;
+  }
+
+  function init() {
+    readColors();
+    renderSpec();
+    renderPresets();
+    buildRail();
+    $("#top-k").max = String(V);
+    syncControls();
+    bindControls();
+    bindTransport();
+    $("#msg").value = state.message;
+    runSimulation(false);
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const retheme = () => { readColors(); render(); };
+    if (media.addEventListener) media.addEventListener("change", retheme);
+    new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+    let resizeTimer = 0;
+    window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(render, 120); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render());
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

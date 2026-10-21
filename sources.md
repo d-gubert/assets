@@ -12,7 +12,7 @@ This page lists every source in the document set, grouped by trust tier. Each en
 
 ## Method and limits
 
-- Research date: 2026-10-08. Document 14 was added on 2026-10-11.
+- Research date: 2026-10-08. Document 14 was added on 2026-10-11. The simulation in `simulation/` was added on 2026-10-21. Its section below logs each web search and fetch.
 - The network policy of the research environment blocked direct page fetches for arxiv.org, huggingface.co, and transformer-circuits.pub. The research confirmed each source through web search results: titles, authors, venues, abstracts, and quoted passages.
 - Some claims rest on well-established facts that the search did not quote word for word. Examples: the Llama 2 7B layer sizes, and the tensor names in [11](11-model-files-and-quantization.md). Verify exact numbers against the primary source before you rely on them.
 
@@ -148,6 +148,45 @@ This page lists every source in the document set, grouped by trust tier. Each en
 | Shojaee et al. (Apple), *The Illusion of Thinking*, 2025 — https://machinelearning.apple.com/research/illusion-of-thinking | 2 | 14 |
 | Lawsen, *The Illusion of the Illusion of Thinking*, 2025 — https://arxiv.org/abs/2506.09250 | 2 | 14 |
 | Anthropic, *Building with extended thinking* (API docs) — https://platform.claude.com/docs/en/build-with-claude/extended-thinking | 1 | 14 |
+
+## Token lifecycle simulation
+
+The [simulation](simulation/README.md) builds on documents 00 to 08. The research for it on 2026-10-21 looked for the exact details that a working model and runtime need: the Llama 3 chat format and its token IDs, the order of the logit processors, the stop rules, and two interpretability methods that the page shows.
+
+Unlike in the first research round, direct fetches from GitHub, docs.vllm.ai, and huggingface.co worked.
+
+### Search log
+
+| # | Search or fetch | What it confirmed | Used for |
+|---|-----------------|-------------------|----------|
+| 1 | Web search: `Meta-Llama-3-8B-Instruct config.json vocab_size 128256 rope_theta 500000 num_key_value_heads 8 intermediate_size 14336` | Community copies of the config agree on these values. No official copy was in the results, so fetch 11 checked them. | Llama 3 8B column of the comparison table |
+| 2 | Web search: `Llama 3 prompt format special tokens begin_of_text start_header_id end_header_id eot_id 128009 generation_config eos_token_id` | Meta's prompt-format page gives the role of each special token. It gives no token IDs. | Chat template stage |
+| 3 | Web search: `llama3 tokenizer.py pat_str regex …` | torchtune and llama.cpp use the same pre-tokenizer pattern. The upstream file was not in the results, so fetch 8 read it. | Pre-tokenizer stage |
+| 4 | Web search: `Hugging Face transformers generate logits processor order repetition penalty temperature top_k top_p` | No clear answer. Fetch 10 read the source code. | Sampler stage |
+| 5 | Web search: `vLLM sampler order penalties temperature top-k top-p min-p` | The vLLM `Sampler` documentation lists the order. Fetch 9 read the full list. | Sampler stage |
+| 6 | Web search: `CTRL Keskar 2019 repetition penalty discount logits of previously generated tokens penalty 1.2` | CTRL introduced "penalized sampling": a factor θ on the logits of earlier tokens, with θ ≈ 1.2. | Repetition penalty setting |
+| 7 | Web search: `OpenAI chat completions finish_reason "stop" "length" natural stop point or stop sequence max_tokens` | `"stop"` means a natural stop or a stop sequence. `"length"` means the token limit. | Stop check and final event |
+| 8 | Fetch: `raw.githubusercontent.com/meta-llama/llama3/main/llama/tokenizer.py` | The full pattern. The special-token list, with ID = 128,000 + list index. Stop tokens `<\|end_of_text\|>` and `<\|eot_id\|>`. The `ChatFormat` code. | Tokenizer and template of the toy model |
+| 9 | Fetch: `docs.vllm.ai/en/latest/api/vllm/v1/sample/sampler/` | Order: allowed-token and bad-word masks, other logit processors, penalties, then temperature, min-p, top-k and top-p, and the draw. | Note in the sampler stage |
+| 10 | Fetch: `raw.githubusercontent.com/huggingface/transformers/main/src/transformers/generation/utils.py` | `_get_logits_processor` adds `RepetitionPenaltyLogitsProcessor` before the warpers. The warpers follow: temperature first, then top-k, top-p, and min-p, among others. | Order of the sampler in `engine.js` |
+| 11 | Download: `tokenizer.json`, `config.json`, and `generation_config.json` from the `NousResearch/Meta-Llama-3-8B-Instruct` mirror | `vocab_size` 128,256, `rope_theta` 500,000, `max_position_embeddings` 8,192, `tie_word_embeddings` false. `eos_token_id` [128001, 128009], `temperature` 0.6, `top_p` 0.9. The real token IDs of the example messages. | Default sampler settings, Llama 3 IDs in the token ID stage |
+| 12 | Web search: `nostalgebraist "interpreting GPT: the logit lens" 2020 LessWrong` | The original logit lens post. The Tuned Lens paper reports that the logit lens is unreliable for some models. | Logit lens rows, with a caution |
+| 13 | Web search: `Geva 2022 "Transformer Feed-Forward Layers Build Predictions by Promoting Concepts in the Vocabulary Space" EMNLP` | EMNLP 2022. Each MLP sub-update promotes tokens that can be read through the output head. | "Its write vector raises" column in the MLP stage |
+
+### Sources
+
+| Source | Tier | Used in |
+|--------|------|---------|
+| Meta, *llama3* repository, `llama/tokenizer.py` — https://github.com/meta-llama/llama3/blob/main/llama/tokenizer.py | 1 | Simulation |
+| Meta, *Meta Llama 3 model card and prompt format* — https://www.llama.com/docs/model-cards-and-prompt-formats/meta-llama-3/ | 1 | Simulation |
+| Llama 3 8B Instruct `config.json`, `generation_config.json`, and `tokenizer.json`, from a community mirror of the gated official repository — https://huggingface.co/NousResearch/Meta-Llama-3-8B-Instruct | 2 | Simulation |
+| Hugging Face transformers, `generation/utils.py` — https://github.com/huggingface/transformers/blob/main/src/transformers/generation/utils.py | 1 | Simulation |
+| vLLM documentation, *Sampler* (v1) — https://docs.vllm.ai/en/latest/api/vllm/v1/sample/sampler/ | 1 | Simulation |
+| Keskar et al., *CTRL: A Conditional Transformer Language Model for Controllable Generation*, 2019 — https://arxiv.org/abs/1909.05858 | 2 | Simulation |
+| OpenAI API reference, *The completion object* (`finish_reason`) — https://developers.openai.com/api/docs/api-reference/completions/object | 1 | Simulation |
+| nostalgebraist, *interpreting GPT: the logit lens*, LessWrong, 2020 — https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens | 2 | Simulation |
+| Belrose et al., *Eliciting Latent Predictions from Transformers with the Tuned Lens*, 2023 — https://arxiv.org/abs/2303.08112 | 2 | Simulation |
+| Geva, Caciularu, Wang, Goldberg, *Transformer Feed-Forward Layers Build Predictions by Promoting Concepts in the Vocabulary Space*, EMNLP 2022 — https://aclanthology.org/2022.emnlp-main.3 | 1 | Simulation |
 
 ## Teaching material for intuition
 

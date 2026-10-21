@@ -27,6 +27,7 @@ One-line definitions for the terms in this document set. The number in brackets 
 | Embedding table | The weight matrix that maps each token ID to a vector. [03](03-embeddings-and-positions.md) |
 | Expert | One of many MLPs in a mixture-of-experts layer. [10](10-mixture-of-experts.md) |
 | Feature | A meaningful direction in activation space. Not the same as a neuron. [13](13-interpretability.md) |
+| Finish reason | The response field that tells the client why generation ended, for example "stop" or "length". [Simulation](simulation/README.md) |
 | FlashAttention | An exact attention implementation that reduces GPU memory traffic. [05](05-attention.md) |
 | GGUF | The single-file model format of llama.cpp. [11](11-model-files-and-quantization.md) |
 | GQA (grouped-query attention) | Attention in which groups of query heads share one key/value head. [05](05-attention.md) |
@@ -34,6 +35,7 @@ One-line definitions for the terms in this document set. The number in brackets 
 | Induction head | An attention circuit that finds an earlier copy of the current token and predicts what followed it. [05](05-attention.md) |
 | KV cache | Saved attention keys and values of earlier tokens, reused at each decode step. [08](08-inference-runtime.md) |
 | Logit | The raw score that the output head gives to one vocabulary entry. [07](07-output-and-sampling.md) |
+| Logit lens | The output head applied to the residual stream of an earlier layer, to read the next-token guess at that depth. [Simulation](simulation/README.md) |
 | LoRA | Small add-on matrices that fine-tune a frozen model. [12](12-training-lifecycle.md) |
 | MLP (feed-forward network) | The sub-layer that transforms each token vector alone. [06](06-mlp-and-neurons.md) |
 | Model dimension (d_model) | The length of each token vector in the residual stream. [04](04-transformer-block.md) |
@@ -58,12 +60,14 @@ One-line definitions for the terms in this document set. The number in brackets 
 | Sparse autoencoder (SAE) | A helper network that decomposes activations into interpretable features. [13](13-interpretability.md) |
 | Special token | A vocabulary entry with a control meaning, such as end-of-sequence. [01](01-tokenizer.md) |
 | Speculative decoding | A small model proposes tokens, and the large model verifies them in one pass. [08](08-inference-runtime.md) |
+| Stop sequence | A string, set by the client, that ends generation when the output contains it. [07](07-output-and-sampling.md) |
 | Superposition | The storage of more features than dimensions in overlapping directions. [13](13-interpretability.md) |
 | SwiGLU | A gated MLP variant with three matrices: gate, up, and down. [06](06-mlp-and-neurons.md) |
 | Temperature | A sampler setting that sharpens or flattens the probability distribution. [07](07-output-and-sampling.md) |
 | Tensor parallelism | A split of each weight matrix across GPUs. [09](09-scaling-across-devices.md) |
 | Tensor | A multi-dimensional array of numbers with a dtype, shape, and device. [02](02-tensors-and-weights.md) |
 | Test-time compute | Extra inference work, such as longer chains or more samples, spent to improve an answer. [14](14-reasoning-models.md) |
+| Time to first token (TTFT) | The delay from the request to the first output token. The prefill takes most of it. [08](08-inference-runtime.md) |
 | Token | A unit of text that the tokenizer maps to one integer ID. [01](01-tokenizer.md) |
 | Tokenizer | The component that converts text to token IDs and back. [01](01-tokenizer.md) |
 | Top-k / top-p | Sampler filters that keep only the most probable tokens. [07](07-output-and-sampling.md) |

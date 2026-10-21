@@ -36,6 +36,7 @@ Support documents:
 - [Glossary](glossary.md) — one-line definitions for every term in this set.
 - [Sources](sources.md) — the reference list, with a trust tier for each source.
 - [Anatomy of an LLM process](https://claude.ai/artifact/TvETLLNWN1Xtuk8jewHo41) — a diagram of one serving process: startup, threads, memory allocation, and the path of one user request. It expands on [08 Inference runtime](08-inference-runtime.md).
+- [Life of a Token](simulation/README.md) — an interactive simulation of one chat request in a small, real transformer that runs in the browser. It follows each token from the chat template to the stop token, and it covers documents 00 to 08. Open [simulation/index.html](simulation/index.html) locally, or the [published copy](https://claude.ai/artifact/SNkcMEnHkSyWGwzeXLxBQp).
 
 ## How the documents connect
 
@@ -65,3 +66,4 @@ flowchart LR
 The research used primary papers, official documentation, and well-known teaching material by recognized authors.
 [sources.md](sources.md) lists each source, its trust tier, and the claims it supports.
 The research date is 2026-10-08.
+The simulation was added on 2026-10-21. [sources.md](sources.md) logs the web searches for it.
